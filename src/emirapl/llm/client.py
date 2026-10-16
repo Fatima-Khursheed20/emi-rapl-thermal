@@ -20,7 +20,7 @@ PROVIDERS = {
     "gemini": {"base_url": "https://generativelanguage.googleapis.com/v1beta/openai/", "key_env": "GEMINI_API_KEY",
                "default_model": "gemini-flash-latest", "min_interval_s": 6.5},
     "groq": {"base_url": "https://api.groq.com/openai/v1", "key_env": "GROQ_API_KEY",
-             "default_model": "openai/gpt-oss-20b", "min_interval_s": 20.0},
+             "default_model": "openai/gpt-oss-20b", "min_interval_s": 1.0, "tpm_budget": 7200},
     "ollama": {"base_url": "http://localhost:11434/v1", "key_env": None,
                "default_model": "qwen2.5:7b", "min_interval_s": 0.0},
     "openai": {"base_url": None, "key_env": "OPENAI_API_KEY",
@@ -57,7 +57,8 @@ class LLMClient:
     """Thin OpenAI-compatible client with rate limiting, retries and token accounting."""
 
     def __init__(self, provider: str, model: str | None = None, temperature: float = 0.2,
-                 max_retries: int = 7, min_interval_s: float | None = None, max_tokens: int = 1024):
+                 max_retries: int = 7, min_interval_s: float | None = None, max_tokens: int = 2048,
+                 reasoning_effort: str | None = "low"):
         from openai import OpenAI  # imported lazily so the scripted client needs no network deps
 
         cfg = PROVIDERS[provider]
@@ -70,30 +71,61 @@ class LLMClient:
         self.max_retries = max_retries
         self.max_tokens = max_tokens
         self.min_interval_s = cfg["min_interval_s"] if min_interval_s is None else min_interval_s
+        self.tpm_budget = cfg.get("tpm_budget")
+        # reasoning models (gpt-oss) spend output tokens on hidden reasoning; "low" keeps calls cheap
+        self.extra_body = {"reasoning_effort": reasoning_effort} if reasoning_effort and "gpt-oss" in self.model else None
         self._client = OpenAI(api_key=key, base_url=cfg["base_url"]) if cfg["base_url"] else OpenAI(api_key=key)
         self._last_call = 0.0
+        self._usage: list[tuple[float, int]] = []  # (time, tokens) for the tokens-per-minute budget
 
     @property
     def name(self) -> str:
         return f"{self.provider}:{self.model}"
 
-    def complete(self, agent: str, messages: list[dict], context: dict | None = None) -> LLMResponse:
+    def _pace(self, messages: list[dict]) -> None:
         wait = self.min_interval_s - (time.time() - self._last_call)
         if wait > 0:
             time.sleep(wait)
-        err = None
+        if not self.tpm_budget:
+            return
+        est = sum(len(m["content"]) for m in messages) // 3 + 600  # prompt + typical completion
+        while True:
+            now = time.time()
+            self._usage = [(t, n) for t, n in self._usage if now - t < 60.0]
+            if not self._usage or sum(n for _, n in self._usage) + est <= self.tpm_budget:
+                return
+            time.sleep(min(5.0, 60.0 - (now - self._usage[0][0]) + 0.5))
+
+    def complete(self, agent: str, messages: list[dict], context: dict | None = None) -> LLMResponse:
+        from openai import BadRequestError
+
+        self._pace(messages)
+        err, json_mode = None, True
         for attempt in range(self.max_retries):
             t0 = time.time()
             try:
+                kw = {"response_format": {"type": "json_object"}} if json_mode else {}
+                if self.extra_body:
+                    kw["extra_body"] = self.extra_body
                 resp = self._client.chat.completions.create(
                     model=self.model, messages=messages, temperature=self.temperature,
-                    max_tokens=self.max_tokens, response_format={"type": "json_object"})
+                    max_tokens=self.max_tokens, **kw)
                 self._last_call = time.time()
                 usage = getattr(resp, "usage", None)
                 rec = LLMCallRecord(agent=agent, model=self.name, latency_s=round(self._last_call - t0, 3),
                                     tokens_in=getattr(usage, "prompt_tokens", 0) or 0,
                                     tokens_out=getattr(usage, "completion_tokens", 0) or 0)
+                self._usage.append((self._last_call, rec.tokens_in + rec.tokens_out))
                 return LLMResponse(resp.choices[0].message.content or "", rec)
+            except BadRequestError as e:
+                # provider-side JSON validation failed: retry once without JSON mode and let our parser and
+                # the validator judge the reply. Any other 400 is not transient, so give up immediately.
+                err = str(e)
+                self._last_call = time.time()
+                if json_mode and "json" in err.lower():
+                    json_mode = False
+                    continue
+                break
             except Exception as e:  # rate limits / transient errors: exponential backoff
                 err = str(e)
                 self._last_call = time.time()
