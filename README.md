@@ -47,6 +47,13 @@ Results land in `results/<run>/`: `summary.csv` (one row per episode), `aggregat
 `episodes.jsonl` (full decision traces: prompts' outputs, validations, token counts). Runs resume where they
 stopped. Run `python scripts/make_report.py` to rebuild the tables and figures in `docs/results/`.
 
+Inspect a single decision (plan → action → twin validation → reprompts → true-plant outcome):
+
+```bash
+.venv/Scripts/python scripts/show_trace.py --run phase1_llm_gptoss20b --list
+.venv/Scripts/python scripts/show_trace.py --run phase1_llm_gptoss20b --scenario p1-z2-sensor_bias-mm20-s1 --method base_agent_nominal
+```
+
 ## What is in the box
 
 | Path | Purpose |
