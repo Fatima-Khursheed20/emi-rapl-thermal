@@ -22,7 +22,7 @@ See [docs/base_paper_mapping.md](docs/base_paper_mapping.md) for the component-b
 ```bash
 # Python 3.10+; uv is optional (plain pip works too)
 uv venv .venv && uv pip install -e ".[dev]"      # or: python -m venv .venv && .venv/Scripts/pip install -e ".[dev]"
-.venv/Scripts/python -m pytest -q                 # 9 tests, ~5 s, no API key needed
+.venv/Scripts/python -m pytest -q                 # 12 tests, ~10 s, no API key needed
 ```
 
 Offline run (no API key): non-LLM baselines on the 120-scenario suite:
@@ -32,7 +32,7 @@ Offline run (no API key): non-LLM baselines on the 120-scenario suite:
 ```
 
 LLM run: copy `.env.example` to `.env` and add a free key (Gemini: https://aistudio.google.com/apikey,
-Groq: https://console.groq.com/keys):
+Groq: https://console.groq.com/keys). Groq's free tier allows 200k tokens per day per model; runs stop cleanly at the cap and resume on the next invocation:
 
 ```bash
 .venv/Scripts/python scripts/run_eval.py --provider groq --model llama-3.1-8b-instant \
@@ -86,6 +86,24 @@ Inspect a single decision (plan → action → twin validation → reprompts →
 
 The `scripted` provider is a deterministic rule-based stand-in for the LLM. It exercises the full pipeline
 offline and in CI. Its numbers are a pipeline check, not an LLM result.
+
+## Phase-1 results (summary)
+
+Full 120-scenario suite. The base workflow uses a scripted proposer, so the two twins see identical proposals:
+
+| Method | Plant success | Validated-but-failed |
+|---|---|---|
+| No recovery | 19.2 % | – |
+| Rule table | 67.5 % | – |
+| DE retune (nominal twin) | 65.0 % | – |
+| Base workflow, matched twin (paper's assumption) | 80.8 % | **0.0 %** |
+| Base workflow, nominal twin (realistic) | 80.8 % | **19.2 %** |
+
+A realistic twin approves about one action in five that then fails on the true plant, mostly under sensor bias. This is
+the gap that G1 targets. Preliminary real-LLM runs (gpt-oss-20b / gpt-oss-120b on Groq, 15 episodes so far) show the
+validated workflow keeping the plant safe, while the LLM itself finds a valid action in only 0–67 % of episodes and
+leans on the fallback (G2). Full tables and figures are in [docs/results/](docs/results/phase1_results.md). The
+remaining LLM runs are described in [docs/phase1_remaining_llm_runs.md](docs/phase1_remaining_llm_runs.md).
 
 ## Roadmap (Phase 2)
 - **G1**: adaptive EKF (joint state + parameter, EWMA noise adaptation) → calibrated twin ensemble → chance-constrained validation.
