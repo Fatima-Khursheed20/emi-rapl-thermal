@@ -27,6 +27,7 @@ from emirapl.llm.client import make_llm  # noqa: E402
 
 
 def main():
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser()
     ap.add_argument("--suite", default=str(ROOT / "configs" / "suites" / "phase1_suite.json"))
     ap.add_argument("--methods", nargs="+", default=["no_recovery", "rule_table"], choices=METHODS)
