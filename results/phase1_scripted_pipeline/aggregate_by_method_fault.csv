@@ -1,0 +1,11 @@
+method,fault,episodes,agent_success_%,plant_success_%,validated_but_failed_%,safety_violation_%,fallback_%,mean_reprompts,setpoint_retention,mean_llm_calls,mean_tokens_in,mean_llm_latency_s
+base_agent_matched,actuator_stuck_high,24,20.8,87.5,0.0,12.5,79.2,3.96,0.667,9.29,12737.0,0.0
+base_agent_matched,heat_loss_increase,24,100.0,100.0,0.0,0.0,0.0,0.0,0.76,2.0,2147.0,0.0
+base_agent_matched,heater_degradation,24,100.0,100.0,0.0,0.0,0.0,0.0,0.928,2.0,2232.0,0.0
+base_agent_matched,local_insulation_loss,24,100.0,100.0,0.0,0.0,0.0,0.0,0.888,2.0,2166.0,0.0
+base_agent_matched,sensor_bias,24,16.7,16.7,0.0,0.0,83.3,4.17,0.938,6.17,8991.0,0.0
+base_agent_nominal,actuator_stuck_high,24,33.3,87.5,12.5,12.5,66.7,3.33,0.667,8.67,11769.0,0.0
+base_agent_nominal,heat_loss_increase,24,100.0,100.0,0.0,0.0,0.0,0.0,0.76,2.0,2147.0,0.0
+base_agent_nominal,heater_degradation,24,100.0,100.0,0.0,0.0,0.0,0.0,0.928,2.0,2232.0,0.0
+base_agent_nominal,local_insulation_loss,24,100.0,100.0,0.0,0.0,0.0,0.0,0.888,2.0,2166.0,0.0
+base_agent_nominal,sensor_bias,24,100.0,16.7,83.3,0.0,0.0,0.0,1.0,2.0,2149.0,0.0

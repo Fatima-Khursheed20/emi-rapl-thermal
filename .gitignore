@@ -6,4 +6,5 @@ __pycache__/
 .pytest_cache/
 results/_*/
 results/**/episodes.jsonl
+results/*.log
 docs/architecture.svg

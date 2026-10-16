@@ -1,0 +1,5 @@
+method,mismatch,episodes,agent_success_%,plant_success_%,validated_but_failed_%,safety_violation_%,fallback_%,mean_reprompts,setpoint_retention,mean_llm_calls,mean_tokens_in,mean_llm_latency_s
+de_retune,0.0,6,100.0,83.3,16.7,0.0,0.0,0.0,0.914,0.0,0.0,0.0
+de_retune,0.1,6,100.0,66.7,33.3,0.0,0.0,0.0,0.914,0.0,0.0,0.0
+de_retune,0.2,6,100.0,50.0,50.0,0.0,0.0,0.0,0.915,0.0,0.0,0.0
+de_retune,0.3,6,100.0,50.0,50.0,0.0,0.0,0.0,0.916,0.0,0.0,0.0

@@ -1,0 +1,9 @@
+method,mismatch,episodes,agent_success_%,plant_success_%,validated_but_failed_%,safety_violation_%,fallback_%,mean_reprompts,setpoint_retention,mean_llm_calls,mean_tokens_in,mean_llm_latency_s
+no_recovery,0.0,30,0.0,13.3,0.0,6.7,0.0,0.0,1.0,0.0,0.0,0.0
+no_recovery,0.1,30,0.0,20.0,0.0,6.7,0.0,0.0,1.0,0.0,0.0,0.0
+no_recovery,0.2,30,0.0,20.0,0.0,6.7,0.0,0.0,1.0,0.0,0.0,0.0
+no_recovery,0.3,30,0.0,23.3,0.0,6.7,0.0,0.0,1.0,0.0,0.0,0.0
+rule_table,0.0,30,100.0,70.0,30.0,0.0,0.0,0.0,0.715,0.0,0.0,0.0
+rule_table,0.1,30,100.0,66.7,33.3,3.3,0.0,0.0,0.715,0.0,0.0,0.0
+rule_table,0.2,30,100.0,66.7,33.3,3.3,0.0,0.0,0.715,0.0,0.0,0.0
+rule_table,0.3,30,100.0,66.7,33.3,3.3,0.0,0.0,0.715,0.0,0.0,0.0

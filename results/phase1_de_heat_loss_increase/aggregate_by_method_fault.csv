@@ -1,0 +1,2 @@
+method,fault,episodes,agent_success_%,plant_success_%,validated_but_failed_%,safety_violation_%,fallback_%,mean_reprompts,setpoint_retention,mean_llm_calls,mean_tokens_in,mean_llm_latency_s
+de_retune,heat_loss_increase,24,100.0,62.5,37.5,0.0,0.0,0.0,0.915,0.0,0.0,0.0

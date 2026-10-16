@@ -1,0 +1,11 @@
+method,fault,episodes,agent_success_%,plant_success_%,validated_but_failed_%,safety_violation_%,fallback_%,mean_reprompts,setpoint_retention,mean_llm_calls,mean_tokens_in,mean_llm_latency_s
+no_recovery,actuator_stuck_high,24,0.0,66.7,0.0,33.3,0.0,0.0,1.0,0.0,0.0,0.0
+no_recovery,heat_loss_increase,24,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0
+no_recovery,heater_degradation,24,0.0,25.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0
+no_recovery,local_insulation_loss,24,0.0,4.2,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0
+no_recovery,sensor_bias,24,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0
+rule_table,actuator_stuck_high,24,100.0,20.8,79.2,12.5,0.0,0.0,0.0,0.0,0.0,0.0
+rule_table,heat_loss_increase,24,100.0,100.0,0.0,0.0,0.0,0.0,0.76,0.0,0.0,0.0
+rule_table,heater_degradation,24,100.0,100.0,0.0,0.0,0.0,0.0,0.928,0.0,0.0,0.0
+rule_table,local_insulation_loss,24,100.0,100.0,0.0,0.0,0.0,0.0,0.888,0.0,0.0,0.0
+rule_table,sensor_bias,24,100.0,16.7,83.3,0.0,0.0,0.0,1.0,0.0,0.0,0.0
