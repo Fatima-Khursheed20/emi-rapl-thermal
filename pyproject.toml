@@ -1,0 +1,30 @@
+[project]
+name = "emirapl"
+version = "0.1.0"
+description = "EMI-RAPL Thermal: physics-grounded LLM agents for fault-tolerant multi-zone thermal control"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "pandas>=2.1",
+    "matplotlib>=3.8",
+    "pydantic>=2.5",
+    "openai>=1.40",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+    "tabulate>=0.9",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+hardware = ["tclab>=1.0"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

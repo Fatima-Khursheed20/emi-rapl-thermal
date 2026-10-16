@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.env
+.pytest_cache/
+results/_*/
+results/**/episodes.jsonl
+docs/architecture.svg
