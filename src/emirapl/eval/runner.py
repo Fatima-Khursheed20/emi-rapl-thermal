@@ -12,6 +12,7 @@ from ..agents.pipeline import BasePaperAgent
 from ..baselines.methods import DERetune, NoRecovery, RuleTable, SingleCallLLM
 from ..env.episode import Episode, Scenario
 from ..env.thermal import ThermalParams
+from ..llm.client import QuotaExhausted
 from ..tools.twin import DigitalTwin
 from ..tools.validator import Validator
 
@@ -52,7 +53,12 @@ def run(scenarios: list[Scenario], methods: list[str], llm, out_dir: str | Path,
             if (sc.scenario_id, m) in done:
                 continue
             t0 = time.time()
-            res = Episode(sc, latency_s=latency_s).run(build_method(m, sc, llm, latency_s=latency_s), keep_traj=keep_traj)
+            try:
+                res = Episode(sc, latency_s=latency_s).run(build_method(m, sc, llm, latency_s=latency_s), keep_traj=keep_traj)
+            except QuotaExhausted as e:  # stop cleanly; the unfinished episode is not recorded, so a rerun resumes here
+                print(f"STOPPED: {e}", flush=True)
+                ep_file.close()
+                return pd.read_csv(out / "summary.csv") if (out / "summary.csv").exists() else pd.DataFrame()
             row = {"scenario_id": sc.scenario_id, "method": m, "llm": getattr(llm, "name", None) if "llm" in m or "agent" in m else None,
                    "n_zones": sc.n_zones, "fault": sc.fault["kind"], "fault_zone": sc.fault["zone"],
                    "magnitude": sc.fault["magnitude"], "mismatch": sc.mismatch, "seed": sc.seed,

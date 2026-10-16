@@ -116,3 +116,18 @@ def test_shutdown_rejected_when_isolating_other_zones_is_safe():
     v = Validator(DigitalTwin("matched", ThermalParams(n_zones=2)), [50.0, 45.0])
     res = v.validate(RecoveryAction(mode=Mode.SAFE_SHUTDOWN, shutdown=True), loop, report, {1})
     assert not res.passed and any(x.check == "shutdown_justified" for x in res.violations)
+
+
+def test_quota_exhaustion_stops_run_without_recording(tmp_path):
+    from emirapl.eval.runner import run
+    from emirapl.llm.client import QuotaExhausted
+
+    class Exhausted:
+        name = "fake:exhausted"
+
+        def complete(self, agent, messages, context=None):
+            raise QuotaExhausted("daily quota reached")
+
+    sc = make_suite("t", mismatch_levels=(0.0,), seeds=(0,), zones=(2,))[:1]
+    df = run(sc, ["single_llm"], Exhausted(), tmp_path, verbose=False)
+    assert df.empty and not (tmp_path / "summary.csv").exists()

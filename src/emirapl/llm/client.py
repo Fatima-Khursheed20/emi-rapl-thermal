@@ -28,6 +28,10 @@ PROVIDERS = {
 }
 
 
+class QuotaExhausted(RuntimeError):
+    """The provider's daily quota is used up; the evaluation run must stop and be resumed later."""
+
+
 @dataclass
 class LLMResponse:
     text: str
@@ -131,6 +135,9 @@ class LLMClient:
             except Exception as e:  # rate limits / transient errors: exponential backoff
                 err = str(e)
                 self._last_call = time.time()
+                if "tokens per day" in err.lower() or "requests per day" in err.lower():
+                    # daily quota: retrying cannot help, and a failed call would be scored as an agent error
+                    raise QuotaExhausted(f"{self.name}: daily quota reached - resume later. {err[:200]}") from e
                 time.sleep(min(60.0, 2.0 * 2 ** attempt))
         rec = LLMCallRecord(agent=agent, model=self.name, latency_s=0.0, ok=False, error=err)
         return LLMResponse("", rec)
