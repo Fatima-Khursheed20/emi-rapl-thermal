@@ -31,6 +31,7 @@ class Rollout:
     y: np.ndarray  # twin measurements
     u: np.ndarray  # heater outputs
     setpoints: np.ndarray
+    hold: int = 0  # samples before the action takes effect
 
 
 class DigitalTwin:
@@ -61,16 +62,19 @@ class DigitalTwin:
         return twin
 
     @staticmethod
-    def rollout(loop: ClosedLoop, action: RecoveryAction | None, horizon_s: float) -> Rollout:
+    def rollout(loop: ClosedLoop, action: RecoveryAction | None, horizon_s: float, delay_s: float = 0.0) -> Rollout:
+        """Simulate `horizon_s` after the action takes effect; current settings are held for `delay_s`
+        first (the decision/actuation latency), because that is what the real plant experiences."""
         sim = loop.clone()
         sim.plant.noise_std = 0.0
-        if action is not None:
-            sim.apply(action)
-        steps = int(horizon_s / sim.plant.dt)
+        hold = int(delay_s / sim.plant.dt)
+        steps = hold + int(horizon_s / sim.plant.dt)
         TH, Y, U = np.zeros((steps, sim.n)), np.zeros((steps, sim.n)), np.zeros((steps, sim.n))
         for k in range(steps):
+            if k == hold and action is not None:
+                sim.apply(action)
             Y[k] = sim.step()
             TH[k] = sim.plant.state.TH
             U[k] = sim.plant.last_Q
         sps = np.array([l.setpoint for l in sim.ctrl.loops])
-        return Rollout(np.arange(steps) * sim.plant.dt, TH, Y, U, sps)
+        return Rollout(np.arange(steps) * sim.plant.dt, TH, Y, U, sps, hold)

@@ -12,13 +12,15 @@ import numpy as np
 from ..contracts import FaultReport, Mode, RecoveryAction, ValidationResult, Violation
 from ..env.closed_loop import ClosedLoop
 from ..knowledge import ADMISSIBLE_MODES, CONSTRAINTS
+from ..env.episode import EXCURSION_TOL_DEGC, EXCURSION_TOL_S
 from .twin import DigitalTwin
 
 
 class Validator:
     def __init__(self, twin: DigitalTwin, nominal_setpoints, horizon_s: float = 1500.0,
-                 settle_window_s: float = 300.0):
+                 settle_window_s: float = 300.0, delay_s: float = 30.0):
         self.twin = twin
+        self.delay_s = delay_s  # decision + actuation latency assumed by the twin rollout
         self.sp_nom = np.asarray(nominal_setpoints, dtype=float)
         self.horizon_s = horizon_s
         self.window = int(settle_window_s)
@@ -69,15 +71,18 @@ class Validator:
             return ValidationResult(passed=False, violations=structural,
                                     responsible="planner" if planner_err else "action")
         twin_loop = self.twin.build(true_loop, report)
-        ro = DigitalTwin.rollout(twin_loop, action, self.horizon_s)
+        ro = DigitalTwin.rollout(twin_loop, action, self.horizon_s, self.delay_s)
         limit = CONSTRAINTS["safety_limit_T"]
         band = CONSTRAINTS["regulation_band_degC"]
         v: list[Violation] = []
-        max_T = ro.TH.max(axis=0)
+        post = ro.TH[ro.hold:]  # judged from the moment the action takes effect
+        max_T = post.max(axis=0)
+        above_s = (post > limit).sum(axis=0) * self.twin.dt
         for z in range(n):
-            if max_T[z] > limit:
+            if max_T[z] > limit + EXCURSION_TOL_DEGC or above_s[z] > EXCURSION_TOL_S:
                 v.append(Violation(check="safety_envelope", zone=z, value=float(max_T[z]), limit=limit,
-                                   message=f"twin predicts zone {z} reaches {max_T[z]:.1f} degC > limit {limit}"))
+                                   message=(f"twin predicts zone {z} reaches {max_T[z]:.1f} degC (limit {limit}, "
+                                            f"{above_s[z]:.0f}s above it) after the action takes effect")))
         track_err = np.full(n, np.nan)
         if not action.shutdown:
             lost = lost_zones or set()
@@ -93,8 +98,8 @@ class Validator:
                         f"(mean heater output {sat:.0f}%) over the last {self.window}s")))
         else:
             # shutdown is only justified if continuing without it would be unsafe
-            hold = DigitalTwin.rollout(twin_loop, None, self.horizon_s)
-            hold_max = float(hold.TH.max())
+            hold = DigitalTwin.rollout(twin_loop, None, self.horizon_s, self.delay_s)
+            hold_max = float(hold.TH[hold.hold:].max())
             if hold_max <= limit:
                 v.append(Violation(check="shutdown_justified", value=hold_max, limit=limit, message=(
                     f"shutdown not justified: twin predicts max {hold_max:.1f} degC <= {limit} under current settings")))

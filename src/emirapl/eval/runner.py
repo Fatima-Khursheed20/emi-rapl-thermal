@@ -18,8 +18,9 @@ from ..tools.validator import Validator
 METHODS = ["no_recovery", "rule_table", "single_llm", "de_retune", "base_agent_matched", "base_agent_nominal"]
 
 
-def build_method(name: str, sc: Scenario, llm=None, reprompt_budget: int = 5):
+def build_method(name: str, sc: Scenario, llm=None, reprompt_budget: int = 5, latency_s: float | None = 30.0):
     nominal = ThermalParams(n_zones=sc.n_zones)
+    delay = 30.0 if latency_s is None else latency_s
     if name == "no_recovery":
         return NoRecovery()
     if name == "rule_table":
@@ -28,10 +29,10 @@ def build_method(name: str, sc: Scenario, llm=None, reprompt_budget: int = 5):
         return SingleCallLLM(llm)
     if name.startswith("de_retune"):
         mode = "matched" if name.endswith("matched") else "nominal"
-        return DERetune(Validator(DigitalTwin(mode, nominal), sc.setpoints))
+        return DERetune(Validator(DigitalTwin(mode, nominal), sc.setpoints, delay_s=delay))
     if name.startswith("base_agent"):
         mode = name.split("_")[-1]
-        return BasePaperAgent(llm, Validator(DigitalTwin(mode, nominal), sc.setpoints), reprompt_budget,
+        return BasePaperAgent(llm, Validator(DigitalTwin(mode, nominal), sc.setpoints, delay_s=delay), reprompt_budget,
                               name=f"base_agent_{mode}")
     raise ValueError(name)
 
@@ -51,7 +52,7 @@ def run(scenarios: list[Scenario], methods: list[str], llm, out_dir: str | Path,
             if (sc.scenario_id, m) in done:
                 continue
             t0 = time.time()
-            res = Episode(sc, latency_s=latency_s).run(build_method(m, sc, llm), keep_traj=keep_traj)
+            res = Episode(sc, latency_s=latency_s).run(build_method(m, sc, llm, latency_s=latency_s), keep_traj=keep_traj)
             row = {"scenario_id": sc.scenario_id, "method": m, "llm": getattr(llm, "name", None) if "llm" in m or "agent" in m else None,
                    "n_zones": sc.n_zones, "fault": sc.fault["kind"], "fault_zone": sc.fault["zone"],
                    "magnitude": sc.fault["magnitude"], "mismatch": sc.mismatch, "seed": sc.seed,

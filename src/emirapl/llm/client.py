@@ -20,7 +20,7 @@ PROVIDERS = {
     "gemini": {"base_url": "https://generativelanguage.googleapis.com/v1beta/openai/", "key_env": "GEMINI_API_KEY",
                "default_model": "gemini-2.5-flash", "min_interval_s": 6.5},
     "groq": {"base_url": "https://api.groq.com/openai/v1", "key_env": "GROQ_API_KEY",
-             "default_model": "llama-3.1-8b-instant", "min_interval_s": 2.1},
+             "default_model": "llama-3.1-8b-instant", "min_interval_s": 12.0},
     "ollama": {"base_url": "http://localhost:11434/v1", "key_env": None,
                "default_model": "qwen2.5:7b", "min_interval_s": 0.0},
     "openai": {"base_url": None, "key_env": "OPENAI_API_KEY",
@@ -57,7 +57,7 @@ class LLMClient:
     """Thin OpenAI-compatible client with rate limiting, retries and token accounting."""
 
     def __init__(self, provider: str, model: str | None = None, temperature: float = 0.2,
-                 max_retries: int = 5, min_interval_s: float | None = None, max_tokens: int = 1024):
+                 max_retries: int = 7, min_interval_s: float | None = None, max_tokens: int = 1024):
         from openai import OpenAI  # imported lazily so the scripted client needs no network deps
 
         cfg = PROVIDERS[provider]

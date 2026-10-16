@@ -87,5 +87,5 @@ offline and in CI. Its numbers are a pipeline check, not an LLM result.
 - Dashboard with human approval; optional real TCLab via `pip install -e ".[hardware]"`.
 
 ## Team
-- _Member 1 (group head): name, roll no._
-- _Member 2: name, roll no._
+- Fatima Khursheed (23I-0746), group head
+- Saleha Muhammad (23I-0727)

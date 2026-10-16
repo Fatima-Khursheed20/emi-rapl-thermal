@@ -10,7 +10,7 @@ from ..tools.twin import DigitalTwin
 def fallback_action(snap: Snapshot, report: FaultReport, validator, true_loop: ClosedLoop) -> RecoveryAction:
     """Shut down if the twin predicts the current settings are unsafe, else derate affected zones by 10 degC."""
     twin_loop = validator.twin.build(true_loop, report)
-    hold = DigitalTwin.rollout(twin_loop, None, validator.horizon_s)
+    hold = DigitalTwin.rollout(twin_loop, None, validator.horizon_s, validator.delay_s)
     if hold.TH.max() > CONSTRAINTS["safety_limit_T"]:
         return RecoveryAction(mode=Mode.SAFE_SHUTDOWN, shutdown=True, rationale="fallback: unsafe hold")
     zones = range(snap.n_zones) if report.zone is None or report.fault_class == "process" else [report.zone]

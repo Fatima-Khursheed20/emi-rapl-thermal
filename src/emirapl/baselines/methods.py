@@ -96,7 +96,7 @@ class DERetune:
             return a
 
         def cost(x) -> float:
-            ro = DigitalTwin.rollout(twin_loop, to_action(x), self.horizon_s)
+            ro = DigitalTwin.rollout(twin_loop, to_action(x), self.horizon_s, self.v.delay_s)
             tail = ro.TH[-300:]
             healthy = [z for z in range(n) if z not in lost]
             track = float(np.mean(np.abs(tail[:, healthy] - ro.setpoints[healthy])))
@@ -108,7 +108,7 @@ class DERetune:
                                      polish=False, tol=1e-3)
         best = to_action(res.x)
         tr.notes.append(f"DE evals={res.nfev} cost={res.fun:.3f}")
-        ro = DigitalTwin.rollout(twin_loop, best, self.horizon_s)
+        ro = DigitalTwin.rollout(twin_loop, best, self.horizon_s, self.v.delay_s)
         if ro.TH.max() > limit:  # no safe operating point found by the optimiser
             best = RecoveryAction(mode=Mode.SAFE_SHUTDOWN, shutdown=True, rationale="DE found no safe operating point")
         tr.actions.append(best)
