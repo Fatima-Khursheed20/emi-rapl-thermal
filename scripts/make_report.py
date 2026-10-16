@@ -58,7 +58,7 @@ def load_all() -> pd.DataFrame:
     return pd.concat(frames, ignore_index=True)
 
 
-def line_by_mismatch(df, metric, methods, title, ylabel, fname):
+def line_by_mismatch(df, metric, methods, title, ylabel, fname, ymax=103):
     fig, ax = plt.subplots(figsize=(7.2, 4.2))
     for m in methods:
         d = df[df.method == m]
@@ -71,17 +71,26 @@ def line_by_mismatch(df, metric, methods, title, ylabel, fname):
                     va="center", fontsize=8, color=INK)
     style(ax, title, ylabel, "plant-model parameter mismatch (%)")
     ax.set_xticks([0, 10, 20, 30])
-    ax.set_ylim(-3, 103)
+    ax.set_ylim(-ymax * 0.03, ymax)
     ax.set_xlim(-2, 52)
-    ax.legend(frameon=False, fontsize=8, loc="lower left")
+    ax.legend(frameon=False, fontsize=8, loc="upper left")
     fig.tight_layout()
     fig.savefig(OUT / fname, dpi=200)
     plt.close(fig)
 
 
+def pretty(label: str) -> str:
+    """Readable method names for figures, e.g. 'base_agent_nominal [openai/gpt-oss-20b]' -> 'Base workflow, nominal twin (gpt-oss-20b)'."""
+    name, _, rest = label.partition(" ")
+    base = LABEL.get(name, name)
+    tag = rest.strip("[]() ").replace("openai/", "")
+    return f"{base} ({tag})" if tag else base
+
+
 def bars_llm_subset(df, subset_ids, fname):
     """Plant success of every method on the same scenarios as the LLM runs (one series -> one hue)."""
     d = df[df.scenario_id.isin(subset_ids)]
+    d = d.assign(method_label=d.method_label.map(pretty))
     g = (d.groupby("method_label").plant_success.mean() * 100).sort_values()
     n = d.groupby("method_label").size().reindex(g.index)
     fig, ax = plt.subplots(figsize=(7.2, 0.42 * len(g) + 1.2))
@@ -89,8 +98,8 @@ def bars_llm_subset(df, subset_ids, fname):
     for i, (v, k) in enumerate(zip(g.values, n.values)):
         ax.text(v + 1, i, f"{v:.0f}%  (n={k})", va="center", fontsize=8, color=INK)
     ax.set_yticks(range(len(g)), g.index, fontsize=8)
-    ax.set_xlim(0, 112)
-    style(ax, f"Plant success on the {len(subset_ids)}-scenario LLM subset (2-zone)", "", "plant success (%)")
+    ax.set_xlim(0, 128)
+    style(ax, f"Plant success on the {len(subset_ids)} LLM-run scenarios", "", "plant success (%)")
     ax.grid(axis="x", color=GRID, lw=0.8)
     ax.grid(axis="y", visible=False)
     fig.tight_layout()
@@ -146,8 +155,9 @@ def main():
                      "fig_plant_success_vs_mismatch.png")
     line_by_mismatch(full, "validated_but_failed", [m for m in methods if m.startswith("base_agent")],
                      "Validated by the twin, but failed on the true plant", "episodes (%)",
-                     "fig_validated_but_failed.png")
-    subset = [x.scenario_id for x in load_suite(ROOT / "configs/suites/phase1_llm_subset.json")]
+                     "fig_validated_but_failed.png", ymax=40)
+    # compare all methods on exactly the scenarios the LLM runs have covered so far
+    subset = sorted(set(df[df.run.str.startswith("phase1_llm_")].scenario_id)) or         [x.scenario_id for x in load_suite(ROOT / "configs/suites/phase1_llm_subset.json")]
     bars_llm_subset(df, subset, "fig_llm_subset_plant_success.png")
     example_trajectory(ROOT / "configs/suites/phase1_suite.json", "p1-z2-sensor_bias-mm30-s1",
                        ["no_recovery", "rule_table", "base_agent_matched", "base_agent_nominal"], "fig_example_sensor_bias.png")
