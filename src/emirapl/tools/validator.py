@@ -97,12 +97,18 @@ class Validator:
                         f"twin predicts zone {z} misses setpoint {ro.setpoints[z]:.1f} by {track_err[z]:.2f} degC "
                         f"(mean heater output {sat:.0f}%) over the last {self.window}s")))
         else:
-            # shutdown is only justified if continuing without it would be unsafe
-            hold = DigitalTwin.rollout(twin_loop, None, self.horizon_s, self.delay_s)
-            hold_max = float(hold.TH[hold.hold:].max())
-            if hold_max <= limit:
-                v.append(Violation(check="shutdown_justified", value=hold_max, limit=limit, message=(
-                    f"shutdown not justified: twin predicts max {hold_max:.1f} degC <= {limit} under current settings")))
+            # shutdown is only justified if the least disruptive alternative - keep running but switch off
+            # every other controllable heater - would still be unsafe (same criterion as the evaluation oracle)
+            lost = lost_zones or set()
+            isolate = RecoveryAction(mode=Mode.COMPENSATE, q_max={z: 0.0 for z in range(n) if z not in lost})
+            alt = DigitalTwin.rollout(twin_loop, isolate, self.horizon_s, self.delay_s)
+            alt_post = alt.TH[alt.hold:]
+            alt_max = float(alt_post.max())
+            alt_above = float((alt_post > limit).any(axis=1).sum() * self.twin.dt)
+            if alt_max <= limit + EXCURSION_TOL_DEGC and alt_above <= EXCURSION_TOL_S:
+                v.append(Violation(check="shutdown_justified", value=alt_max, limit=limit, message=(
+                    f"shutdown not justified: twin predicts max {alt_max:.1f} degC (limit {limit}) even if only the "
+                    f"other controllable heaters are switched off, so production can continue")))
         predicted = {"max_T": [round(float(x), 2) for x in max_T],
                      "tracking_err": [None if np.isnan(e) else round(float(e), 3) for e in track_err]}
         return ValidationResult(passed=not v, violations=v, predicted=predicted,

@@ -121,6 +121,7 @@ class Episode:
         if self.spec.kind != "actuator_stuck_high":
             return False
         sim = self.loop.plant.clone()
+        sim.master_power = True  # judge the fault itself, not whatever interlock the method applied
         TH = sim.steady_state(np.zeros(sim.n))
         return bool(TH.max() > CONSTRAINTS["safety_limit_T"])
 

@@ -97,3 +97,22 @@ def test_end_to_end_episode_with_scripted_agent():
     m = res.metrics
     assert m["detected"] and m["action_applied"] and m["plant_success"]
     assert res.trace["applied_action"]["mode"] == "DERATE"
+
+
+def test_shutdown_oracle_ignores_applied_interlock():
+    sc = [s for s in make_suite("t", mismatch_levels=(0.0,), seeds=(0, 1, 2), zones=(2,))
+          if "stuck_high" in s.scenario_id and s.fault["zone"] == 0 and s.fault["magnitude"] >= 90][0]
+    ep = Episode(sc)
+    apply_fault(ep.loop.plant.fault, ep.spec)
+    required_before = ep.shutdown_required()
+    ep.loop.plant.master_power = False  # a method opened the master relay
+    assert required_before and ep.shutdown_required() == required_before
+
+
+def test_shutdown_rejected_when_isolating_other_zones_is_safe():
+    loop = warm_loop()
+    apply_fault(loop.plant.fault, FaultSpec("actuator_stuck_high", 1, 85.0, 0))  # weaker (even) heater stuck
+    report = FaultReport(detected=True, fault_class="actuator", fault_kind="actuator_stuck_high", zone=1)
+    v = Validator(DigitalTwin("matched", ThermalParams(n_zones=2)), [50.0, 45.0])
+    res = v.validate(RecoveryAction(mode=Mode.SAFE_SHUTDOWN, shutdown=True), loop, report, {1})
+    assert not res.passed and any(x.check == "shutdown_justified" for x in res.violations)
