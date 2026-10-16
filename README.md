@@ -35,11 +35,15 @@ LLM run: copy `.env.example` to `.env` and add a free key (Gemini: https://aistu
 Groq: https://console.groq.com/keys). Groq's free tier allows 200k tokens per day per model; runs stop cleanly at the cap and resume on the next invocation:
 
 ```bash
-.venv/Scripts/python scripts/run_eval.py --provider groq --model llama-3.1-8b-instant \
-    --methods single_llm base_agent_matched base_agent_nominal --filter z2- --run phase1_groq8b
-.venv/Scripts/python scripts/run_eval.py --provider gemini --model gemini-2.5-flash \
-    --methods single_llm base_agent_matched base_agent_nominal --filter z2- --run phase1_gemini
+.venv/Scripts/python scripts/run_eval.py --provider groq --model openai/gpt-oss-20b \
+    --suite configs/suites/phase1_llm_subset.json \
+    --methods single_llm base_agent_matched base_agent_nominal --run phase1_llm_gptoss20b
+.venv/Scripts/python scripts/run_eval.py --provider groq --model openai/gpt-oss-120b \
+    --suite configs/suites/phase1_llm_subset.json \
+    --methods single_llm base_agent_matched base_agent_nominal --run phase1_llm_gptoss120b
 ```
+
+Gemini works the same way with `--provider gemini --model gemini-flash-latest` once a working `GEMINI_API_KEY` is set.
 
 Check the model names against your provider's current free-tier list; model availability changes.
 
