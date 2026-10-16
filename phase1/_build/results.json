@@ -1,0 +1,278 @@
+{
+ "full": {
+  "headers": [
+   "Method",
+   "n",
+   "Plant success %",
+   "Agent success %",
+   "Validated-but-failed %",
+   "Safety violation %",
+   "Fallback %",
+   "Setpoint retention"
+  ],
+  "rows": [
+   [
+    "B0 No recovery",
+    "120",
+    "19.2",
+    "\u2013",
+    "\u2013",
+    "6.7",
+    "\u2013",
+    "1.00"
+   ],
+   [
+    "B1 Rule table",
+    "120",
+    "67.5",
+    "\u2013",
+    "\u2013",
+    "2.5",
+    "\u2013",
+    "0.72"
+   ],
+   [
+    "B3 DE retune (nominal twin)",
+    "120",
+    "65.0",
+    "\u2013",
+    "\u2013",
+    "3.3",
+    "\u2013",
+    "0.89"
+   ],
+   [
+    "B4 Base workflow, matched twin (scripted proposer)",
+    "120",
+    "80.8",
+    "67.5",
+    "0.0",
+    "2.5",
+    "32.5",
+    "0.84"
+   ],
+   [
+    "B4 Base workflow, nominal twin (scripted proposer)",
+    "120",
+    "80.8",
+    "86.7",
+    "19.2",
+    "2.5",
+    "13.3",
+    "0.85"
+   ]
+  ],
+  "widths": [
+   2626,
+   450,
+   950,
+   950,
+   1100,
+   950,
+   1000,
+   1000
+  ]
+ },
+ "llm": {
+  "headers": [
+   "Method",
+   "n",
+   "Plant %",
+   "Agent %",
+   "VbF %",
+   "Unsafe %",
+   "Reprompts",
+   "Recovery %",
+   "Calls",
+   "Tokens",
+   "Time (s)"
+  ],
+  "rows": [
+   [
+    "B0 No recovery",
+    "4",
+    "25.0",
+    "\u2013",
+    "\u2013",
+    "0.0",
+    "\u2013",
+    "\u2013",
+    "\u2013",
+    "\u2013",
+    "\u2013"
+   ],
+   [
+    "B1 Rule table",
+    "4",
+    "100.0",
+    "\u2013",
+    "\u2013",
+    "0.0",
+    "\u2013",
+    "\u2013",
+    "\u2013",
+    "\u2013",
+    "\u2013"
+   ],
+   [
+    "B3 DE retune (nominal twin)",
+    "4",
+    "100.0",
+    "\u2013",
+    "\u2013",
+    "0.0",
+    "\u2013",
+    "\u2013",
+    "\u2013",
+    "\u2013",
+    "79"
+   ],
+   [
+    "B2 Single LLM call [gpt-oss-120b]",
+    "4",
+    "25.0",
+    "\u2013",
+    "\u2013",
+    "0.0",
+    "\u2013",
+    "\u2013",
+    "1.0",
+    "1.8k",
+    "2"
+   ],
+   [
+    "B2 Single LLM call [gpt-oss-20b]",
+    "2",
+    "0.0",
+    "\u2013",
+    "\u2013",
+    "0.0",
+    "\u2013",
+    "\u2013",
+    "1.0",
+    "1.8k",
+    "2"
+   ],
+   [
+    "B4 Base workflow, matched twin [gpt-oss-120b]",
+    "3",
+    "100.0",
+    "66.7",
+    "0.0",
+    "0.0",
+    "2.67",
+    "50.0",
+    "4.7",
+    "11.7k",
+    "123"
+   ],
+   [
+    "B4 Base workflow, matched twin [gpt-oss-20b]",
+    "2",
+    "100.0",
+    "50.0",
+    "0.0",
+    "0.0",
+    "4.00",
+    "50.0",
+    "6.0",
+    "13.8k",
+    "152"
+   ],
+   [
+    "B4 Base workflow, nominal twin [gpt-oss-120b]",
+    "3",
+    "100.0",
+    "33.3",
+    "0.0",
+    "0.0",
+    "3.67",
+    "33.3",
+    "5.7",
+    "14.7k",
+    "164"
+   ],
+   [
+    "B4 Base workflow, nominal twin [gpt-oss-20b]",
+    "1",
+    "100.0",
+    "0.0",
+    "0.0",
+    "0.0",
+    "5.00",
+    "0.0",
+    "7.0",
+    "16.9k",
+    "183"
+   ]
+  ],
+  "widths": [
+   2426,
+   350,
+   620,
+   620,
+   620,
+   650,
+   800,
+   780,
+   560,
+   650,
+   950
+  ]
+ },
+ "by_fault": {
+  "B0 No recovery": {
+   "actuator_stuck_high": 66.7,
+   "heat_loss_increase": 0.0,
+   "heater_degradation": 25.0,
+   "local_insulation_loss": 4.2,
+   "sensor_bias": 0.0
+  },
+  "B1 Rule table": {
+   "actuator_stuck_high": 20.8,
+   "heat_loss_increase": 100.0,
+   "heater_degradation": 100.0,
+   "local_insulation_loss": 100.0,
+   "sensor_bias": 16.7
+  },
+  "B2 Single LLM call [gpt-oss-120b]": {
+   "heater_degradation": 25.0
+  },
+  "B2 Single LLM call [gpt-oss-20b]": {
+   "heater_degradation": 0.0
+  },
+  "B3 DE retune (nominal twin)": {
+   "actuator_stuck_high": 87.5,
+   "heat_loss_increase": 62.5,
+   "heater_degradation": 100.0,
+   "local_insulation_loss": 58.3,
+   "sensor_bias": 16.7
+  },
+  "B4 Base workflow, matched twin (scripted proposer)": {
+   "actuator_stuck_high": 87.5,
+   "heat_loss_increase": 100.0,
+   "heater_degradation": 100.0,
+   "local_insulation_loss": 100.0,
+   "sensor_bias": 16.7
+  },
+  "B4 Base workflow, matched twin [gpt-oss-120b]": {
+   "heater_degradation": 100.0
+  },
+  "B4 Base workflow, matched twin [gpt-oss-20b]": {
+   "heater_degradation": 100.0
+  },
+  "B4 Base workflow, nominal twin (scripted proposer)": {
+   "actuator_stuck_high": 87.5,
+   "heat_loss_increase": 100.0,
+   "heater_degradation": 100.0,
+   "local_insulation_loss": 100.0,
+   "sensor_bias": 16.7
+  },
+  "B4 Base workflow, nominal twin [gpt-oss-120b]": {
+   "heater_degradation": 100.0
+  },
+  "B4 Base workflow, nominal twin [gpt-oss-20b]": {
+   "heater_degradation": 100.0
+  }
+ }
+}

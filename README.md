@@ -91,6 +91,11 @@ Inspect a single decision (plan → action → twin validation → reprompts →
 The `scripted` provider is a deterministic rule-based stand-in for the LLM. It exercises the full pipeline
 offline and in CI. Its numbers are a pipeline check, not an LLM result.
 
+## Phase-1 submission
+
+The submitted document is [phase1/Phase1_G3-09_23I-0746.pdf](phase1/Phase1_G3-09_23I-0746.pdf) (Word source and
+build scripts in `phase1/`). Handover and submission checklist: [phase1/HANDOVER_SALEHA.md](phase1/HANDOVER_SALEHA.md).
+
 ## Phase-1 results (summary)
 
 Full 120-scenario suite. The base workflow uses a scripted proposer, so the two twins see identical proposals:

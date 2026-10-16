@@ -5,6 +5,6 @@ __pycache__/
 .env
 .pytest_cache/
 results/_*/
-results/**/episodes.jsonl
 results/*.log
 docs/architecture.svg
+phase1/_build/node_modules/
