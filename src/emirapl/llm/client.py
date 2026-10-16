@@ -74,7 +74,9 @@ class LLMClient:
         self.tpm_budget = cfg.get("tpm_budget")
         # reasoning models (gpt-oss) spend output tokens on hidden reasoning; "low" keeps calls cheap
         self.extra_body = {"reasoning_effort": reasoning_effort} if reasoning_effort and "gpt-oss" in self.model else None
-        self._client = OpenAI(api_key=key, base_url=cfg["base_url"]) if cfg["base_url"] else OpenAI(api_key=key)
+        # bounded timeout and no hidden SDK retries: a hung request must not stall an evaluation run
+        kw = {"timeout": 90.0, "max_retries": 0}
+        self._client = OpenAI(api_key=key, base_url=cfg["base_url"], **kw) if cfg["base_url"] else OpenAI(api_key=key, **kw)
         self._last_call = 0.0
         self._usage: list[tuple[float, int]] = []  # (time, tokens) for the tokens-per-minute budget
 
