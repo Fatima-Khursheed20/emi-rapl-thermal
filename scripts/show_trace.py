@@ -64,7 +64,8 @@ def show(ep: dict) -> None:
         print(f"llm calls  : {len(calls)}  tokens in/out={sum(c['tokens_in'] for c in calls)}/"
               f"{sum(c['tokens_out'] for c in calls)}  latency={sum(c['latency_s'] for c in calls):.1f}s  model={calls[0]['model']}")
     print(f"TRUE PLANT : success={m['plant_success']}  safety_violation={m['safety_violation_post']}  "
-          f"max_T={m['max_T_post']}  regulated={m['regulated']}  validated_but_failed={m['validated_but_failed']}")
+          f"max_T={m['max_T_post']}  regulated={m['regulated']}"
+          + (f"  validated_but_failed={m['validated_but_failed']}" if ep["method"].startswith("base_agent") else ""))
 
 
 def main():
@@ -79,7 +80,8 @@ def main():
     if args.list:
         for ep in eps:
             m = ep["metrics"]
-            flag = "VALIDATED-BUT-FAILED" if m.get("validated_but_failed") else ("ok" if m["plant_success"] else "failed")
+            validated = ep["method"].startswith("base_agent")  # only the workflow has a validator
+            flag = "VALIDATED-BUT-FAILED" if validated and m.get("validated_but_failed") else ("ok" if m["plant_success"] else "failed")
             print(f"{ep['scenario']['scenario_id']:45s} {ep['method']:22s} {flag}")
         return
     sel = [e for e in eps if (not args.scenario or e["scenario"]["scenario_id"] == args.scenario)
