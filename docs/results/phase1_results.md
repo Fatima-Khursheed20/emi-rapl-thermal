@@ -23,59 +23,59 @@
 
 
 
-## Run `phase1_llm_gptoss120b` (4 scenarios)
+## Run `phase1_llm_gptoss120b` (12 scenarios)
 
 | method_label                             |   episodes |   agent_success_% |   plant_success_% |   validated_but_failed_% |   safety_violation_% |   fallback_% |   mean_reprompts |   setpoint_retention |   mean_llm_calls |   mean_tokens_in |   mean_llm_latency_s |
 |:-----------------------------------------|-----------:|------------------:|------------------:|-------------------------:|---------------------:|-------------:|-----------------:|---------------------:|-----------------:|-----------------:|---------------------:|
-| base_agent_matched [openai/gpt-oss-120b] |          3 |              66.7 |               100 |                        0 |                    0 |         33.3 |             2.67 |                0.947 |             4.67 |            10539 |                 7.3  |
-| base_agent_nominal [openai/gpt-oss-120b] |          3 |              33.3 |               100 |                        0 |                    0 |         66.7 |             3.67 |                0.917 |             5.67 |            13243 |                10.31 |
-| single_llm [openai/gpt-oss-120b]         |          4 |             100   |                25 |                       75 |                    0 |          0   |             0    |                0.975 |             1    |             1560 |                 1.74 |
+| base_agent_matched [openai/gpt-oss-120b] |         11 |              63.6 |             100   |                      0   |                    0 |         36.4 |             2.36 |                0.905 |             4.36 |             9884 |                 6.31 |
+| base_agent_nominal [openai/gpt-oss-120b] |         11 |              72.7 |              90.9 |                      0   |                    0 |         27.3 |             2.73 |                0.915 |             4.73 |            10684 |                 7.08 |
+| single_llm [openai/gpt-oss-120b]         |         12 |             100   |              41.7 |                     58.3 |                    0 |          0   |             0    |                0.983 |             1    |             1544 |                 1.4  |
 
 
 **Plant success % by fault**
 
-| method_label                             |   heater_degradation |
-|:-----------------------------------------|---------------------:|
-| base_agent_matched [openai/gpt-oss-120b] |                  100 |
-| base_agent_nominal [openai/gpt-oss-120b] |                  100 |
-| single_llm [openai/gpt-oss-120b]         |                   25 |
+| method_label                             |   actuator_stuck_high |   heat_loss_increase |   heater_degradation |   local_insulation_loss |   sensor_bias |
+|:-----------------------------------------|----------------------:|---------------------:|---------------------:|------------------------:|--------------:|
+| base_agent_matched [openai/gpt-oss-120b] |                   100 |                  100 |                  100 |                     100 |           100 |
+| base_agent_nominal [openai/gpt-oss-120b] |                   100 |                  100 |                  100 |                     100 |            50 |
+| single_llm [openai/gpt-oss-120b]         |                   100 |                    0 |                   25 |                       0 |           100 |
 
 
 **Plant success % by mismatch**
 
 | method_label                             |   0.0 |   0.2 |
 |:-----------------------------------------|------:|------:|
-| base_agent_matched [openai/gpt-oss-120b] |   100 |   100 |
-| base_agent_nominal [openai/gpt-oss-120b] |   100 |   100 |
-| single_llm [openai/gpt-oss-120b]         |     0 |    50 |
+| base_agent_matched [openai/gpt-oss-120b] | 100   |   100 |
+| base_agent_nominal [openai/gpt-oss-120b] |  83.3 |   100 |
+| single_llm [openai/gpt-oss-120b]         |  33.3 |    50 |
 
 
 
-## Run `phase1_llm_gptoss20b` (2 scenarios)
+## Run `phase1_llm_gptoss20b` (10 scenarios)
 
 | method_label                            |   episodes |   agent_success_% |   plant_success_% |   validated_but_failed_% |   safety_violation_% |   fallback_% |   mean_reprompts |   setpoint_retention |   mean_llm_calls |   mean_tokens_in |   mean_llm_latency_s |
 |:----------------------------------------|-----------:|------------------:|------------------:|-------------------------:|---------------------:|-------------:|-----------------:|---------------------:|-----------------:|-----------------:|---------------------:|
-| base_agent_matched [openai/gpt-oss-20b] |          2 |                50 |               100 |                        0 |                    0 |           50 |                4 |                0.905 |                6 |            12760 |                 5.59 |
-| base_agent_nominal [openai/gpt-oss-20b] |          1 |                 0 |               100 |                        0 |                    0 |          100 |                5 |                0.9   |                7 |            15550 |                 9.46 |
-| single_llm [openai/gpt-oss-20b]         |          2 |               100 |                 0 |                      100 |                    0 |            0 |                0 |                0.975 |                1 |             1560 |                 1.16 |
+| base_agent_matched [openai/gpt-oss-20b] |         10 |              60   |             100   |                        0 |                    0 |         40   |             3.3  |                0.886 |             5.3  |            11986 |                 5.03 |
+| base_agent_nominal [openai/gpt-oss-20b] |          9 |              55.6 |              88.9 |                        0 |                    0 |         44.4 |             3.22 |                0.88  |             5.22 |            11301 |                 4.76 |
+| single_llm [openai/gpt-oss-20b]         |         10 |             100   |              20   |                       80 |                   20 |          0   |             0    |                0.99  |             1    |             1540 |                 0.97 |
 
 
 **Plant success % by fault**
 
-| method_label                            |   heater_degradation |
-|:----------------------------------------|---------------------:|
-| base_agent_matched [openai/gpt-oss-20b] |                  100 |
-| base_agent_nominal [openai/gpt-oss-20b] |                  100 |
-| single_llm [openai/gpt-oss-20b]         |                    0 |
+| method_label                            |   actuator_stuck_high |   heat_loss_increase |   heater_degradation |   local_insulation_loss |   sensor_bias |
+|:----------------------------------------|----------------------:|---------------------:|---------------------:|------------------------:|--------------:|
+| base_agent_matched [openai/gpt-oss-20b] |                   100 |                  100 |                100   |                     100 |           100 |
+| base_agent_nominal [openai/gpt-oss-20b] |                   100 |                  100 |                100   |                     100 |            50 |
+| single_llm [openai/gpt-oss-20b]         |                   100 |                    0 |                 33.3 |                       0 |             0 |
 
 
 **Plant success % by mismatch**
 
-| method_label                            |   0.0 |
-|:----------------------------------------|------:|
-| base_agent_matched [openai/gpt-oss-20b] |   100 |
-| base_agent_nominal [openai/gpt-oss-20b] |   100 |
-| single_llm [openai/gpt-oss-20b]         |     0 |
+| method_label                            |   0.0 |   0.2 |
+|:----------------------------------------|------:|------:|
+| base_agent_matched [openai/gpt-oss-20b] |   100 |   100 |
+| base_agent_nominal [openai/gpt-oss-20b] |    75 |   100 |
+| single_llm [openai/gpt-oss-20b]         |     0 |    40 |
 
 
 
