@@ -1,4 +1,4 @@
 method,episodes,agent_success_%,plant_success_%,validated_but_failed_%,safety_violation_%,fallback_%,mean_reprompts,setpoint_retention,mean_llm_calls,mean_tokens_in,mean_llm_latency_s
-base_agent_matched,2,50.0,100.0,0.0,0.0,50.0,4.0,0.905,6.0,12760.0,5.59
-base_agent_nominal,1,0.0,100.0,0.0,0.0,100.0,5.0,0.9,7.0,15550.0,9.46
-single_llm,2,100.0,0.0,100.0,0.0,0.0,0.0,0.975,1.0,1560.0,1.16
+base_agent_matched,10,60.0,100.0,0.0,0.0,40.0,3.3,0.886,5.3,11986.0,5.03
+base_agent_nominal,9,55.6,88.9,0.0,0.0,44.4,3.22,0.88,5.22,11301.0,4.76
+single_llm,10,100.0,20.0,80.0,20.0,0.0,0.0,0.99,1.0,1540.0,0.97
