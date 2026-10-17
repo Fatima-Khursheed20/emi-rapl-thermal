@@ -78,8 +78,8 @@ def rows_llm(d):
 res = {
     "full": {"headers": ["Method", "n", "Plant success %", "Agent success %", "Validated-but-failed %", "Safety violation %", "Fallback %", "Setpoint retention"],
              "rows": rows_full(full), "widths": [2626, 450, 950, 950, 1100, 950, 1000, 1000]},
-    "llm": {"headers": ["Method", "n", "Plant %", "Agent %", "VbF %", "Unsafe %", "Reprompts", "Recovery %", "Calls", "Tokens", "Time (s)"],
-            "rows": rows_llm(sub), "widths": [2426, 350, 620, 620, 620, 650, 800, 780, 560, 650, 950]},
+    "llm": {"headers": ["Method", "n", "Plant %", "Agent %", "VbF %", "Unsafe %", "Re-prompts", "Recovery %", "Calls", "Tokens", "Time (s)"],
+            "rows": rows_llm(sub), "widths": [2226, 350, 600, 600, 560, 700, 820, 860, 560, 700, 1050]},
     "by_fault": {f"{lbl}": {k: round(100 * v, 1) for k, v in g.groupby("fault").plant_success.mean().items()}
                  for lbl, g in pd.concat([full, llm]).groupby("label")},
 }

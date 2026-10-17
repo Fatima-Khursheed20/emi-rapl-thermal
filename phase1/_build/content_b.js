@@ -62,7 +62,7 @@ module.exports.FAULTS = [
   ['Stuck-high heater', 'Actuator', 'Heater output frozen at 85–100%', 'Zone may exceed the 60 °C limit'],
 ];
 module.exports.DATA2 = [
-  'The Phase-1 evaluation suite contains 120 scenarios: five faults × two plant sizes × four mismatch levels × three seeds. Because free-tier LLM quotas are limited (8,000 tokens per minute and 1,000 requests per day per model), LLM methods are also run on a fixed 20-scenario two-zone subset. In Phase 2 the suite grows to five seeds, two noise levels and a held-out set with unseen magnitudes and compound faults. LLMs are accessed through Groq\'s OpenAI-compatible API: openai/gpt-oss-20b as the small model and openai/gpt-oss-120b as the large one, both with low reasoning effort. Every number in this report can be regenerated from the repository.',
+  'The Phase-1 evaluation suite contains 120 scenarios: five faults × two plant sizes × four mismatch levels × three seeds. Because free-tier LLM quotas are limited (8,000 tokens per minute and 200,000 tokens per day per model), LLM methods are run on a fixed two-zone subset; Phase 1 reports its 10-scenario core set, which covers all five faults at 0% and 20% mismatch. In Phase 2 the suite grows to five seeds, two noise levels and a held-out set with unseen magnitudes and compound faults. LLMs are accessed through Groq\'s OpenAI-compatible API: openai/gpt-oss-20b as the small model and openai/gpt-oss-120b as the large one, both with low reasoning effort. Every number in this report can be regenerated from the repository.',
 ];
 
 module.exports.ARCH = [
@@ -93,7 +93,7 @@ module.exports.RQ = [
 ];
 
 module.exports.EVAL = [
-  ['Evaluation sets', 'Phase-1 suite (120 scenarios) and 20-scenario LLM subset; Phase-2 extended suite (about 200 scenarios plus a held-out set of unseen magnitudes and compound faults). Each LLM configuration is repeated three times at temperature 0.2.'],
+  ['Evaluation sets', 'Phase-1 suite (120 scenarios) and the 10-scenario LLM core set (20-scenario subset in Phase 2); Phase-2 extended suite (about 200 scenarios plus a held-out set of unseen magnitudes and compound faults). Each LLM configuration is repeated three times at temperature 0.2.'],
   ['Primary metrics', 'Plant success (no safety violation after the action and healthy zones regulated within ±1.5 °C, with shutdown only when unavoidable); agent success (the base paper\'s definition: a validated LLM action applied without fallback); validated-but-failed rate; safety-violation rate (more than 0.5 °C or 60 s above the 60 °C limit after the action).'],
   ['Secondary metrics', 'Peak temperature, time above the limit, setpoint retention, integrated absolute error, recovery rate, reprompts, fallback rate, localisation accuracy (G3) and EKF parameter error (G1).'],
   ['System measures', 'LLM calls, input and output tokens, LLM latency and total decision time per episode.'],
@@ -111,7 +111,7 @@ module.exports.MILESTONES = [
   ['Phase 3 (1 week)', 'Slides, live demonstration, viva preparation.'],
 ];
 module.exports.RISKS = [
-  ['Free-tier LLM limits (8k tokens/min, 1k requests/day per model)', 'Token-budget pacer (implemented); run the two models in parallel on separate quotas; LLM experiments on the two-zone subset; local open model through Ollama as a last resort.'],
+  ['Free-tier LLM limits (8k tokens/min and 200k tokens/day per model)', 'Token-budget pacer and clean stop/resume at the daily cap (implemented); run the two models in parallel on separate quotas; spread long runs over several days; LLM experiments on the two-zone subset; local open model through Ollama as a last resort.'],
   ['LLM non-determinism', 'Three repeats per configuration, fixed temperature, logged prompts and replies, confidence intervals.'],
   ['EKF divergence under large mismatch', 'Recursive least squares or a batch grey-box fit over a sliding window as a fallback estimator.'],
   ['Compute cost of DE (30–130 s per decision)', 'Smaller population and horizon, vectorised rollouts, parallel scenario shards (already used).'],
