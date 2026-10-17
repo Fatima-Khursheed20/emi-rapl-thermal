@@ -30,8 +30,7 @@ chat or commit them.
 1. Open the PDF and read it once end to end.
 2. Paper [7] (*Applied Energy*) was published online in Oct 2026, but its issue is dated **Jan 2027**. Online-first
    usually counts as 2026; if the supervisor disagrees, swap it for a reserve paper (listed in `phase1/A_literature_notes.md`).
-3. If you finished the LLM runs (§3), rebuild the document first (§5). Otherwise submit as is: the LLM numbers are
-   already labelled *preliminary*.
+3. The PDF already includes the completed core LLM runs (17 Oct). Rebuild it (§5) only if you run more scenarios.
 4. Keep the instructor's email that permits AI-assisted writing.
 
 ---
@@ -59,7 +58,7 @@ chat or commit them.
 | Model integration and provider setup | `src/emirapl/llm/client.py` (Groq/Gemini/Ollama/OpenAI, pacing, quota stop) |
 | Tool interfaces | `src/emirapl/tools/` (digital twin rollout, validator), `knowledge.py` |
 | State and structured contracts | `src/emirapl/contracts.py` |
-| Evaluation dataset / test suite | `configs/suites/` (120-scenario suite + 20-scenario LLM subset), `tests/` (12 tests) |
+| Evaluation dataset / test suite | `configs/suites/` (120-scenario suite, 20-scenario LLM subset, 10-scenario LLM core set), `tests/` (12 tests) |
 | End-to-end workflow | `scripts/run_eval.py`; inspect any decision with `scripts/show_trace.py` |
 | Clean repo, README, commits from both members | ✅ commits from both members, roughly even |
 
@@ -67,7 +66,8 @@ chat or commit them.
 - 600 episodes on the 120-scenario suite: no recovery, rule table, DE retune, and the base workflow (scripted proposer)
   with matched and nominal twins.
 - Headline: matched twin 0.0 % validated-but-failed vs **19.2 %** with a realistic nominal twin, which is the Gap-1 evidence.
-- 15 valid real-LLM episodes (gpt-oss-20b: 5, gpt-oss-120b: 10).
+- 63 valid real-LLM episodes on the 10-scenario core set (all five faults at 0 % and 20 % mismatch): gpt-oss-120b
+  complete; gpt-oss-20b one scenario short (stuck heater at 0 % mismatch), because it hit the daily cap on 17 Oct.
 
 ---
 
@@ -75,8 +75,8 @@ chat or commit them.
 
 | Task | Needed for submission? | Effort |
 |---|---|---|
-| Finish the real-LLM runs on the 20-scenario subset (45 more episodes per model) | No; they're labelled preliminary in the PDF. Nice to have | 3–4 days of free Groq quota, mostly waiting |
-| Rebuild the PDF if the LLM runs finish before the deadline | Only if you do the task above | ~30 min |
+| (Optional) the last gpt-oss-20b core scenario, then the seed-1 half of the 20-scenario subset | No. The core set in the PDF already covers every fault; this is Phase-2 material | 1 scenario ≈ 30k tokens; the full seed-1 half ≈ 2 days of free quota |
+| Rebuild the PDF if you add runs | Only if you do the task above | ~30 min |
 | Confirm paper [7]'s year with the supervisor | Recommended | 5 min |
 | Instructor accepts the GitHub invite | Yes (supervisor access) | — |
 

@@ -1,20 +1,21 @@
 # Remaining Phase-1 LLM runs (owner: Saleha)
 
-**Status (16 Oct 2026):** 15 valid real-LLM episodes on the 2-zone LLM subset, all heater-degradation scenarios
-(gpt-oss-20b: 5, gpt-oss-120b: 10). Both runs stopped at Groq's free-tier cap of **200,000 tokens per day per model**.
-The cap is a rolling 24-hour window, so quota frees up gradually about a day after it was used.
+**Status (17 Oct 2026):** the 10-scenario **core set** reported in the Phase-1 PDF (`configs/suites/phase1_llm_core.json`,
+all five faults at 0 % and 20 % mismatch) is done: 63 valid episodes in total, with gpt-oss-120b complete and
+gpt-oss-20b missing only `actuator_stuck_high-mm00-s0`. Groq's free tier caps each model at **200,000 tokens per day**,
+on a rolling 24-hour window.
 
-**Goal:** finish `configs/suites/phase1_llm_subset.json`: 20 scenarios × 3 methods = 60 episodes per model.
-One base-workflow episode costs about 12–17k tokens, so each model can do roughly 12–15 episodes a day.
-Expect **3–4 days** with both models running in parallel.
+**Optional next step (Phase 2):** the seed-1 half of `configs/suites/phase1_llm_subset.json` (10 more scenarios ×
+3 methods per model). One scenario costs about 30k tokens across the three methods, so expect roughly **2 days** with
+both models running in parallel. Replace `phase1_llm_core.json` with `phase1_llm_subset.json` in the commands below.
 
 ## How to resume (safe to run any time)
 
 ```bash
 cd emi-rapl-thermal
 # .env must contain GROQ_API_KEY (never commit .env)
-.venv/Scripts/python scripts/run_eval.py --suite configs/suites/phase1_llm_subset.json --provider groq --model openai/gpt-oss-20b  --methods single_llm base_agent_matched base_agent_nominal --run phase1_llm_gptoss20b
-.venv/Scripts/python scripts/run_eval.py --suite configs/suites/phase1_llm_subset.json --provider groq --model openai/gpt-oss-120b --methods single_llm base_agent_matched base_agent_nominal --run phase1_llm_gptoss120b
+.venv/Scripts/python scripts/run_eval.py --suite configs/suites/phase1_llm_core.json --provider groq --model openai/gpt-oss-20b  --methods single_llm base_agent_matched base_agent_nominal --run phase1_llm_gptoss20b
+.venv/Scripts/python scripts/run_eval.py --suite configs/suites/phase1_llm_core.json --provider groq --model openai/gpt-oss-120b --methods single_llm base_agent_matched base_agent_nominal --run phase1_llm_gptoss120b
 ```
 
 - Each run **resumes** where it stopped: finished `(scenario, method)` pairs in `summary.csv` are skipped.
