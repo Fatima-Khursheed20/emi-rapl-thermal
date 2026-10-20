@@ -51,13 +51,13 @@
 
 
 
-## Run `phase1_llm_gptoss20b` (10 scenarios)
+## Run `phase1_llm_gptoss20b` (11 scenarios)
 
 | method_label                            |   episodes |   agent_success_% |   plant_success_% |   validated_but_failed_% |   safety_violation_% |   fallback_% |   mean_reprompts |   setpoint_retention |   mean_llm_calls |   mean_tokens_in |   mean_llm_latency_s |
 |:----------------------------------------|-----------:|------------------:|------------------:|-------------------------:|---------------------:|-------------:|-----------------:|---------------------:|-----------------:|-----------------:|---------------------:|
-| base_agent_matched [openai/gpt-oss-20b] |         10 |              60   |             100   |                        0 |                    0 |         40   |             3.3  |                0.886 |             5.3  |            11986 |                 5.03 |
-| base_agent_nominal [openai/gpt-oss-20b] |          9 |              55.6 |              88.9 |                        0 |                    0 |         44.4 |             3.22 |                0.88  |             5.22 |            11301 |                 4.76 |
-| single_llm [openai/gpt-oss-20b]         |         10 |             100   |              20   |                       80 |                   20 |          0   |             0    |                0.99  |             1    |             1540 |                 0.97 |
+| base_agent_matched [openai/gpt-oss-20b] |         11 |              63.6 |             100   |                      0   |                  0   |         36.4 |              3   |                0.887 |              5   |            11188 |                 4.81 |
+| base_agent_nominal [openai/gpt-oss-20b] |         10 |              60   |              90   |                      0   |                  0   |         40   |              2.9 |                0.892 |              4.9 |            10491 |                 4.47 |
+| single_llm [openai/gpt-oss-20b]         |         11 |             100   |              27.3 |                     72.7 |                 18.2 |          0   |              0   |                0.991 |              1   |             1542 |                 0.96 |
 
 
 **Plant success % by fault**
@@ -73,9 +73,9 @@
 
 | method_label                            |   0.0 |   0.2 |
 |:----------------------------------------|------:|------:|
-| base_agent_matched [openai/gpt-oss-20b] |   100 |   100 |
-| base_agent_nominal [openai/gpt-oss-20b] |    75 |   100 |
-| single_llm [openai/gpt-oss-20b]         |     0 |    40 |
+| base_agent_matched [openai/gpt-oss-20b] | 100   |   100 |
+| base_agent_nominal [openai/gpt-oss-20b] |  80   |   100 |
+| single_llm [openai/gpt-oss-20b]         |  16.7 |    40 |
 
 
 

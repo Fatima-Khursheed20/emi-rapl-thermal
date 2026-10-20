@@ -147,9 +147,9 @@ module.exports.SUMMARIES = [
   ['[12] Li et al., Journal of Manufacturing Systems 2026', {
     problem: 'Setting up and adapting tension and speed controllers on roll-to-roll lines consumes scarce expert time.',
     method: 'A five-phase LLM-assisted multi-agent framework: system identification from operating data, automatic controller selection and tuning, simulation-to-real adaptation with safety checks, continuous monitoring with diagnostics, and periodic model refinement.',
-    data: 'A laboratory roll-to-roll machine.',
+    data: 'A simulated multi-span roll-to-roll web-handling system: the "real" plant is itself a simulation, and the controller is tuned on a deliberately mismatched model (8.3–50% parameter deviations); hardware testing is left to future work.',
     results: 'RMSE fell by 55.7% for tension control and 82.4% for velocity tracking, outperforming an MPC baseline.',
-    limitations: 'One machine is studied, diagnostics are descriptive rather than verified, and the paper does not show how uncertainty in the identified model enters its safety checks.',
+    limitations: 'The authors list hardware validation on a physical roll-to-roll testbed and extension to other manufacturing processes as future work, and note that tension–velocity coupling grows stronger at production speeds than at the low speed they tested. We add that each configuration appears to be evaluated in a single run without repeats or statistics, and that the Monitoring Agent is described but never evaluated: no faults or degradation are injected in the validation study.',
     relevance: 'It shows that refreshing the model online matters in practice, the step our base paper leaves out, and gives a manufacturing example of the EMI-RAPL idea.',
   }],
 ];
@@ -167,7 +167,7 @@ module.exports.TABLE = [
   ['9', 'LLM + PSO UAV controller synthesis', '2026, IEEE TII', 'UAV sim → PX4 SITL → real UAV', 'LLM writes control law; PSO tunes coefficients', 'Trajectory MSE', '≥38% lower MSE in real flights', 'Offline and compute-heavy'],
   ['10', 'P&ID-grounded validation', '2026, Auton. Intell. Systems', 'Tennessee Eastman + 2 synthetic plants', 'Observation-only LLM; deterministic graph verifier', 'Recall of invalid proposals, unsafe-proposal rate', '100% recall; LLMs unsafe in 10–70% of runs', 'Structural checks only; no dynamics'],
   ['11', 'Neuro-symbolic hallucination checks', '2026, Processes', '500-scenario dataset + 36-user study', 'GPT-5.1 generator; abductive and counter-abductive verifier', 'Logical accuracy, consistency, trust', '+18% accuracy; +15/+12 consistency; +23% trust', 'Explanations only; synthetic data'],
-  ['12', 'LLM multi-agent roll-to-roll control', '2026, J. Manuf. Systems', 'Laboratory R2R machine', 'Sys-ID, tuning, sim-to-real safety checks, monitoring, refinement', 'Tension and velocity RMSE', '−55.7% / −82.4% RMSE; beats MPC', 'One machine; model uncertainty not carried into checks'],
+  ['12', 'LLM multi-agent roll-to-roll control', '2026, J. Manuf. Systems', 'Simulated R2R web-handling system', 'Sys-ID, tuning, sim-to-real safety checks, monitoring, refinement', 'Tension and velocity RMSE', '−55.7% / −82.4% RMSE; beats MPC', 'Simulation only; single runs; monitoring not evaluated'],
 ];
 
 module.exports.GAPS_INTRO = 'Reading the twelve papers side by side shows a common pattern: almost all of them place a verification step between the LLM and the plant, but that step is either a perfect copy of the simulator [1], [6], a rule or symbolic check [2], [3], [7], [10], or absent [4], [5]. In parallel, the papers that measure repeated revisions [1]–[3] show that the LLM often cannot repair its own proposal from pass/fail feedback, and the papers on diagnosis [10], [11] show that LLM fault explanations cannot be trusted without verification. From these observations we derived six candidate gaps and selected the three that are specific, supported by named papers, tied to the base paper and measurable on our plant within the semester.';

@@ -24,6 +24,8 @@ See [docs/base_paper_mapping.md](docs/base_paper_mapping.md) for the component-b
 uv venv .venv && uv pip install -e ".[dev]"      # or: python -m venv .venv && .venv/Scripts/pip install -e ".[dev]"
 .venv/Scripts/python -m pytest -q                 # 12 tests, ~10 s, no API key needed
 ```
+On Linux/macOS, use `.venv/bin/python` wherever these commands say `.venv/Scripts/python`.
+
 
 Offline run (no API key): non-LLM baselines on the 120-scenario suite:
 
@@ -31,8 +33,7 @@ Offline run (no API key): non-LLM baselines on the 120-scenario suite:
 .venv/Scripts/python scripts/run_eval.py --methods no_recovery rule_table de_retune --run phase1_nonllm
 ```
 
-LLM run: copy `.env.example` to `.env` and add a free key (Gemini: https://aistudio.google.com/apikey,
-Groq: https://console.groq.com/keys). Groq's free tier allows 200k tokens per day per model; runs stop cleanly at the cap and resume on the next invocation:
+LLM run: copy `.env.example` to `.env` and add a free Groq key (https://console.groq.com/keys). Groq's free tier allows 200k tokens per day per model; runs stop cleanly at the cap and resume on the next invocation:
 
 ```bash
 .venv/Scripts/python scripts/run_eval.py --provider groq --model openai/gpt-oss-20b \
@@ -42,9 +43,6 @@ Groq: https://console.groq.com/keys). Groq's free tier allows 200k tokens per da
     --suite configs/suites/phase1_llm_subset.json \
     --methods single_llm base_agent_matched base_agent_nominal --run phase1_llm_gptoss120b
 ```
-
-Gemini works the same way with `--provider gemini --model gemini-flash-latest` once a working `GEMINI_API_KEY` is set.
-
 Check the model names against your provider's current free-tier list; model availability changes.
 
 Results land in `results/<run>/`: `summary.csv` (one row per episode), `aggregate_by_method*.csv`, and
@@ -94,7 +92,7 @@ offline and in CI. Its numbers are a pipeline check, not an LLM result.
 ## Phase-1 submission
 
 The submitted document is [phase1/Phase1_G3-09_23I-0746.pdf](phase1/Phase1_G3-09_23I-0746.pdf) (Word source and
-build scripts in `phase1/`). Handover and submission checklist: [phase1/HANDOVER_SALEHA.md](phase1/HANDOVER_SALEHA.md).
+build scripts in `phase1/`).
 
 ## Phase-1 results (summary)
 
@@ -112,8 +110,7 @@ A realistic twin approves about one action in five that then fails on the true p
 the gap that G1 targets. Real-LLM runs (gpt-oss-20b / gpt-oss-120b on Groq, 63 episodes on a 10-scenario core set
 covering all five faults) show a single unvalidated LLM call succeeding in only 20–42 % of episodes, sometimes unsafely.
 The validated workflow keeps the plant safe (89–100 %), but the LLM itself finds a valid action in only 56–73 % of
-episodes and leans on the fallback (G2). Full tables and figures are in [docs/results/](docs/results/phase1_results.md). The
-remaining LLM runs are described in [docs/phase1_remaining_llm_runs.md](docs/phase1_remaining_llm_runs.md).
+episodes and leans on the fallback (G2). Full tables and figures are in [docs/results/](docs/results/phase1_results.md).
 
 ## Roadmap (Phase 2)
 - **G1**: adaptive EKF (joint state + parameter, EWMA noise adaptation) → calibrated twin ensemble → chance-constrained validation.
