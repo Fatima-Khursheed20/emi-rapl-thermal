@@ -107,9 +107,9 @@ Full 120-scenario suite. The base workflow uses a scripted proposer, so the two 
 | Base workflow, nominal twin (realistic) | 80.8 % | **19.2 %** |
 
 A realistic twin approves about one action in five that then fails on the true plant, mostly under sensor bias. This is
-the gap that G1 targets. Real-LLM runs (gpt-oss-20b / gpt-oss-120b on Groq, 63 episodes on a 10-scenario core set
-covering all five faults) show a single unvalidated LLM call succeeding in only 20–42 % of episodes, sometimes unsafely.
-The validated workflow keeps the plant safe (89–100 %), but the LLM itself finds a valid action in only 56–73 % of
+the gap that G1 targets. Real-LLM runs (gpt-oss-20b / gpt-oss-120b on Groq, 66 episodes on a 10-scenario core set
+covering all five faults) show a single unvalidated LLM call succeeding in only 27–42 % of episodes, sometimes unsafely.
+The validated workflow keeps the plant safe (90–100 %), but the LLM itself finds a valid action in only 60–73 % of
 episodes and leans on the fallback (G2). Full tables and figures are in [docs/results/](docs/results/phase1_results.md).
 
 ## Roadmap (Phase 2)

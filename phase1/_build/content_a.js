@@ -7,7 +7,7 @@ module.exports.REFS = [
   'T. M. Arif and M. A. Rahim, "Agentic AI for real-time adaptive PID control of a servo motor," *Actuators*, vol. 14, no. 9, Art. no. 459, Sep. 2025, doi: 10.3390/act14090459.',
   'N. S. M. Amin, Y.-W. Kim, and Y.-C. Byun, "Prompt-based PID tuning for adaptive AGV control via few-shot and MultiSpeed strategies," *IEEE Access*, vol. 13, pp. 190685–190700, 2025, doi: 10.1109/ACCESS.2025.3627967.',
   'C. Ren, S.-M. Hong, and R. Tang, "AgentiControl-MPC: Automated model predictive control for buildings using large language model-based multi-agent system," *Advanced Engineering Informatics*, vol. 76, Art. no. 105062, Nov. 2026, doi: 10.1016/j.aei.2026.105062.',
-  'W. Xin, W. Liang, and A. Chong, "Causality-constrained hierarchical LLM agents for online rule adaptation in building HVAC control," *Applied Energy*, vol. 427, Art. no. 129012, 2026, doi: 10.1016/j.apenergy.2026.129012.',
+  'W. Xin, W. Liang, and A. Chong, "Causality-constrained hierarchical LLM agents for online rule adaptation in building HVAC control," *Applied Energy*, vol. 427, Art. no. 129012, Jan. 2027 (available online Oct. 2026), doi: 10.1016/j.apenergy.2026.129012.',
   'Z. Zhou *et al.*, "LLM-guided adaptive compensator: Bringing adaptivity to robotic feedback control with large language model," *IEEE Transactions on Automation Science and Engineering*, vol. 23, pp. 10762–10774, 2026, doi: 10.1109/TASE.2026.3700674.',
   'C. Carr, M. Martínez-García, B. J. Marshall, M. Coombes, and Y. Zhang, "Automated UAV controller synthesis via LLM-generated control logic and particle swarm optimization," *IEEE Transactions on Industrial Informatics*, vol. 22, no. 7, pp. 6187–6197, Jul. 2026, doi: 10.1109/TII.2026.3675738.',
   'D. Schall, "Safe integration of large language models into industrial process control: A multi-agent architecture with P&ID-grounded validation," *Autonomous Intelligent Systems*, vol. 6, no. 1, Art. no. 14, Jun. 2026, doi: 10.1007/s43684-026-00136-1.',
@@ -117,7 +117,7 @@ module.exports.SUMMARIES = [
     method: 'The LLM designs a compensator that makes an unknown plant respond like a chosen reference model, following the idea of model-reference adaptive control, instead of writing a controller from scratch; a Lyapunov analysis supports stability.',
     data: 'A two-degree-of-freedom soft robot and a one-degree-of-freedom humanoid shoulder, in simulation and on hardware.',
     results: 'Performance comparable to four conventional adaptive controllers, with a simpler reasoning process than an LLM-designed adaptive controller.',
-    limitations: 'Design happens offline and stability is argued afterwards rather than checked before each deployment; only two low-DoF platforms are studied and faults are not considered.',
+    limitations: 'The authors note that the compensator is only effective within a bounded region of tracking-error conditions, becomes ineffective when its structural assumptions are violated, and that the Lyapunov analysis is carried out on a single system. We add that design happens offline and stability is argued afterwards rather than checked before each deployment; only two low-DoF platforms are studied and faults are not considered.',
     relevance: 'It confirms that dealing with an unknown or mismatched plant is the central difficulty for LLM-designed control, the issue our Gap 1 tackles for supervisory recovery, and represents the robotics strand of EMI-RAPL.',
   }],
   ['[9] Carr et al., IEEE TII 2026', {
