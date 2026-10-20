@@ -77,15 +77,15 @@ module.exports.SUMMARIES = [
     method: 'A Qwen2.5-1.5B model aligned to control rules with Group Relative Policy Optimisation, placed in an action, validator and reprompter loop with a symbolic, twin-style validator.',
     data: 'Randomised thermal-control simulations: 30 experiments of 500 steps each.',
     results: 'Mean action-alignment accuracy of 91.5% (86.3–100% across cases) at 3.84 s mean latency, and a 95% in-range rate when the symbol mapping was altered.',
-    limitations: 'Simulation only, with a symbolic rather than calibrated dynamic validator. The main metric is agreement with a reference action rather than plant safety or tracking, and the small model works only after task-specific reinforcement-learning fine-tuning, which limits transfer to other plants or off-the-shelf models.',
+    limitations: 'The authors note that hardware-in-the-loop testing is still needed to assess sensor noise and actuator non-idealities, that the symbolic rule layer should be replaced by a predictive digital twin, that only mean latency is reported rather than jitter and tail latency, and that only single-zone thermal benchmarks are tested. We add that the main metric is agreement with a reference action rather than plant safety or tracking, and that the small model works only after task-specific reinforcement-learning fine-tuning, which limits transfer to other plants or off-the-shelf models.',
     relevance: 'It shows small models need more than reprompting to be reliable. Our Gap 2 targets the same weakness without fine-tuning, through quantitative physical feedback and numeric repair.',
   }],
   ['[4] Arif and Rahim, Actuators 2025', {
     problem: 'Whether an LLM can tune the PID gains of a physical servo while it runs.',
     method: 'Two agents in an n8n workflow: a control agent (o3-mini) watches steady-state error, overshoot, rise time and settling time and decides when to tune; an optimiser agent (GPT-4.1-mini) proposes new gains from a guided prompt or freely within a fixed safe range, sent to the hardware through a Python/Flask link.',
     data: 'A Quanser QUBE-Servo 2 motor.',
-    results: 'Both modes reduced IAE, ISE, MAE and RMSE after the initial transient, but not ITAE or ITSE because of high-frequency oscillation and noise; without the guiding prompt the agent failed to settle on final gains in about one run in ten.',
-    limitations: 'Only three runs are tabulated and the detailed analysis uses one, without statistics. Safety rests on a static gain box, so a destabilising gain set inside the box would still be applied. There is no comparison with classical tuning on an equal budget and no fault scenario.',
+    results: 'Both modes reduced IAE, ISE, MAE and RMSE after the initial transient, but not ITAE or ITSE because of high-frequency oscillation and noise; without a tuning strategy the agent found gains quickly (50–80 s) but in some runs aborted tuning, citing instability.',
+    limitations: 'The authors note that ITAE and ITSE could only be improved by stronger filtering or conservative derivative tuning, which would slow the response too much for live tuning, and they leave prompting strategies, LLM training and usability studies to future work. We add that only three runs are tabulated without statistics, that safety rests on a static gain box, so a destabilising gain set inside the box would still be applied, and that there is no comparison with classical tuning on an equal budget and no fault scenario.',
     relevance: 'A hardware example of agentic tuning without pre-execution verification, which motivates the twin-based validator our work keeps and strengthens.',
   }],
   ['[5] Amin et al., IEEE Access 2025', {
@@ -93,7 +93,7 @@ module.exports.SUMMARIES = [
     method: 'Prompt-only gain inference through in-context learning: MultiSpeed prompting interpolates gains from the target speed, and Few-Shot + MultiSpeed adds worked examples.',
     data: 'A two-wheeled AGV at five speeds between 5 and 25 m/min.',
     results: 'Gains stayed close to simulation-optimised values, kept physically sensible trends (Kp rising and Ki falling with speed), held tracking RMSE within 5–10% of optimal and cut calibration effort by over 80%.',
-    limitations: 'A single LLM call with no feedback loop or safety check; accuracy relies on exemplars from an existing optimiser, so it is unlikely to cope with dynamics unlike those examples, for instance after a fault. Only one vehicle under nominal conditions is tested.',
+    limitations: 'The authors note that the method is reliable only within the calibrated 5–25 m/min range: with noisy or outlier sensor inputs the LLM can carry bias from the prompt, since there is no statistical filtering or uncertainty modelling, and because prompting is static it cannot adapt to abrupt disturbances without re-prompting; results also depend on the chosen LLM. We add that it is a single LLM call with no closed-loop verification beyond a fixed conservative gain scaling, that its accuracy relies on exemplars from an existing optimiser and so is unlikely to hold for dynamics unlike those examples, for instance after a fault, and that only one vehicle under nominal conditions is tested.',
     relevance: 'It represents the single-call, non-agentic design used as our baseline B2, which we argue is insufficient once the plant changes in ways the prompt has not seen.',
   }],
   ['[6] Ren et al., Advanced Engineering Informatics 2026', {
@@ -132,8 +132,8 @@ module.exports.SUMMARIES = [
     problem: 'Hallucination and the lack of physical understanding make direct LLM control in safety-critical processes unacceptable.',
     method: 'The Autonomous Action Execution framework confines the LLM to an observation-only monitor, while deterministic verification and execution agents make every safety-relevant decision. SCADA data, P&IDs and procedures are converted to text, and proposals are checked by traversing the P&ID graph for tag existence, actuatability, fail-state consistency and downstream effects; baselines B0–B3 add components one by one.',
     data: 'Three Tennessee Eastman Process scenarios plus synthetic polymer-reactor and dryer cases.',
-    results: 'The validator caught all 43 crafted invalid proposals, and over 50 LLM runs, in which models proposed unsafe actions 10–70% of the time, it caught every invalid proposal in the covered categories.',
-    limitations: 'The checks are structural, so a physically wrong setpoint on a valid tag would pass; the scenarios are synthetic, and keeping the LLM out of the action path limits autonomy.',
+    results: 'The validator caught all 43 crafted invalid proposals, and over 50 LLM runs, in which the LLM proposed unsafe actions in 10–70% of runs depending on the scenario, it caught every invalid proposal in the covered categories.',
+    limitations: 'The authors list synthetic data rather than production SCADA records, static P&ID checks without time-sequenced interlocks or action ordering, a single LLM (Claude Sonnet 4), single-fault scenarios only, no operator study, and a high false-positive rate. We add that the checks are structural, so a physically wrong setpoint on a valid tag would pass, and that keeping the LLM out of the action path limits autonomy.',
     relevance: 'It quantifies how often LLMs propose unsafe actions, which supports a validator, while showing that structural checks alone are not enough (Gap 1).',
   }],
   ['[11] Galitsky and Rybalov, Processes 2026', {
