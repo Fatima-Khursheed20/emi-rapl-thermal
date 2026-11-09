@@ -9,18 +9,20 @@ matched : exact copy of the true plant, including hidden parameter values and th
 nominal : what is realistically available: nominal parameters, the *reported* fault
           type/zone with an assumed nominal magnitude, and a state reconstructed from
           measurements. This exposes the base paper's matched-model gap.
-calibrated : reserved for the proposed system (Gap 1) - parameters and uncertainty
-          from online adaptive-EKF calibration. Implemented in Phase 2.
+Phase 2 constructs its observation-driven calibrated twin through CalibratedTwin
+in agents.phase2, where the fitted state and covariance are available.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass
+from math import ceil, isfinite
 
 import numpy as np
 
 from ..contracts import FaultReport, RecoveryAction
 from ..env.closed_loop import ClosedLoop
 from ..env.faults import NOMINAL_MAGNITUDE, FaultSpec, apply_fault
+from ..env.simulation import closed_loop
 from ..env.thermal import FaultState, PlantState, ThermalParams, ThermalPlant
 
 
@@ -47,7 +49,7 @@ class DigitalTwin:
         if self.mode == "matched":
             return true_loop.clone()  # oracle copy: same params, same fault, same hidden state
         if self.mode == "calibrated":
-            raise NotImplementedError("calibrated twin (Gap 1) is implemented in Phase 2")
+            raise NotImplementedError("construct CalibratedTwin with an observation-derived estimate")
         plant = ThermalPlant(self.nominal.copy(), self.dt, noise_std=0.0)
         plant.fault = FaultState.healthy(plant.n)
         if report.fault_kind is not None and report.zone is not None:
@@ -66,15 +68,25 @@ class DigitalTwin:
         """Simulate `horizon_s` after the action takes effect; current settings are held for `delay_s`
         first (the decision/actuation latency), because that is what the real plant experiences."""
         sim = loop.clone()
-        sim.plant.noise_std = 0.0
-        hold = int(delay_s / sim.plant.dt)
-        steps = hold + int(horizon_s / sim.plant.dt)
-        TH, Y, U = np.zeros((steps, sim.n)), np.zeros((steps, sim.n)), np.zeros((steps, sim.n))
-        for k in range(steps):
-            if k == hold and action is not None:
-                sim.apply(action)
-            Y[k] = sim.step()
-            TH[k] = sim.plant.state.TH
-            U[k] = sim.plant.last_Q
-        sps = np.array([l.setpoint for l in sim.ctrl.loops])
-        return Rollout(np.arange(steps) * sim.plant.dt, TH, Y, U, sps, hold)
+        dt = sim.plant.dt
+        if not isfinite(horizon_s) or not isfinite(delay_s) or horizon_s <= 0 or delay_s < 0:
+            raise ValueError("Rollout requires a finite positive horizon and nonnegative delay.")
+        hold = ceil(delay_s / dt)
+        steps = hold + ceil(horizon_s / dt)
+
+        def settings(loop):
+            return np.array([[z.setpoint, z.gains.Kc, z.gains.tauI, z.gains.tauD, z.q_max, z.bias, offset]
+                             for z, offset in zip(loop.ctrl.loops, loop.sensor_offset)], dtype=float)
+
+        initial = settings(sim)
+        integral = np.array([z.integral for z in sim.ctrl.loops], dtype=float)
+        previous = np.array([np.nan if z.prev_meas is None else z.prev_meas for z in sim.ctrl.loops], dtype=float)
+        power_before = sim.plant.master_power
+        if action is not None:
+            sim.apply(action)
+        changed = settings(sim)
+        plant = sim.plant
+        TH, Y, U = closed_loop(plant.state.TH, plant.state.TC, sim.y, dt, plant.physics(), plant.fault.stuck_value,
+                               plant.fault.sensor_bias, initial, changed, integral, previous, power_before,
+                               plant.master_power, hold, steps)
+        return Rollout(np.arange(1, steps + 1) * dt, TH, Y, U, changed[:, 0].copy(), hold)
