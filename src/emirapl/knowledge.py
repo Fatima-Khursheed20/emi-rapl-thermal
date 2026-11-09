@@ -36,6 +36,15 @@ MODE_SEMANTICS = {
     Mode.SAFE_SHUTDOWN: "Open the master heater relay (all heaters off). Use only if no operating mode is safe.",
 }
 
+MODE_FIELDS = {
+    Mode.NORMAL: frozenset(),
+    Mode.RETUNE: frozenset({"gains"}),
+    Mode.DERATE: frozenset({"setpoints", "q_max"}),
+    Mode.SENSOR_CORRECTION: frozenset({"sensor_offset"}),
+    Mode.COMPENSATE: frozenset({"setpoints", "q_max"}),
+    Mode.SAFE_SHUTDOWN: frozenset(),
+}
+
 CONSTRAINTS = {
     "safety_limit_T": 60.0,      # hard limit on true heater temperature, degC
     "setpoint_range": [30.0, 58.0],
@@ -74,7 +83,7 @@ def retrieve(fault_kind: str | None, zone: int | None, n_zones: int) -> dict:
     """Return the knowledge subgraph relevant to a reported fault (Graph-RAG analogue)."""
     fclass = FAULT_CLASS.get(fault_kind or "", "unknown")
     structure = plant_structure(n_zones)
-    implicated = structure["zones"] if zone is None else [
+    implicated = structure["zones"] if zone is None or fault_kind == "heat_loss_increase" else [
         z for z in structure["zones"] if z["zone"] == zone or z["zone"] in structure["zones"][zone]["neighbours"]]
     return {
         "fault_kind": fault_kind,
@@ -82,6 +91,7 @@ def retrieve(fault_kind: str | None, zone: int | None, n_zones: int) -> dict:
         "implicated_zones": implicated,
         "admissible_modes": [m.value for m in ADMISSIBLE_MODES[fclass]],
         "mode_semantics": {m.value: MODE_SEMANTICS[m] for m in ADMISSIBLE_MODES[fclass]},
+        "mode_fields": {m.value: sorted(MODE_FIELDS[m]) for m in ADMISSIBLE_MODES[fclass]},
         "constraints": CONSTRAINTS,
         "dynamics": DYNAMICS,
         "interlock": structure["interlock"],

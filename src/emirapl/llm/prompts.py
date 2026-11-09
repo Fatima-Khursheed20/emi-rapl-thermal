@@ -13,6 +13,7 @@ Reply with a JSON object only: {"target_mode": "<MODE>", "rationale": "<one or t
 ACTION_SYSTEM = """You are the Action Agent of a supervisory fault-tolerant control system for a multi-zone \
 electric thermal process. Given the plant snapshot, the fault report, the knowledge context and the selected mode,
 propose concrete recovery parameters. Only change what the mode requires. Zones are integers starting at 0.
+Follow the mode_fields mapping. Use empty objects for fields outside the selected mode.
 Respect every range in the constraints. Reply with a JSON object only, using this schema:
 {"mode": "<MODE>",
  "setpoints": {"<zone>": <degC>},
@@ -52,6 +53,6 @@ def single_call_messages(snapshot: dict, report: dict, knowledge: dict) -> list[
 
 def reprompt_message(violations: list[dict], previous: str) -> dict:
     return {"role": "user", "content": (
-        "The validator REJECTED your previous proposal after simulating it on the digital twin.\n"
+        "The validator rejected the proposal. Review the violations below.\n"
         f"Previous proposal: {previous}\nViolations:\n{_dump(violations)}\n"
         "Revise the proposal to remove every violation. Reply with the JSON object only.")}

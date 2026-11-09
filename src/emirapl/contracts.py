@@ -9,7 +9,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Mode(str, Enum):
@@ -52,17 +52,21 @@ class FaultReport(BaseModel):
 
 
 class PlanDecision(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     target_mode: Mode
     rationale: str = ""
 
 
 class ZoneGains(BaseModel):
+    model_config = ConfigDict(allow_inf_nan=False, extra="forbid")
     Kc: float
     tauI: float
 
 
 class RecoveryAction(BaseModel):
     """Continuous/discrete recovery parameters proposed by the Action Agent."""
+
+    model_config = ConfigDict(allow_inf_nan=False, extra="forbid")
 
     mode: Mode
     setpoints: dict[int, float] = Field(default_factory=dict)
@@ -96,6 +100,12 @@ class LLMCallRecord(BaseModel):
     tokens_out: int = 0
     ok: bool = True
     error: str | None = None
+    api_attempts: int = 0
+    api_latency_s: float = 0.0
+    usage_reported: bool = False
+    returned_model: str | None = None
+    system_fingerprint: str | None = None
+    finish_reason: str | None = None
 
 
 class DecisionTrace(BaseModel):
@@ -109,6 +119,9 @@ class DecisionTrace(BaseModel):
     llm_calls: list[LLMCallRecord] = Field(default_factory=list)
     reprompts: int = 0
     used_fallback: bool = False
+    validated_action: bool = False
+    selected_action: RecoveryAction | None = None
     applied_action: RecoveryAction | None = None
     decision_wall_s: float = 0.0
+    tool_events: list[dict] = Field(default_factory=list)
     notes: list[str] = Field(default_factory=list)

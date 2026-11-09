@@ -39,6 +39,13 @@ class ResidualMonitor:
         y_hat = self.obs.step(u_cmd)
         self.residual = y - y_hat
         lo, hi = self.calib_window
+        if t < hi and self.report is None:
+            self.cnt["high"] = np.where(y > self.high_T, self.cnt["high"] + 1, 0)
+            hot = np.flatnonzero(self.cnt["high"] >= 5)
+            if hot.size:
+                self.report = FaultReport(detected=True, t_detect_s=t,
+                                          symptoms=[f"high_temperature_zone{z}" for z in hot])
+                return self.report
         if lo <= t < hi:
             self._calib.append(self.residual.copy())
             return None

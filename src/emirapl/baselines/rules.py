@@ -24,7 +24,7 @@ def rule_mode(report: FaultReport, snap: Snapshot) -> Mode:
         "sensor_bias": Mode.SENSOR_CORRECTION,
         "local_insulation_loss": Mode.DERATE,
         "actuator_stuck_high": Mode.SAFE_SHUTDOWN,
-    }.get(report.fault_kind or "", Mode.DERATE)
+    }.get(report.fault_kind or "", Mode.NORMAL)
 
 
 def rule_action(report: FaultReport, snap: Snapshot, mode: Mode | str | None = None,
@@ -34,6 +34,8 @@ def rule_action(report: FaultReport, snap: Snapshot, mode: Mode | str | None = N
     sp = list(snap.setpoints)
     max_d = CONSTRAINTS["max_derate_degC"]
     act = RecoveryAction(mode=mode, rationale="rule table")
+    if mode == Mode.NORMAL:
+        return act
     if mode == Mode.SAFE_SHUTDOWN:
         act.shutdown = True
         return act
@@ -53,7 +55,7 @@ def rule_action(report: FaultReport, snap: Snapshot, mode: Mode | str | None = N
     # crude reaction to validator feedback (used only by the scripted test client)
     for v in feedback or []:
         vz = v.get("zone")
-        if v.get("check") in ("regulation", "safety_envelope") and vz is not None:
+        if act.mode == Mode.DERATE and v.get("check") in ("regulation", "safety_envelope") and vz is not None:
             cur = act.setpoints.get(vz, sp[vz])
             act.setpoints[vz] = round(max(sp[vz] - max_d, cur - 3.0), 1)
     return act
