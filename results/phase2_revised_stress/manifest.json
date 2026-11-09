@@ -1,0 +1,17 @@
+{
+  "experiment": "E3",
+  "methods": [
+    "phase2_agent"
+  ],
+  "split": "stress",
+  "suite_sha256": "5da9ad7267390cd065f7de17b6ee616d514b3a5313bf36b07818e65dc36328cd",
+  "model": "scripted:rules",
+  "temperature": 0.2,
+  "repeats": 1,
+  "provider_seed": null,
+  "input_price": null,
+  "output_price": null,
+  "plant_delay_s": 30,
+  "reasoning_effort_gpt_oss": "low",
+  "reprompt_budget": 5
+}

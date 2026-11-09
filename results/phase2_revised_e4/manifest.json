@@ -1,0 +1,23 @@
+{
+  "experiment": "E4",
+  "methods": [
+    "base_agent_matched",
+    "base_agent_nominal",
+    "base_agent_no_oracle",
+    "phase2_agent",
+    "phase2_agent_no_g1",
+    "phase2_agent_no_g2",
+    "phase2_agent_no_g3"
+  ],
+  "split": "screen",
+  "suite_sha256": "f5623276d9226e99cbc253462540f55323488d72bcdddbcb5b7a9c07d8077ee4",
+  "model": "scripted:rules",
+  "temperature": 0.2,
+  "repeats": 1,
+  "provider_seed": null,
+  "input_price": null,
+  "output_price": null,
+  "plant_delay_s": 30,
+  "reasoning_effort_gpt_oss": "low",
+  "reprompt_budget": 5
+}
