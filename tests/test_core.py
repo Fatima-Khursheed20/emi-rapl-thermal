@@ -76,11 +76,12 @@ def test_validator_rejects_inadmissible_mode_and_ranges():
 def test_validator_flags_unsafe_setpoint():
     loop = warm_loop()
     v = Validator(DigitalTwin("matched", ThermalParams(n_zones=2)), [50.0, 45.0])
-    report = FaultReport(detected=True, fault_class="process", fault_kind="heat_loss_increase", zone=0)
-    res = v.validate(RecoveryAction(mode=Mode.NORMAL, setpoints={0: 58.0}), loop, report)
+    report = FaultReport(detected=True, fault_class="actuator", fault_kind="heater_degradation", zone=1)
+    action = RecoveryAction(mode=Mode.COMPENSATE, setpoints={0: 58.0})
+    res = v.validate(action, loop, report)
     assert res.passed  # 58 degC is below the 60 degC limit and reachable
     apply_fault(loop.plant.fault, FaultSpec("sensor_bias", 0, -8.0, 0))
-    res = v.validate(RecoveryAction(mode=Mode.NORMAL, setpoints={0: 58.0}), loop, report)
+    res = v.validate(action, loop, report)
     assert not res.passed and any(x.check == "safety_envelope" for x in res.violations)
 
 
