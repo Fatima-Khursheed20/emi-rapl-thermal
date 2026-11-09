@@ -24,9 +24,11 @@ from ..tools.validator import Validator
 from .fallback import fallback_action
 
 
-def _parse(model_cls, text: str):
+def _parse(model_cls, response):
+    if not response.record.ok:
+        return None, response.record.error
     try:
-        return model_cls.model_validate(extract_json(text)), None
+        return model_cls.model_validate(extract_json(response.text)), None
     except (ValueError, ValidationError, json.JSONDecodeError) as e:
         return None, str(e)[:300]
 
@@ -56,38 +58,42 @@ class BasePaperAgent:
             # ---- planning (re-run when the planner is responsible for the failure)
             if plan is None:
                 resp = self.llm.complete("planner", p_msgs, ctx)
-                tr.llm_calls.append(resp.record)
-                plan, err = _parse(PlanDecision, resp.text)
+                self._record(tr, resp, p_msgs)
+                plan, err = _parse(PlanDecision, resp)
                 if plan is None:
                     vr = ValidationResult(passed=False, responsible="planner",
                                           violations=[Violation(check="parse", message=f"invalid planner JSON: {err}")])
+                    tr.validations.append(vr)
                     if not self._reprompt(tr, vr, p_msgs, resp.text):
                         break
                     continue
                 tr.plans.append(plan)
+                plan_reply = resp.text
                 a_msgs = action_messages(s, r, kb, plan.target_mode.value)
             # ---- action synthesis
             resp = self.llm.complete("action", a_msgs, {**ctx, "mode": plan.target_mode, "feedback": feedback})
-            tr.llm_calls.append(resp.record)
-            action, err = _parse(RecoveryAction, resp.text)
+            self._record(tr, resp, a_msgs)
+            action, err = _parse(RecoveryAction, resp)
             if action is None:
                 vr = ValidationResult(passed=False, responsible="action",
                                       violations=[Violation(check="parse", message=f"invalid action JSON: {err}")])
             else:
-                if action.mode != plan.target_mode:
-                    tr.notes.append(f"action mode {action.mode.value} overridden by plan {plan.target_mode.value}")
-                    action.mode = plan.target_mode
-                if action.mode == Mode.SAFE_SHUTDOWN:
-                    action.shutdown = True
                 tr.actions.append(action)
-                vr = self.validator.validate(action, true_loop, report, _lost_zones(report))
+                if action.mode != plan.target_mode:
+                    vr = ValidationResult(passed=False, responsible="action", violations=[Violation(
+                        check="planned_mode", message=f"Use the planned mode {plan.target_mode.value}.")])
+                else:
+                    vr = self.validator.validate(action, true_loop, report, _lost_zones(report))
             tr.validations.append(vr)
+            if action is not None and action.mode == plan.target_mode:
+                action, vr = self.refine(action, vr, true_loop, report, _lost_zones(report), tr)
             if vr.passed:
                 tr.applied_action = action
+                tr.validated_action = True
                 return tr
-            feedback = [v.model_dump() for v in vr.violations]
+            feedback = [v.model_dump() for v in self.feedback(list(vr.violations), tr)]
             target = p_msgs if vr.responsible == "planner" else a_msgs
-            if not self._reprompt(tr, vr, target, resp.text):
+            if not self._reprompt(tr, vr, target, plan_reply if vr.responsible == "planner" else resp.text):
                 break
             if vr.responsible == "planner":
                 plan = None  # re-plan with feedback appended to planner conversation
@@ -96,10 +102,21 @@ class BasePaperAgent:
         tr.applied_action = fallback_action(snap, report, self.validator, true_loop)
         return tr
 
+    @staticmethod
+    def _record(trace, response, messages):
+        trace.llm_calls.append(response.record)
+        trace.tool_events.append({"tool": response.record.agent, "messages": messages.copy(), "output": response.text})
+
+    def refine(self, action, result, loop, report, lost, trace):
+        return action, result
+
+    def feedback(self, violations, trace):
+        return violations
+
     def _reprompt(self, tr: DecisionTrace, vr: ValidationResult, msgs: list[dict], previous: str) -> bool:
         if tr.reprompts >= self.budget:
             return False
         tr.reprompts += 1
         msgs.append({"role": "assistant", "content": previous or "(empty)"})
-        msgs.append(reprompt_message([v.model_dump() for v in vr.violations], previous or "(empty)"))
+        msgs.append(reprompt_message([v.model_dump() for v in self.feedback(list(vr.violations), tr)], previous or "(empty)"))
         return True

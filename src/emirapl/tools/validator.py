@@ -11,8 +11,8 @@ import numpy as np
 
 from ..contracts import FaultReport, Mode, RecoveryAction, ValidationResult, Violation
 from ..env.closed_loop import ClosedLoop
-from ..knowledge import ADMISSIBLE_MODES, CONSTRAINTS
-from ..env.episode import EXCURSION_TOL_DEGC, EXCURSION_TOL_S
+from ..knowledge import ADMISSIBLE_MODES, CONSTRAINTS, MODE_FIELDS
+from ..safety import thermal_safety
 from .twin import DigitalTwin
 
 
@@ -23,7 +23,9 @@ class Validator:
         self.delay_s = delay_s  # decision + actuation latency assumed by the twin rollout
         self.sp_nom = np.asarray(nominal_setpoints, dtype=float)
         self.horizon_s = horizon_s
-        self.window = int(settle_window_s)
+        if not np.isfinite(settle_window_s) or settle_window_s <= 0:
+            raise ValueError("The regulation window must be positive and finite.")
+        self.window = float(settle_window_s)
 
     # ------------------------------------------------------------------
     def structural(self, action: RecoveryAction, report: FaultReport, n: int) -> list[Violation]:
@@ -35,6 +37,11 @@ class Validator:
                 f"admissible: {[m.value for m in ADMISSIBLE_MODES[report.fault_class]]}")))
         if action.shutdown != (action.mode == Mode.SAFE_SHUTDOWN):
             v.append(Violation(check="mode_consistency", message="shutdown flag must be true iff mode is SAFE_SHUTDOWN"))
+        fields = {field for field in ("setpoints", "gains", "q_max", "sensor_offset") if getattr(action, field)}
+        allowed = MODE_FIELDS[action.mode]
+        if fields - allowed or (allowed and not fields):
+            v.append(Violation(check="mode_fields", message=(
+                f"{action.mode.value} permits {sorted(allowed)}; supplied {sorted(fields)}")))
         for z in list(action.setpoints) + list(action.gains) + list(action.q_max) + list(action.sensor_offset):
             if not 0 <= int(z) < n:
                 v.append(Violation(check="zone_exists", zone=int(z), message=f"zone {z} does not exist (n={n})"))
@@ -47,6 +54,9 @@ class Validator:
                 v.append(Violation(check="max_derate", zone=int(z), value=sp,
                                    limit=self.sp_nom[int(z)] - c["max_derate_degC"],
                                    message=f"setpoint {sp:.1f} derates zone {z} by more than {c['max_derate_degC']} degC"))
+            if action.mode == Mode.DERATE and 0 <= z < n and sp > self.sp_nom[z]:
+                v.append(Violation(check="derate_raise", zone=z, value=sp, limit=self.sp_nom[z],
+                                   message="DERATE cannot raise a zone above its nominal setpoint"))
         for z, g in action.gains.items():
             if not c["Kc_range"][0] <= g.Kc <= c["Kc_range"][1]:
                 v.append(Violation(check="Kc_range", zone=int(z), value=g.Kc, message=f"Kc {g.Kc} outside {c['Kc_range']}"))
@@ -75,41 +85,49 @@ class Validator:
         limit = CONSTRAINTS["safety_limit_T"]
         band = CONSTRAINTS["regulation_band_degC"]
         v: list[Violation] = []
-        post = ro.TH[ro.hold:]  # judged from the moment the action takes effect
+        dt = twin_loop.plant.dt
+        post = ro.TH[ro.hold:]
+        post_safety = thermal_safety(post, dt)
+        pre_safety = thermal_safety(ro.TH[:ro.hold], dt)
+        if post_safety is None or not post_safety.valid or (pre_safety is not None and not pre_safety.valid):
+            return ValidationResult(passed=False, responsible="action",
+                                    violations=[Violation(check="simulation_nonfinite",
+                                                          message="Twin produced non-finite temperatures")])
         max_T = post.max(axis=0)
-        above_s = (post > limit).sum(axis=0) * self.twin.dt
-        for z in range(n):
-            if max_T[z] > limit + EXCURSION_TOL_DEGC or above_s[z] > EXCURSION_TOL_S:
-                v.append(Violation(check="safety_envelope", zone=z, value=float(max_T[z]), limit=limit,
-                                   message=(f"twin predicts zone {z} reaches {max_T[z]:.1f} degC (limit {limit}, "
-                                            f"{above_s[z]:.0f}s above it) after the action takes effect")))
+        if post_safety.violation:
+            zone = int(np.argmax(max_T))
+            v.append(Violation(check="safety_envelope", zone=zone, value=post_safety.peak_degC, limit=limit,
+                               message=(f"twin predicts peak {post_safety.peak_degC:.2f} degC and "
+                                        f"{post_safety.above_s:.0f}s with any zone above {limit} degC after actuation")))
         track_err = np.full(n, np.nan)
         if not action.shutdown:
             lost = lost_zones or set()
-            tail = ro.TH[-self.window:]
+            samples = min(len(post), max(1, int(np.ceil(self.window / dt))))
+            tail = post[-samples:]
             for z in range(n):
                 if z in lost:
                     continue
                 track_err[z] = float(np.mean(np.abs(tail[:, z] - ro.setpoints[z])))
                 if track_err[z] > band:
-                    sat = float(np.mean(ro.u[-self.window:, z]))
+                    sat = float(np.mean(ro.u[-samples:, z]))
                     v.append(Violation(check="regulation", zone=z, value=track_err[z], limit=band, message=(
                         f"twin predicts zone {z} misses setpoint {ro.setpoints[z]:.1f} by {track_err[z]:.2f} degC "
-                        f"(mean heater output {sat:.0f}%) over the last {self.window}s")))
+                        f"(mean heater output {sat:.0f}%) over the last {samples * dt:g}s")))
         else:
             # shutdown is only justified if the least disruptive alternative - keep running but switch off
             # every other controllable heater - would still be unsafe (same criterion as the evaluation oracle)
             lost = lost_zones or set()
             isolate = RecoveryAction(mode=Mode.COMPENSATE, q_max={z: 0.0 for z in range(n) if z not in lost})
             alt = DigitalTwin.rollout(twin_loop, isolate, self.horizon_s, self.delay_s)
-            alt_post = alt.TH[alt.hold:]
-            alt_max = float(alt_post.max())
-            alt_above = float((alt_post > limit).any(axis=1).sum() * self.twin.dt)
-            if alt_max <= limit + EXCURSION_TOL_DEGC and alt_above <= EXCURSION_TOL_S:
-                v.append(Violation(check="shutdown_justified", value=alt_max, limit=limit, message=(
-                    f"shutdown not justified: twin predicts max {alt_max:.1f} degC (limit {limit}) even if only the "
-                    f"other controllable heaters are switched off, so production can continue")))
+            alt_safety = thermal_safety(alt.TH[alt.hold:], dt)
+            if alt_safety is None or not alt_safety.valid:
+                v.append(Violation(check="simulation_nonfinite", message="Isolation alternative could not be verified"))
+            elif not alt_safety.violation:
+                v.append(Violation(check="shutdown_justified", value=alt_safety.peak_degC, limit=limit,
+                                   message="the isolation alternative stayed within the thermal tolerance"))
         predicted = {"max_T": [round(float(x), 2) for x in max_T],
+                     "during_delay_safety": pre_safety.as_dict() if pre_safety else None,
+                     "post_action_safety": post_safety.as_dict(),
                      "tracking_err": [None if np.isnan(e) else round(float(e), 3) for e in track_err]}
         return ValidationResult(passed=not v, violations=v, predicted=predicted,
                                 responsible="none" if not v else (
