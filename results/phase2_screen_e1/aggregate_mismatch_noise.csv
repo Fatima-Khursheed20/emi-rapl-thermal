@@ -1,0 +1,11 @@
+,,,plant_success,plant_success,localisation_correct,localisation_correct,agent_success,agent_success,validated_but_failed,validated_but_failed,safety_violation_post,safety_violation_post,used_fallback,used_fallback,reprompts,reprompts,llm_calls,llm_calls,tokens_in,tokens_in,tokens_out,tokens_out,llm_latency_s,llm_latency_s,decision_wall_s,decision_wall_s,tool_events,tool_events,gain_scale_rmse,gain_scale_rmse,loss_scale_rmse,loss_scale_rmse,bias_rmse,bias_rmse,reprompt_recovery,reprompt_recovery
+,,,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std
+method,mismatch,noise_std,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+de_retune,0.0,0.05,0.7,,1.0,,1.0,,0.3,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,97.20259999999999,,0.0,,,,,,,,,
+de_retune,0.3,0.15,0.7,,1.0,,1.0,,0.3,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,97.0453,,0.0,,,,,,,,,
+no_recovery,0.0,0.05,0.1,,1.0,,0.0,,0.0,,0.2,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,,,,,,,,
+no_recovery,0.3,0.15,0.1,,1.0,,0.0,,0.0,,0.2,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,,,,,,,,
+rule_table,0.0,0.05,0.8,,1.0,,1.0,,0.2,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0002,,0.0,,,,,,,,,
+rule_table,0.3,0.15,0.8,,1.0,,1.0,,0.2,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,0.0,,,,,,,,,
+single_llm,0.0,0.05,0.8,,1.0,,1.0,,0.2,,0.0,,0.0,,0.0,,1.0,,1015.8,,35.5,,0.0,,0.0028,,1.0,,,,,,,,,
+single_llm,0.3,0.15,0.8,,1.0,,1.0,,0.2,,0.0,,0.0,,0.0,,1.0,,1016.6,,35.5,,0.0,,0.0019,,1.0,,,,,,,,,

@@ -1,0 +1,4 @@
+method,failure_category,episodes
+phase2_agent,no_action,1
+phase2_agent,success,8
+phase2_agent,tracking,9

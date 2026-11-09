@@ -1,0 +1,8 @@
+,,plant_success,plant_success,localisation_correct,localisation_correct,agent_success,agent_success,validated_but_failed,validated_but_failed,safety_violation_post,safety_violation_post,used_fallback,used_fallback,reprompts,reprompts,llm_calls,llm_calls,tokens_in,tokens_in,tokens_out,tokens_out,llm_latency_s,llm_latency_s,decision_wall_s,decision_wall_s,tool_events,tool_events,gain_scale_rmse,gain_scale_rmse,loss_scale_rmse,loss_scale_rmse,bias_rmse,bias_rmse,reprompt_recovery,reprompt_recovery
+,,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std
+method,fault,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+phase2_agent,actuator_stuck_high,0.5,,0.0,,1.0,,0.5,,0.0,,0.0,,0.0,,3.0,,2402.5,,79.0,,0.0,,2.0495,,5.0,,0.2715065444875012,,0.5640985263259919,,1.8106601717798212,,,
+phase2_agent,heat_loss_increase,0.5,,0.25,,1.0,,0.5,,0.0,,0.0,,0.0,,3.0,,2369.75,,81.0,,0.0,,3.39175,,5.5,,0.2908646262482611,,2.3163814528265205,,1.8106601717798212,,,
+phase2_agent,heater_degradation,0.5,,0.5,,1.0,,0.5,,0.0,,0.0,,0.0,,3.0,,2388.25,,79.0,,0.0,,3.5147500000000003,,5.0,,0.18744262125433092,,0.5432875627617721,,1.8106601717798212,,,
+phase2_agent,local_insulation_loss,0.25,,0.25,,1.0,,0.75,,0.0,,0.0,,0.0,,3.0,,2371.25,,81.0,,0.0,,3.14025,,5.5,,0.24586315216864477,,2.251468067494045,,1.8106601717798212,,,
+phase2_agent,sensor_bias,0.5,,0.5,,0.5,,0.0,,0.0,,0.5,,2.5,,5.5,,6536.0,,167.0,,0.0,,7.12,,14.5,,0.13489787236429124,,1.603954308493431,,5.639138488195858,,0.0,

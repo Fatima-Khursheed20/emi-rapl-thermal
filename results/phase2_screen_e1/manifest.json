@@ -1,0 +1,20 @@
+{
+  "experiment": "E1",
+  "methods": [
+    "no_recovery",
+    "rule_table",
+    "de_retune",
+    "single_llm"
+  ],
+  "split": "screen",
+  "suite_sha256": "f5623276d9226e99cbc253462540f55323488d72bcdddbcb5b7a9c07d8077ee4",
+  "model": "scripted:rules",
+  "temperature": 0.2,
+  "repeats": 1,
+  "provider_seed": null,
+  "input_price": null,
+  "output_price": null,
+  "plant_delay_s": 30,
+  "reasoning_effort_gpt_oss": "low",
+  "reprompt_budget": 5
+}

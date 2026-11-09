@@ -1,0 +1,10 @@
+,plant_success,plant_success,localisation_correct,localisation_correct,agent_success,agent_success,validated_but_failed,validated_but_failed,safety_violation_post,safety_violation_post,used_fallback,used_fallback,reprompts,reprompts,llm_calls,llm_calls,tokens_in,tokens_in,tokens_out,tokens_out,llm_latency_s,llm_latency_s,decision_wall_s,decision_wall_s,tool_events,tool_events,gain_scale_rmse,gain_scale_rmse,loss_scale_rmse,loss_scale_rmse,bias_rmse,bias_rmse,reprompt_recovery,reprompt_recovery
+,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std,mean,std
+method,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+base_agent_matched,0.9,,1.0,,0.8,,0.0,,0.0,,0.2,,1.0,,3.5,,4263.9,,93.0,,0.0,,0.98525,,3.5,,,,,,,,0.0,
+base_agent_no_oracle,0.1,,0.0,,1.0,,0.9,,0.2,,0.0,,0.0,,2.0,,2132.5,,45.0,,0.0,,0.5919,,2.0,,,,,,,,,
+base_agent_nominal,0.9,,1.0,,0.9,,0.1,,0.0,,0.1,,0.5,,3.0,,3490.5,,73.5,,0.0005,,0.95745,,3.0,,,,,,,,0.0,
+phase2_agent,0.55,,0.75,,0.8,,0.35,,0.1,,0.2,,1.0,,4.5,,4671.55,,121.0,,0.0,,7.20735,,6.5,,0.08672659116261686,,0.6615133438438389,,0.6917988528622999,,0.0,
+phase2_agent_no_g1,0.65,,0.75,,0.9,,0.35,,0.0,,0.1,,0.5,,4.0,,3675.35,,104.5,,0.0,,2.73775,,5.0,,,,,,,,0.0,
+phase2_agent_no_g2,0.55,,0.75,,0.8,,0.35,,0.1,,0.2,,1.0,,4.5,,4671.55,,121.0,,0.0,,7.129900000000001,,6.5,,0.08672659116261686,,0.6615133438438389,,0.6917988528622999,,0.0,
+phase2_agent_no_g3,0.7,,1.0,,0.8,,0.2,,0.1,,0.2,,1.0,,3.5,,4486.25,,90.0,,0.0,,8.4118,,5.8,,0.05886537220200479,,0.2783126307863452,,0.35660221305228457,,0.0,

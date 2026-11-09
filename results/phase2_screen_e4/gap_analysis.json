@@ -1,0 +1,125 @@
+{
+  "scope": {
+    "experiment": "E4",
+    "methods": [
+      "base_agent_matched",
+      "base_agent_nominal",
+      "base_agent_no_oracle",
+      "phase2_agent",
+      "phase2_agent_no_g1",
+      "phase2_agent_no_g2",
+      "phase2_agent_no_g3"
+    ],
+    "split": "screen",
+    "suite_sha256": "f5623276d9226e99cbc253462540f55323488d72bcdddbcb5b7a9c07d8077ee4",
+    "model": "scripted:rules",
+    "temperature": 0.2,
+    "repeats": 1,
+    "provider_seed": null,
+    "input_price": null,
+    "output_price": null,
+    "plant_delay_s": 30,
+    "reasoning_effort_gpt_oss": "low",
+    "reprompt_budget": 5
+  },
+  "G1": {
+    "full_validated_but_failed_at_30pct": 0.5,
+    "nominal_validated_but_failed_at_30pct": 0.1,
+    "nominal_vs_calibrated_at_30pct": {
+      "pairs": 10,
+      "wins": 0,
+      "losses": 1,
+      "delta": -0.1,
+      "ci95": [
+        -0.3,
+        0.0
+      ],
+      "mcnemar_p_single_repeat": 1.0,
+      "wilcoxon_latency_p": 0.064453125
+    },
+    "full_vs_baseline_at_30pct": {
+      "pairs": 10,
+      "wins": 0,
+      "losses": 5,
+      "delta": -0.5,
+      "ci95": [
+        -0.8,
+        -0.2
+      ],
+      "mcnemar_p_single_repeat": 0.0625,
+      "wilcoxon_latency_p": 0.001953125
+    },
+    "full_mean_decision_seconds": 6.6918999999999995,
+    "baseline_mean_decision_seconds": 0.9439
+  },
+  "G2": {
+    "full_reprompt_recovery": 0.0,
+    "baseline_reprompt_recovery": 0.0,
+    "full_mean_reprompts": 1.0,
+    "baseline_mean_reprompts": 0.5,
+    "paired_ablation": {
+      "pairs": 20,
+      "wins": 0,
+      "losses": 0,
+      "delta": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "mcnemar_p_single_repeat": null,
+      "wilcoxon_latency_p": 0.9272785186767578
+    }
+  },
+  "G3": {
+    "localisation_all_episodes": 0.75,
+    "localisation_after_valid_detection": 0.75,
+    "full_vs_oracle_matched": {
+      "pairs": 20,
+      "wins": 0,
+      "losses": 7,
+      "delta": -0.35,
+      "ci95": [
+        -0.55,
+        -0.15
+      ],
+      "mcnemar_p_single_repeat": 0.015625,
+      "wilcoxon_latency_p": 1.9073486328125e-06
+    },
+    "full_vs_oracle_nominal": {
+      "pairs": 20,
+      "wins": 0,
+      "losses": 7,
+      "delta": -0.35,
+      "ci95": [
+        -0.55,
+        -0.15
+      ],
+      "mcnemar_p_single_repeat": 0.015625,
+      "wilcoxon_latency_p": 3.814697265625e-06
+    },
+    "full_vs_unlocalised_baseline": {
+      "pairs": 20,
+      "wins": 9,
+      "losses": 0,
+      "delta": 0.45,
+      "ci95": [
+        0.25,
+        0.65
+      ],
+      "mcnemar_p_single_repeat": 0.00390625,
+      "wilcoxon_latency_p": 1.9073486328125e-06
+    },
+    "paired_ablation": {
+      "pairs": 20,
+      "wins": 0,
+      "losses": 3,
+      "delta": -0.15,
+      "ci95": [
+        -0.3,
+        0.0
+      ],
+      "mcnemar_p_single_repeat": 0.25,
+      "wilcoxon_latency_p": 0.6215133666992188
+    }
+  }
+}
