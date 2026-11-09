@@ -6,7 +6,7 @@ from scipy.optimize import differential_evolution
 
 from ..contracts import DecisionTrace, FaultReport, Mode, RecoveryAction, Snapshot, ZoneGains
 from ..env.closed_loop import ClosedLoop
-from ..knowledge import CONSTRAINTS, retrieve
+from ..knowledge import CONSTRAINTS, MODE_FIELDS, retrieve
 from ..llm.client import extract_json
 from ..llm.prompts import single_call_messages
 from ..tools.twin import DigitalTwin
@@ -46,16 +46,29 @@ class SingleCallLLM:
         msgs = single_call_messages(snap.model_dump(mode="json"), report.model_dump(mode="json"), kb)
         resp = self.llm.complete("single", msgs, {"snapshot": snap, "fault_report": report})
         tr.llm_calls.append(resp.record)
+        tr.tool_events.append({"tool": "single", "messages": msgs, "output": resp.text})
+        if not resp.record.ok:
+            tr.notes.append(f"generation failure: {resp.record.error}")
+            return tr
         try:
             act = RecoveryAction.model_validate(extract_json(resp.text))
-            if act.mode == Mode.SAFE_SHUTDOWN:
-                act.shutdown = True
-            # clip to hard actuator ranges only (no physics check)
-            act.setpoints = {z: float(np.clip(v, *CONSTRAINTS["setpoint_range"])) for z, v in act.setpoints.items()
-                             if 0 <= int(z) < snap.n_zones}
+            fields = {field for field in ("setpoints", "gains", "q_max", "sensor_offset") if getattr(act, field)}
+            if act.shutdown != (act.mode == Mode.SAFE_SHUTDOWN) or fields - MODE_FIELDS[act.mode]:
+                raise ValueError("action parameters conflict with the mode")
+            # Physical input bounds only. This baseline does not simulate or verify the proposal.
+            for field in (act.setpoints, act.gains, act.q_max, act.sensor_offset):
+                if any(not 0 <= zone < snap.n_zones for zone in field):
+                    raise ValueError("action addresses a nonexistent zone")
+            act.setpoints = {z: float(np.clip(v, *CONSTRAINTS["setpoint_range"])) for z, v in act.setpoints.items()}
+            act.q_max = {z: float(np.clip(v, *CONSTRAINTS["q_max_range"])) for z, v in act.q_max.items()}
+            act.sensor_offset = {z: float(np.clip(v, *CONSTRAINTS["sensor_offset_range"]))
+                                 for z, v in act.sensor_offset.items()}
+            act.gains = {z: ZoneGains(Kc=float(np.clip(g.Kc, *CONSTRAINTS["Kc_range"])),
+                                     tauI=float(np.clip(g.tauI, *CONSTRAINTS["tauI_range"])))
+                         for z, g in act.gains.items()}
             tr.actions.append(act)
             tr.applied_action = act
-        except Exception as e:  # unparseable reply -> nothing applied
+        except ValueError as e:  # unparseable reply -> nothing applied
             tr.notes.append(f"parse failure: {str(e)[:200]}")
         return tr
 

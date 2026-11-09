@@ -9,6 +9,7 @@ from pathlib import Path
 import pandas as pd
 
 from ..agents.pipeline import BasePaperAgent
+from ..agents.phase2 import Phase2Agent
 from ..baselines.methods import DERetune, NoRecovery, RuleTable, SingleCallLLM
 from ..env.episode import Episode, Scenario
 from ..env.thermal import ThermalParams
@@ -16,7 +17,8 @@ from ..llm.client import QuotaExhausted
 from ..tools.twin import DigitalTwin
 from ..tools.validator import Validator
 
-METHODS = ["no_recovery", "rule_table", "single_llm", "de_retune", "base_agent_matched", "base_agent_nominal"]
+METHODS = ["no_recovery", "rule_table", "single_llm", "de_retune", "base_agent_matched", "base_agent_nominal", "base_agent_no_oracle",
+           "phase2_agent", "phase2_agent_no_g1", "phase2_agent_no_g2", "phase2_agent_no_g3"]
 
 
 def build_method(name: str, sc: Scenario, llm=None, reprompt_budget: int = 5, latency_s: float | None = 30.0):
@@ -31,6 +33,15 @@ def build_method(name: str, sc: Scenario, llm=None, reprompt_budget: int = 5, la
     if name.startswith("de_retune"):
         mode = "matched" if name.endswith("matched") else "nominal"
         return DERetune(Validator(DigitalTwin(mode, nominal), sc.setpoints, delay_s=delay))
+    if name.startswith("phase2_agent"):
+        return Phase2Agent(llm, Validator(DigitalTwin("nominal", nominal), sc.setpoints, delay_s=delay),
+                           reprompt_budget, name=name, calibration=not name.endswith("no_g1"),
+                           repair=not name.endswith("no_g2"), diagnosis=not name.endswith("no_g3"))
+    if name == "base_agent_no_oracle":
+        agent = BasePaperAgent(llm, Validator(DigitalTwin("nominal", nominal), sc.setpoints, delay_s=delay),
+                               reprompt_budget, name=name)
+        agent.oracle_localisation = False
+        return agent
     if name.startswith("base_agent"):
         mode = name.split("_")[-1]
         return BasePaperAgent(llm, Validator(DigitalTwin(mode, nominal), sc.setpoints, delay_s=delay), reprompt_budget,
@@ -44,8 +55,11 @@ def run(scenarios: list[Scenario], methods: list[str], llm, out_dir: str | Path,
     out.mkdir(parents=True, exist_ok=True)
     ep_file = (out / "episodes.jsonl").open("a", encoding="utf-8")
     done = set()
-    if (out / "summary.csv").exists():
-        prev = pd.read_csv(out / "summary.csv")
+    summary_path = out / "summary.csv"
+    columns = None
+    if summary_path.exists():
+        prev = pd.read_csv(summary_path)
+        columns = list(prev.columns)
         done = set(zip(prev.scenario_id, prev.method))
     rows = []
     for sc in scenarios:
@@ -67,7 +81,10 @@ def run(scenarios: list[Scenario], methods: list[str], llm, out_dir: str | Path,
             ep_file.write(json.dumps({"scenario": asdict(sc), "method": m, "metrics": res.metrics, "trace": res.trace,
                                       "traj": res.traj}) + "\n")
             ep_file.flush()
-            pd.DataFrame([row]).to_csv(out / "summary.csv", mode="a", header=not (out / "summary.csv").exists(), index=False)
+            frame = pd.DataFrame([row], columns=columns)
+            frame.to_csv(summary_path, mode="a", header=columns is None, index=False)
+            if columns is None:
+                columns = list(frame.columns)
             if verbose:
                 print(f"{sc.scenario_id:45s} {m:20s} agent_ok={row['agent_success']!s:5s} plant_ok={row['plant_success']!s:5s} "
                       f"maxT={row['max_T_post']:6.2f} reprompts={row['reprompts']} fb={row['used_fallback']!s:5s} ({row['run_s']}s)",
