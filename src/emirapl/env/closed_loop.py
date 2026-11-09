@@ -25,6 +25,11 @@ class ClosedLoop:
 
     def apply(self, action: RecoveryAction) -> None:
         """Apply a validated recovery action to the controllers / interlock."""
+        if any(z not in range(self.n) for field in (action.setpoints, action.gains, action.q_max, action.sensor_offset)
+               for z in field):
+            raise ValueError("Cannot apply an action for a nonexistent zone.")
+        if any(not np.isfinite(g.tauI) or g.tauI <= 0 for g in action.gains.values()):
+            raise ValueError("Cannot apply PI gains with a nonpositive or nonfinite tauI.")
         if action.shutdown:
             self.plant.master_power = False
         for z, sp in action.setpoints.items():

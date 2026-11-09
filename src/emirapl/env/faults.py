@@ -6,6 +6,7 @@ sensor) and add a safety-critical actuator fault that only an interlock can hand
 from __future__ import annotations
 
 from dataclasses import dataclass
+from math import isfinite
 
 import numpy as np
 
@@ -27,8 +28,29 @@ class FaultSpec:
     magnitude: float  # meaning depends on kind (scale factor, bias in degC, or stuck %)
     onset_s: float
 
+    def validate_for(self, n_zones, end_s):
+        if self.kind not in FAULT_TYPES:
+            raise ValueError(f"Unknown fault kind {self.kind!r}.")
+        if type(self.zone) is not int or not 0 <= self.zone < n_zones:
+            raise ValueError(f"Invalid fault zone {self.zone!r} for {n_zones} zones.")
+        if not isfinite(self.onset_s) or not 0 <= self.onset_s <= end_s - 1:
+            raise ValueError("Fault onset must leave at least one simulated sample.")
+        lo, hi = PHYSICAL_MAGNITUDES[self.kind]
+        if not isfinite(self.magnitude) or not lo <= self.magnitude <= hi:
+            raise ValueError(f"{self.kind} magnitude must be between {lo} and {hi}.")
+
     def describe(self) -> str:
         return f"{self.kind} on zone {self.zone} (magnitude={self.magnitude}) at t={self.onset_s:.0f}s"
+
+
+# Input bounds keep custom scenarios in the supported model envelope.
+PHYSICAL_MAGNITUDES = {
+    "heater_degradation": (0., 1.),
+    "heat_loss_increase": (1., 8.),
+    "local_insulation_loss": (1., 8.),
+    "sensor_bias": (-20., 20.),
+    "actuator_stuck_high": (0., 100.),
+}
 
 
 # Nominal magnitudes: what an engineer would assume when only the fault type is known.
@@ -58,7 +80,7 @@ def apply_fault(fault: FaultState, spec: FaultSpec) -> None:
     if spec.kind == "heater_degradation":
         fault.alpha_scale[z] = spec.magnitude
     elif spec.kind == "heat_loss_increase":
-        fault.U_scale[:] = spec.magnitude  # affects whole enclosure (fan / door open)
+        fault.global_loss_scale = spec.magnitude  # enclosure-wide, composes with local loss
     elif spec.kind == "local_insulation_loss":
         fault.U_scale[z] = spec.magnitude
     elif spec.kind == "sensor_bias":

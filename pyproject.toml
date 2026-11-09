@@ -18,6 +18,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
 hardware = ["tclab>=1.0"]
+fast = ["numba>=0.61,<0.66"]
 
 [build-system]
 requires = ["setuptools>=68"]

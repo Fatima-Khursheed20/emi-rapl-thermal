@@ -20,8 +20,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
-SIGMA = 5.67e-8  # Stefan-Boltzmann constant, W/m^2/K^4
-KELVIN = 273.15
+from .simulation import constant_temperature, thermal_step
 
 
 @dataclass
@@ -76,6 +75,7 @@ class FaultState:
     U_scale: np.ndarray  # multiplicative heat-loss coefficient (process fault)
     sensor_bias: np.ndarray  # additive measurement bias, degC (sensor fault)
     stuck_value: np.ndarray  # NaN = healthy, else actuator stuck at this % output
+    global_loss_scale: float = 1.0
 
     @classmethod
     def healthy(cls, n: int) -> "FaultState":
@@ -110,28 +110,14 @@ class ThermalPlant:
         self.t = 0.0
 
     # ---- physics -------------------------------------------------------
-    def _derivatives(self, TH: np.ndarray, TC: np.ndarray, Q: np.ndarray):
+    def physics(self):
         p, f = self.p, self.fault
-        Ta_K = p.Ta + KELVIN
-        TH_K = TH + KELVIN
-        U = p.U * f.U_scale
-        conv = U * p.A * (p.Ta - TH)
-        rad = p.eps * SIGMA * p.A * (Ta_K**4 - TH_K**4)
-        inter = np.zeros(self.n)
-        for i in range(self.n - 1):  # chain coupling between neighbours i, i+1
-            q = (U[i] + U[i + 1]) / 2 * p.As * (TH[i + 1] - TH[i]) \
-                + p.eps * SIGMA * p.As * (TH_K[i + 1] ** 4 - TH_K[i] ** 4)
-            inter[i] += q
-            inter[i + 1] -= q
-        heat = p.alpha * f.alpha_scale * Q
-        dTH = (conv + rad + inter + heat) / (p.m * p.Cp)
-        dTC = (TH - TC) / p.tau_s
-        return dTH, dTC
+        return p.U * f.U_scale * f.global_loss_scale, p.alpha * f.alpha_scale, p.tau_s, p.Ta, p.m * p.Cp, p.A, p.As, p.eps
 
     def effective_input(self, Q_cmd: np.ndarray) -> np.ndarray:
         Q = np.clip(np.asarray(Q_cmd, dtype=float), 0.0, 100.0)
         stuck = ~np.isnan(self.fault.stuck_value)
-        Q = np.where(stuck, self.fault.stuck_value, Q)
+        Q = np.where(stuck, np.clip(self.fault.stuck_value, 0., 100.), Q)
         if not self.master_power:
             Q = np.zeros_like(Q)
         return Q
@@ -139,14 +125,8 @@ class ThermalPlant:
     def step(self, Q_cmd: np.ndarray) -> np.ndarray:
         """Advance one sample with commanded heater outputs (0-100 %). Returns measurement."""
         Q = self.effective_input(Q_cmd)
-        TH, TC, h = self.state.TH, self.state.TC, self.dt
-        k1 = self._derivatives(TH, TC, Q)
-        k2 = self._derivatives(TH + h / 2 * k1[0], TC + h / 2 * k1[1], Q)
-        k3 = self._derivatives(TH + h / 2 * k2[0], TC + h / 2 * k2[1], Q)
-        k4 = self._derivatives(TH + h * k3[0], TC + h * k3[1], Q)
-        self.state.TH = TH + h / 6 * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0])
-        self.state.TC = TC + h / 6 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1])
-        self.t += h
+        self.state.TH, self.state.TC = thermal_step(self.state.TH, self.state.TC, Q, self.dt, self.physics())
+        self.t += self.dt
         self.last_Q = Q
         return self.measure()
 
@@ -159,11 +139,8 @@ class ThermalPlant:
     # ---- utilities -----------------------------------------------------
     def steady_state(self, Q: np.ndarray, iters: int = 4000) -> np.ndarray:
         """Steady-state heater temperatures for constant input (used by feasibility tools)."""
-        sim = self.clone()
-        sim.noise_std = 0.0
-        for _ in range(iters):
-            sim.step(Q)
-        return sim.state.TH.copy()
+        return constant_temperature(self.state.TH, self.state.TC, self.effective_input(Q),
+                                    self.dt, self.physics(), iters)
 
     def clone(self) -> "ThermalPlant":
         c = ThermalPlant(self.p.copy(), self.dt, self.noise_std, np.random.default_rng(1), self.master_power)
