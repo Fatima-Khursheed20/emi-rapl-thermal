@@ -1,0 +1,6 @@
+method,failure_category,episodes
+phase2_agent,no_action,6
+phase2_agent,safety,3
+phase2_agent,success,37
+phase2_agent,tracking,12
+phase2_agent,wrong_shutdown,2

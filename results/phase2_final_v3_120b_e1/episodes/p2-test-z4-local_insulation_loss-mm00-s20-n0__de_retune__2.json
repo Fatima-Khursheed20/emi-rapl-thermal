@@ -1,0 +1,231 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z4-local_insulation_loss-mm00-s20-n0",
+    "n_zones": 4,
+    "setpoints": [
+      50.0,
+      45.0,
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "local_insulation_loss",
+      "zone": 2,
+      "magnitude": 4.406,
+      "onset_s": 1707.0
+    },
+    "mismatch": 0.0,
+    "noise_std": 0.05,
+    "seed": 20004,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "de_retune",
+  "repeat": 2,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 1,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 29.0,
+    "action_applied": true,
+    "actuation_s": 1766.0,
+    "validated_action": false,
+    "agent_success": true,
+    "plant_success": true,
+    "plant_success_since_fault": true,
+    "validated_but_failed": false,
+    "safety_violation_post": false,
+    "safety_violation_since_fault": false,
+    "max_T_post": 51.56,
+    "max_T_since_fault": 51.56,
+    "time_above_limit_s": 0.0,
+    "time_above_limit_post_s": 0.0,
+    "time_above_limit_before_actuation_s": 0.0,
+    "regulated": true,
+    "tracking_err_tail": [
+      0.007,
+      0.142,
+      1.277,
+      0.006
+    ],
+    "shutdown": false,
+    "shutdown_required": false,
+    "setpoint_retention": 0.955,
+    "iae_post": 7201.7,
+    "reprompts": 0,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 0,
+    "model_reply_failures": 0,
+    "provider_attempts": 0,
+    "missing_usage_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "llm_latency_s": 0.0,
+    "api_latency_s": 0.0,
+    "decision_wall_s": 82.694,
+    "episode_wall_s": 83.474
+  },
+  "trace": {
+    "method": "de_retune[nominal]",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1736.0,
+      "symptoms": [
+        "model_residual_zone2"
+      ],
+      "fault_class": "process",
+      "fault_kind": "local_insulation_loss",
+      "zone": 2,
+      "localisation_source": "oracle"
+    },
+    "plans": [],
+    "actions": [
+      {
+        "mode": "DERATE",
+        "setpoints": {
+          "0": 49.97,
+          "1": 44.34,
+          "2": 41.87,
+          "3": 44.84
+        },
+        "gains": {
+          "0": {
+            "Kc": 3.812,
+            "tauI": 92.3
+          },
+          "1": {
+            "Kc": 3.035,
+            "tauI": 265.2
+          },
+          "2": {
+            "Kc": 6.022,
+            "tauI": 130.3
+          },
+          "3": {
+            "Kc": 9.867,
+            "tauI": 218.3
+          }
+        },
+        "q_max": {},
+        "sensor_offset": {},
+        "shutdown": false,
+        "rationale": "DE optimum"
+      }
+    ],
+    "validations": [],
+    "llm_calls": [],
+    "reprompts": 0,
+    "used_fallback": false,
+    "validated_action": false,
+    "selected_action": {
+      "mode": "DERATE",
+      "setpoints": {
+        "0": 49.97,
+        "1": 44.34,
+        "2": 41.87,
+        "3": 44.84
+      },
+      "gains": {
+        "0": {
+          "Kc": 3.812,
+          "tauI": 92.3
+        },
+        "1": {
+          "Kc": 3.035,
+          "tauI": 265.2
+        },
+        "2": {
+          "Kc": 6.022,
+          "tauI": 130.3
+        },
+        "3": {
+          "Kc": 9.867,
+          "tauI": 218.3
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "applied_action": {
+      "mode": "DERATE",
+      "setpoints": {
+        "0": 49.97,
+        "1": 44.34,
+        "2": 41.87,
+        "3": 44.84
+      },
+      "gains": {
+        "0": {
+          "Kc": 3.812,
+          "tauI": 92.3
+        },
+        "1": {
+          "Kc": 3.035,
+          "tauI": 265.2
+        },
+        "2": {
+          "Kc": 6.022,
+          "tauI": 130.3
+        },
+        "3": {
+          "Kc": 9.867,
+          "tauI": 218.3
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "decision_wall_s": 82.694,
+    "tool_events": [
+      {
+        "tool": "plant_actuation",
+        "time_s": 1766.0,
+        "action": {
+          "mode": "DERATE",
+          "setpoints": {
+            "0": 49.97,
+            "1": 44.34,
+            "2": 41.87,
+            "3": 44.84
+          },
+          "gains": {
+            "0": {
+              "Kc": 3.812,
+              "tauI": 92.3
+            },
+            "1": {
+              "Kc": 3.035,
+              "tauI": 265.2
+            },
+            "2": {
+              "Kc": 6.022,
+              "tauI": 130.3
+            },
+            "3": {
+              "Kc": 9.867,
+              "tauI": 218.3
+            }
+          },
+          "q_max": {},
+          "sensor_offset": {},
+          "shutdown": false,
+          "rationale": "DE optimum"
+        }
+      }
+    ],
+    "notes": [
+      "DE evals=648 cost=1.628"
+    ]
+  },
+  "checksum": "4b259d13b5d2395d123ba86f571d9e1bb6958c1a623071a377fd930e4a8aee07"
+}

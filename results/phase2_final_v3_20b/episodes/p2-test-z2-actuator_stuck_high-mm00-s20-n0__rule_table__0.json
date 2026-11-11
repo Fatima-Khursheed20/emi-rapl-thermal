@@ -1,0 +1,136 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z2-actuator_stuck_high-mm00-s20-n0",
+    "n_zones": 2,
+    "setpoints": [
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "actuator_stuck_high",
+      "zone": 0,
+      "magnitude": 97.44,
+      "onset_s": 1602.0
+    },
+    "mismatch": 0.0,
+    "noise_std": 0.05,
+    "seed": 20002,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "rule_table",
+  "repeat": 0,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 1,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 36.0,
+    "action_applied": true,
+    "actuation_s": 1668.0,
+    "validated_action": false,
+    "agent_success": true,
+    "plant_success": true,
+    "plant_success_since_fault": true,
+    "validated_but_failed": false,
+    "safety_violation_post": false,
+    "safety_violation_since_fault": false,
+    "max_T_post": 59.59,
+    "max_T_since_fault": 59.98,
+    "time_above_limit_s": 0.0,
+    "time_above_limit_post_s": 0.0,
+    "time_above_limit_before_actuation_s": 0.0,
+    "regulated": false,
+    "tracking_err_tail": [
+      22.0
+    ],
+    "shutdown": true,
+    "shutdown_required": true,
+    "setpoint_retention": 0.0,
+    "iae_post": 53130.4,
+    "reprompts": 0,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 0,
+    "model_reply_failures": 0,
+    "provider_attempts": 0,
+    "missing_usage_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "llm_latency_s": 0.0,
+    "api_latency_s": 0.0,
+    "decision_wall_s": 0.0,
+    "episode_wall_s": 4.273
+  },
+  "trace": {
+    "method": "rule_table",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1638.0,
+      "symptoms": [
+        "model_residual_zone0"
+      ],
+      "fault_class": "actuator",
+      "fault_kind": "actuator_stuck_high",
+      "zone": 0,
+      "localisation_source": "oracle"
+    },
+    "plans": [],
+    "actions": [
+      {
+        "mode": "SAFE_SHUTDOWN",
+        "setpoints": {},
+        "gains": {},
+        "q_max": {},
+        "sensor_offset": {},
+        "shutdown": true,
+        "rationale": "rule table"
+      }
+    ],
+    "validations": [],
+    "llm_calls": [],
+    "reprompts": 0,
+    "used_fallback": false,
+    "validated_action": false,
+    "selected_action": {
+      "mode": "SAFE_SHUTDOWN",
+      "setpoints": {},
+      "gains": {},
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": true,
+      "rationale": "rule table"
+    },
+    "applied_action": {
+      "mode": "SAFE_SHUTDOWN",
+      "setpoints": {},
+      "gains": {},
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": true,
+      "rationale": "rule table"
+    },
+    "decision_wall_s": 0.0,
+    "tool_events": [
+      {
+        "tool": "plant_actuation",
+        "time_s": 1668.0,
+        "action": {
+          "mode": "SAFE_SHUTDOWN",
+          "setpoints": {},
+          "gains": {},
+          "q_max": {},
+          "sensor_offset": {},
+          "shutdown": true,
+          "rationale": "rule table"
+        }
+      }
+    ],
+    "notes": []
+  },
+  "checksum": "b1ad579c265ba92f78fab62f4358b7060c0478ae0d3bacc03d1206ccc9663cbe"
+}

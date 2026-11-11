@@ -1,0 +1,76 @@
+{
+  "schema_version": 3,
+  "experiment": "all",
+  "methods": [
+    "base_agent_matched",
+    "base_agent_no_oracle",
+    "base_agent_nominal",
+    "de_retune",
+    "no_recovery",
+    "phase2_agent",
+    "phase2_agent_no_g1",
+    "phase2_agent_no_g2",
+    "phase2_agent_no_g3",
+    "rule_table",
+    "single_llm"
+  ],
+  "split": "llm",
+  "suite_sha256": "8328d6ee405b56ebcc01c89f6b4dfe56645a84f33f08c3c9487e16c4c4a1c307",
+  "scenario_ids": [
+    "p2-test-z2-heater_degradation-mm00-s20-n0",
+    "p2-test-z2-heater_degradation-mm30-s20-n1",
+    "p2-test-z2-heat_loss_increase-mm00-s20-n0",
+    "p2-test-z2-heat_loss_increase-mm30-s20-n1",
+    "p2-test-z2-sensor_bias-mm00-s20-n0",
+    "p2-test-z2-sensor_bias-mm30-s20-n1",
+    "p2-test-z2-local_insulation_loss-mm00-s20-n0",
+    "p2-test-z2-local_insulation_loss-mm30-s20-n1",
+    "p2-test-z2-actuator_stuck_high-mm00-s20-n0",
+    "p2-test-z2-actuator_stuck_high-mm30-s20-n1",
+    "p2-test-z4-heater_degradation-mm00-s20-n0",
+    "p2-test-z4-heater_degradation-mm30-s20-n1",
+    "p2-test-z4-heat_loss_increase-mm00-s20-n0",
+    "p2-test-z4-heat_loss_increase-mm30-s20-n1",
+    "p2-test-z4-sensor_bias-mm00-s20-n0",
+    "p2-test-z4-sensor_bias-mm30-s20-n1",
+    "p2-test-z4-local_insulation_loss-mm00-s20-n0",
+    "p2-test-z4-local_insulation_loss-mm30-s20-n1",
+    "p2-test-z4-actuator_stuck_high-mm00-s20-n0",
+    "p2-test-z4-actuator_stuck_high-mm30-s20-n1"
+  ],
+  "code_sha256": "50be86dd8c17593fd135ff8aebe5e10ae0bdc8af4059c77bdfc4a650a876db9d",
+  "provider": "gemini",
+  "model": "gemini:gemini-3.8-flash",
+  "temperature": 0.2,
+  "repeats": 3,
+  "provider_seed": null,
+  "input_price": null,
+  "output_price": null,
+  "plant_delay_s": 30,
+  "reprompt_budget": 5,
+  "llm_request": {
+    "token_cap": 2048,
+    "parameters": {},
+    "timeout_seconds": 90,
+    "max_attempts": 7
+  },
+  "runtime": {
+    "python": "3.14.3",
+    "os": "Windows",
+    "arch": "AMD64",
+    "workers": 1,
+    "numba": false,
+    "dependencies": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "pandas": "3.1.1",
+      "pydantic": "2.14.3",
+      "openai": "3.48.0"
+    },
+    "blas_threads": {
+      "OPENBLAS_NUM_THREADS": null,
+      "OMP_NUM_THREADS": null,
+      "MKL_NUM_THREADS": null
+    }
+  }
+}

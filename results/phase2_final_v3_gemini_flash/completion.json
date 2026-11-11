@@ -1,0 +1,6 @@
+{
+  "status": "paused",
+  "completed": 0,
+  "expected": 660,
+  "reason": "gemini:gemini-3.8-flash: HTTP 403. Check the key, model access and request settings."
+}

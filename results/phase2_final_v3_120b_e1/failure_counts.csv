@@ -1,0 +1,15 @@
+method,failure_category,episodes
+de_retune,safety,3
+de_retune,success,39
+de_retune,tracking,18
+no_recovery,no_action,45
+no_recovery,safety,6
+no_recovery,success,9
+rule_table,safety,3
+rule_table,success,39
+rule_table,tracking,12
+rule_table,wrong_shutdown,6
+single_llm,no_action,31
+single_llm,safety,6
+single_llm,success,10
+single_llm,tracking,13

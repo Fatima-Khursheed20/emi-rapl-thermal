@@ -1,0 +1,10 @@
+method,failure_category,episodes
+base_agent_matched,safety,3
+base_agent_matched,success,53
+base_agent_matched,tracking,4
+base_agent_no_oracle,safety,6
+base_agent_no_oracle,success,11
+base_agent_no_oracle,tracking,43
+base_agent_nominal,safety,3
+base_agent_nominal,success,48
+base_agent_nominal,tracking,9

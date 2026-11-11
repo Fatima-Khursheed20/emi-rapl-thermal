@@ -1,0 +1,10 @@
+method,repeat,episodes,plant_success_post_actuation,plant_success_since_fault,safety_violations_post_actuation,safety_violations_since_fault
+base_agent_matched,0,20,18,18,1,1
+base_agent_matched,1,20,17,17,1,1
+base_agent_matched,2,20,18,18,1,1
+base_agent_no_oracle,0,20,4,4,2,2
+base_agent_no_oracle,1,20,3,3,2,2
+base_agent_no_oracle,2,20,4,4,2,2
+base_agent_nominal,0,20,17,17,1,1
+base_agent_nominal,1,20,15,15,1,1
+base_agent_nominal,2,20,16,16,1,1

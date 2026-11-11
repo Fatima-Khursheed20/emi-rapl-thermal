@@ -1,0 +1,60 @@
+{
+  "returned_versions": [
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_05e76be18c"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_245acb052a"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_267e812a3a"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_420c059a6a"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_4de1d6a1ee"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_5e2577217c"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_69dbc96c74"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_76082d2bd0"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_7a4ab09ae4"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_998410db10"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_a4be3b0989"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_b9a23305b9"
+    },
+    {
+      "model": "openai/gpt-oss-120b",
+      "system_fingerprint": "fp_d577f40f11"
+    }
+  ],
+  "missing_usage_calls": 0,
+  "provider_attempts": 60,
+  "representative_success_cases": 0,
+  "representative_failure_cases": 0
+}

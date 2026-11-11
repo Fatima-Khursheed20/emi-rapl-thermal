@@ -1,0 +1,427 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z4-sensor_bias-mm00-s20-n0",
+    "n_zones": 4,
+    "setpoints": [
+      50.0,
+      45.0,
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "sensor_bias",
+      "zone": 3,
+      "magnitude": -12.271,
+      "onset_s": 1662.0
+    },
+    "mismatch": 0.0,
+    "noise_std": 0.05,
+    "seed": 20004,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "base_agent_matched",
+  "repeat": 0,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 5,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 20.0,
+    "action_applied": true,
+    "actuation_s": 1712.0,
+    "validated_action": true,
+    "agent_success": true,
+    "plant_success": true,
+    "plant_success_since_fault": true,
+    "validated_but_failed": false,
+    "safety_violation_post": false,
+    "safety_violation_since_fault": false,
+    "max_T_post": 51.04,
+    "max_T_since_fault": 51.14,
+    "time_above_limit_s": 0.0,
+    "time_above_limit_post_s": 0.0,
+    "time_above_limit_before_actuation_s": 0.0,
+    "regulated": true,
+    "tracking_err_tail": [
+      0.006,
+      0.003,
+      0.003,
+      0.012
+    ],
+    "shutdown": false,
+    "shutdown_required": false,
+    "setpoint_retention": 1.0,
+    "iae_post": 357.4,
+    "reprompts": 2,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 4,
+    "model_reply_failures": 0,
+    "provider_attempts": 4,
+    "missing_usage_calls": 0,
+    "tokens_in": 8904,
+    "tokens_out": 1100,
+    "llm_latency_s": 121.53,
+    "api_latency_s": 7.988,
+    "decision_wall_s": 122.03,
+    "episode_wall_s": 122.785
+  },
+  "trace": {
+    "method": "base_agent_matched",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1682.0,
+      "symptoms": [
+        "model_residual_zone3"
+      ],
+      "fault_class": "sensor",
+      "fault_kind": "sensor_bias",
+      "zone": 3,
+      "localisation_source": "oracle"
+    },
+    "plans": [
+      {
+        "target_mode": "SENSOR_CORRECTION",
+        "rationale": "Apply a sensor offset to correct the biased temperature reading in zone\u202f3 while keeping all heaters within safety limits and maintaining regulation of healthy zones."
+      }
+    ],
+    "actions": [
+      {
+        "mode": "SENSOR_CORRECTION",
+        "setpoints": {},
+        "gains": {},
+        "q_max": {},
+        "sensor_offset": {
+          "3": -12.26
+        },
+        "shutdown": false,
+        "rationale": "Residual -12.26 indicates sensor T4 reads ~12\u202f\u00b0C too high; applying -12.26\u202f\u00b0C offset corrects the bias within allowed range."
+      },
+      {
+        "mode": "SENSOR_CORRECTION",
+        "setpoints": {},
+        "gains": {},
+        "q_max": {},
+        "sensor_offset": {
+          "3": -20.0
+        },
+        "shutdown": false,
+        "rationale": "Apply maximum allowed offset to counteract bias and bring zone 3 within regulation band."
+      },
+      {
+        "mode": "SENSOR_CORRECTION",
+        "setpoints": {},
+        "gains": {},
+        "q_max": {},
+        "sensor_offset": {
+          "3": 12.26
+        },
+        "shutdown": false,
+        "rationale": "Offset +12.26\u202f\u00b0C corrects the bias so predicted temp aligns with setpoint within band."
+      }
+    ],
+    "validations": [
+      {
+        "passed": false,
+        "violations": [
+          {
+            "check": "regulation",
+            "zone": 3,
+            "message": "twin predicts zone 3 misses setpoint 45.0 by 14.52 degC (mean heater output 100%) over the last 300s",
+            "value": 14.522705245689098,
+            "limit": 1.5
+          }
+        ],
+        "predicted": {
+          "max_T": [
+            50.0,
+            45.02,
+            50.44,
+            59.53
+          ],
+          "during_delay_safety": {
+            "peak_degC": 51.14269891200139,
+            "above_s": 0.0,
+            "valid": true,
+            "violation": false
+          },
+          "post_action_safety": {
+            "peak_degC": 59.52668697930956,
+            "above_s": 0.0,
+            "valid": true,
+            "violation": false
+          },
+          "tracking_err": [
+            0.002,
+            0.005,
+            0.005,
+            14.523
+          ]
+        },
+        "responsible": "action"
+      },
+      {
+        "passed": false,
+        "violations": [
+          {
+            "check": "regulation",
+            "zone": 3,
+            "message": "twin predicts zone 3 misses setpoint 45.0 by 14.52 degC (mean heater output 100%) over the last 300s",
+            "value": 14.522705245689098,
+            "limit": 1.5
+          }
+        ],
+        "predicted": {
+          "max_T": [
+            50.0,
+            45.02,
+            50.44,
+            59.53
+          ],
+          "during_delay_safety": {
+            "peak_degC": 51.14269891200139,
+            "above_s": 0.0,
+            "valid": true,
+            "violation": false
+          },
+          "post_action_safety": {
+            "peak_degC": 59.52668697930956,
+            "above_s": 0.0,
+            "valid": true,
+            "violation": false
+          },
+          "tracking_err": [
+            0.002,
+            0.005,
+            0.005,
+            14.523
+          ]
+        },
+        "responsible": "action"
+      },
+      {
+        "passed": true,
+        "violations": [],
+        "predicted": {
+          "max_T": [
+            50.0,
+            45.01,
+            50.23,
+            51.04
+          ],
+          "during_delay_safety": {
+            "peak_degC": 51.14269891200139,
+            "above_s": 0.0,
+            "valid": true,
+            "violation": false
+          },
+          "post_action_safety": {
+            "peak_degC": 51.03956054380278,
+            "above_s": 0.0,
+            "valid": true,
+            "violation": false
+          },
+          "tracking_err": [
+            0.001,
+            0.001,
+            0.005,
+            0.016
+          ]
+        },
+        "responsible": "none"
+      }
+    ],
+    "llm_calls": [
+      {
+        "agent": "planner",
+        "model": "groq:openai/gpt-oss-20b",
+        "latency_s": 0.617,
+        "tokens_in": 1967,
+        "tokens_out": 166,
+        "ok": true,
+        "error": null,
+        "api_attempts": 1,
+        "api_latency_s": 0.373,
+        "usage_reported": true,
+        "returned_model": "openai/gpt-oss-20b",
+        "system_fingerprint": "fp_80501ff3a1",
+        "finish_reason": "stop"
+      },
+      {
+        "agent": "action",
+        "model": "groq:openai/gpt-oss-20b",
+        "latency_s": 59.266,
+        "tokens_in": 2050,
+        "tokens_out": 177,
+        "ok": true,
+        "error": null,
+        "api_attempts": 1,
+        "api_latency_s": 2.565,
+        "usage_reported": true,
+        "returned_model": "openai/gpt-oss-20b",
+        "system_fingerprint": "fp_c5a89987dc",
+        "finish_reason": "stop"
+      },
+      {
+        "agent": "action",
+        "model": "groq:openai/gpt-oss-20b",
+        "latency_s": 4.406,
+        "tokens_in": 2323,
+        "tokens_out": 599,
+        "ok": true,
+        "error": null,
+        "api_attempts": 1,
+        "api_latency_s": 3.554,
+        "usage_reported": true,
+        "returned_model": "openai/gpt-oss-20b",
+        "system_fingerprint": "fp_c5a89987dc",
+        "finish_reason": "stop"
+      },
+      {
+        "agent": "action",
+        "model": "groq:openai/gpt-oss-20b",
+        "latency_s": 57.242,
+        "tokens_in": 2564,
+        "tokens_out": 158,
+        "ok": true,
+        "error": null,
+        "api_attempts": 1,
+        "api_latency_s": 1.496,
+        "usage_reported": true,
+        "returned_model": "openai/gpt-oss-20b",
+        "system_fingerprint": "fp_e99e93f2ac",
+        "finish_reason": "stop"
+      }
+    ],
+    "reprompts": 2,
+    "used_fallback": false,
+    "validated_action": true,
+    "selected_action": {
+      "mode": "SENSOR_CORRECTION",
+      "setpoints": {},
+      "gains": {},
+      "q_max": {},
+      "sensor_offset": {
+        "3": 12.26
+      },
+      "shutdown": false,
+      "rationale": "Offset +12.26\u202f\u00b0C corrects the bias so predicted temp aligns with setpoint within band."
+    },
+    "applied_action": {
+      "mode": "SENSOR_CORRECTION",
+      "setpoints": {},
+      "gains": {},
+      "q_max": {},
+      "sensor_offset": {
+        "3": 12.26
+      },
+      "shutdown": false,
+      "rationale": "Offset +12.26\u202f\u00b0C corrects the bias so predicted temp aligns with setpoint within band."
+    },
+    "decision_wall_s": 122.03,
+    "tool_events": [
+      {
+        "tool": "planner",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are the Planning Agent of a supervisory fault-tolerant control system for a multi-zone electric thermal process (zones in a row, each with a heater, a temperature sensor and a PI loop).\nA fault has been detected. Choose ONE target operating mode from the admissible modes in the knowledge context.\nPrefer the least disruptive mode that keeps every true heater temperature below the safety limit and keeps the\nhealthy zones regulated. SAFE_SHUTDOWN stops production and is only acceptable when no operating mode can be safe.\nReply with a JSON object only: {\"target_mode\": \"<MODE>\", \"rationale\": \"<one or two sentences>\"}"
+          },
+          {
+            "role": "user",
+            "content": "PLANT SNAPSHOT:\n{\n \"t_s\": 1682.0,\n \"n_zones\": 4,\n \"measured_T\": [\n  49.99,\n  44.95,\n  50.08,\n  34.25\n ],\n \"setpoints\": [\n  50.0,\n  45.0,\n  50.0,\n  45.0\n ],\n \"heater_output_pct\": [\n  53.8,\n  51.5,\n  55.4,\n  99.1\n ],\n \"q_max\": [\n  100.0,\n  100.0,\n  100.0,\n  100.0\n ],\n \"gains\": [\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  }\n ],\n \"sensor_offset\": [\n  0.0,\n  0.0,\n  0.0,\n  0.0\n ],\n \"residuals\": [\n  -0.01,\n  -0.05,\n  0.06,\n  -12.26\n ],\n \"trend\": {\n  \"t_s\": [\n   1383.0,\n   1413.0,\n   1443.0,\n   1473.0,\n   1503.0,\n   1533.0,\n   1563.0,\n   1593.0,\n   1623.0,\n   1653.0\n  ],\n  \"measured_T\": [\n   [\n    50.01,\n    45.02,\n    50.03,\n    44.97\n   ],\n   [\n    49.98,\n    44.93,\n    50.04,\n    45.03\n   ],\n   [\n    50.05,\n    45.09,\n    49.96,\n    45.0\n   ],\n   [\n    50.07,\n    45.06,\n    49.96,\n    44.97\n   ],\n   [\n    50.04,\n    45.0,\n    49.92,\n    45.08\n   ],\n   [\n    49.95,\n    45.03,\n    49.94,\n    45.01\n   ],\n   [\n    49.99,\n    44.99,\n    49.96,\n    45.07\n   ],\n   [\n    49.99,\n    45.06,\n    49.99,\n    44.9\n   ],\n   [\n    50.0,\n    44.96,\n    50.0,\n    44.92\n   ],\n   [\n    50.03,\n    44.95,\n    50.01,\n    44.97\n   ]\n  ],\n  \"heater_output_pct\": [\n   [\n    53.7,\n    51.5,\n    55.0,\n    53.8\n   ],\n   [\n    53.6,\n    51.8,\n    55.4,\n    53.7\n   ],\n   [\n    53.6,\n    52.1,\n    55.4,\n    53.9\n   ],\n   [\n    53.5,\n    51.2,\n    55.4,\n    54.0\n   ],\n   [\n    54.0,\n    51.4,\n    55.5,\n    53.7\n   ],\n   [\n    53.5,\n    51.3,\n    55.3,\n    53.9\n   ],\n   [\n    53.7,\n    51.5,\n    55.5,\n    54.0\n   ],\n   [\n    53.5,\n    51.7,\n    55.1,\n    53.7\n   ],\n   [\n    53.6,\n    51.3,\n    55.7,\n    54.1\n   ],\n   [\n    53.7,\n    51.3,\n    55.7,\n    53.8\n   ]\n  ]\n },\n \"ambient_T\": 23.0,\n \"safety_limit_T\": 60.0\n}\n\nFAULT REPORT:\n{\n \"detected\": true,\n \"t_detect_s\": 1682.0,\n \"symptoms\": [\n  \"model_residual_zone3\"\n ],\n \"fault_class\": \"sensor\",\n \"fault_kind\": \"sensor_bias\",\n \"zone\": 3,\n \"localisation_source\": \"oracle\"\n}\n\nKNOWLEDGE CONTEXT:\n{\n \"fault_kind\": \"sensor_bias\",\n \"fault_class\": \"sensor\",\n \"implicated_zones\": [\n  {\n   \"zone\": 2,\n   \"heater\": \"H3\",\n   \"sensor\": \"T3\",\n   \"controller\": \"PI-3\",\n   \"neighbours\": [\n    1,\n    3\n   ]\n  },\n  {\n   \"zone\": 3,\n   \"heater\": \"H4\",\n   \"sensor\": \"T4\",\n   \"controller\": \"PI-4\",\n   \"neighbours\": [\n    2\n   ]\n  }\n ],\n \"admissible_modes\": [\n  \"NORMAL\",\n  \"SENSOR_CORRECTION\",\n  \"DERATE\",\n  \"SAFE_SHUTDOWN\"\n ],\n \"mode_semantics\": {\n  \"NORMAL\": \"Keep current controller settings (monitor only); valid if the plant stays safe and regulated.\",\n  \"SENSOR_CORRECTION\": \"Add an offset (degC) to a biased sensor so the loop regulates the true temperature.\",\n  \"DERATE\": \"Lower setpoint(s) and/or heater output limit q_max of affected zones to a feasible level.\",\n  \"SAFE_SHUTDOWN\": \"Open the master heater relay (all heaters off). Use only if no operating mode is safe.\"\n },\n \"mode_fields\": {\n  \"NORMAL\": [],\n  \"SENSOR_CORRECTION\": [\n   \"sensor_offset\"\n  ],\n  \"DERATE\": [\n   \"q_max\",\n   \"setpoints\"\n  ],\n  \"SAFE_SHUTDOWN\": []\n },\n \"constraints\": {\n  \"safety_limit_T\": 60.0,\n  \"setpoint_range\": [\n   30.0,\n   58.0\n  ],\n  \"max_derate_degC\": 15.0,\n  \"Kc_range\": [\n   0.5,\n   20.0\n  ],\n  \"tauI_range\": [\n   20.0,\n   600.0\n  ],\n  \"q_max_range\": [\n   0.0,\n   100.0\n  ],\n  \"sensor_offset_range\": [\n   -20.0,\n   20.0\n  ],\n  \"regulation_band_degC\": 1.5\n },\n \"dynamics\": \"Each zone is a lumped thermal mass (m*Cp ~ 2 J/K) heated by a resistive heater (gain alpha ~ 0.01 W/% for odd zones, 0.0075 W/% for even zones) and cooled by convection and radiation to ambient. Neighbouring zones exchange heat through a small shared area, so heating zone i also warms zones i-1 and i+1. Open-loop time constant ~ 3 min; sensors lag the heater by ~ 12 s. At 100 % output an odd zone settles near 71 degC and an even zone near 62 degC (nominal, isolated). Steady-state temperature rises roughly linearly with delivered power.\",\n \"interlock\": \"master heater relay (all heaters)\"\n}\n\nSelect the target mode."
+          }
+        ],
+        "output": "{\"target_mode\":\"SENSOR_CORRECTION\",\"rationale\":\"Apply a sensor offset to correct the biased temperature reading in zone\u202f3 while keeping all heaters within safety limits and maintaining regulation of healthy zones.\"}"
+      },
+      {
+        "tool": "action",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are the Action Agent of a supervisory fault-tolerant control system for a multi-zone electric thermal process. Given the plant snapshot, the fault report, the knowledge context and the selected mode,\npropose concrete recovery parameters. Only change what the mode requires. Zones are integers starting at 0.\nFollow the mode_fields mapping. Use empty objects for fields outside the selected mode.\nRespect every range in the constraints. Reply with a JSON object only, using this schema:\n{\"mode\": \"<MODE>\",\n \"setpoints\": {\"<zone>\": <degC>},\n \"gains\": {\"<zone>\": {\"Kc\": <%/degC>, \"tauI\": <s>}},\n \"q_max\": {\"<zone>\": <0-100 %>},\n \"sensor_offset\": {\"<zone>\": <degC added to the reading>},\n \"shutdown\": <true only for SAFE_SHUTDOWN>,\n \"rationale\": \"<short justification with the numbers you used>\"}"
+          },
+          {
+            "role": "user",
+            "content": "PLANT SNAPSHOT:\n{\n \"t_s\": 1682.0,\n \"n_zones\": 4,\n \"measured_T\": [\n  49.99,\n  44.95,\n  50.08,\n  34.25\n ],\n \"setpoints\": [\n  50.0,\n  45.0,\n  50.0,\n  45.0\n ],\n \"heater_output_pct\": [\n  53.8,\n  51.5,\n  55.4,\n  99.1\n ],\n \"q_max\": [\n  100.0,\n  100.0,\n  100.0,\n  100.0\n ],\n \"gains\": [\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  }\n ],\n \"sensor_offset\": [\n  0.0,\n  0.0,\n  0.0,\n  0.0\n ],\n \"residuals\": [\n  -0.01,\n  -0.05,\n  0.06,\n  -12.26\n ],\n \"trend\": {\n  \"t_s\": [\n   1383.0,\n   1413.0,\n   1443.0,\n   1473.0,\n   1503.0,\n   1533.0,\n   1563.0,\n   1593.0,\n   1623.0,\n   1653.0\n  ],\n  \"measured_T\": [\n   [\n    50.01,\n    45.02,\n    50.03,\n    44.97\n   ],\n   [\n    49.98,\n    44.93,\n    50.04,\n    45.03\n   ],\n   [\n    50.05,\n    45.09,\n    49.96,\n    45.0\n   ],\n   [\n    50.07,\n    45.06,\n    49.96,\n    44.97\n   ],\n   [\n    50.04,\n    45.0,\n    49.92,\n    45.08\n   ],\n   [\n    49.95,\n    45.03,\n    49.94,\n    45.01\n   ],\n   [\n    49.99,\n    44.99,\n    49.96,\n    45.07\n   ],\n   [\n    49.99,\n    45.06,\n    49.99,\n    44.9\n   ],\n   [\n    50.0,\n    44.96,\n    50.0,\n    44.92\n   ],\n   [\n    50.03,\n    44.95,\n    50.01,\n    44.97\n   ]\n  ],\n  \"heater_output_pct\": [\n   [\n    53.7,\n    51.5,\n    55.0,\n    53.8\n   ],\n   [\n    53.6,\n    51.8,\n    55.4,\n    53.7\n   ],\n   [\n    53.6,\n    52.1,\n    55.4,\n    53.9\n   ],\n   [\n    53.5,\n    51.2,\n    55.4,\n    54.0\n   ],\n   [\n    54.0,\n    51.4,\n    55.5,\n    53.7\n   ],\n   [\n    53.5,\n    51.3,\n    55.3,\n    53.9\n   ],\n   [\n    53.7,\n    51.5,\n    55.5,\n    54.0\n   ],\n   [\n    53.5,\n    51.7,\n    55.1,\n    53.7\n   ],\n   [\n    53.6,\n    51.3,\n    55.7,\n    54.1\n   ],\n   [\n    53.7,\n    51.3,\n    55.7,\n    53.8\n   ]\n  ]\n },\n \"ambient_T\": 23.0,\n \"safety_limit_T\": 60.0\n}\n\nFAULT REPORT:\n{\n \"detected\": true,\n \"t_detect_s\": 1682.0,\n \"symptoms\": [\n  \"model_residual_zone3\"\n ],\n \"fault_class\": \"sensor\",\n \"fault_kind\": \"sensor_bias\",\n \"zone\": 3,\n \"localisation_source\": \"oracle\"\n}\n\nKNOWLEDGE CONTEXT:\n{\n \"fault_kind\": \"sensor_bias\",\n \"fault_class\": \"sensor\",\n \"implicated_zones\": [\n  {\n   \"zone\": 2,\n   \"heater\": \"H3\",\n   \"sensor\": \"T3\",\n   \"controller\": \"PI-3\",\n   \"neighbours\": [\n    1,\n    3\n   ]\n  },\n  {\n   \"zone\": 3,\n   \"heater\": \"H4\",\n   \"sensor\": \"T4\",\n   \"controller\": \"PI-4\",\n   \"neighbours\": [\n    2\n   ]\n  }\n ],\n \"admissible_modes\": [\n  \"NORMAL\",\n  \"SENSOR_CORRECTION\",\n  \"DERATE\",\n  \"SAFE_SHUTDOWN\"\n ],\n \"mode_semantics\": {\n  \"NORMAL\": \"Keep current controller settings (monitor only); valid if the plant stays safe and regulated.\",\n  \"SENSOR_CORRECTION\": \"Add an offset (degC) to a biased sensor so the loop regulates the true temperature.\",\n  \"DERATE\": \"Lower setpoint(s) and/or heater output limit q_max of affected zones to a feasible level.\",\n  \"SAFE_SHUTDOWN\": \"Open the master heater relay (all heaters off). Use only if no operating mode is safe.\"\n },\n \"mode_fields\": {\n  \"NORMAL\": [],\n  \"SENSOR_CORRECTION\": [\n   \"sensor_offset\"\n  ],\n  \"DERATE\": [\n   \"q_max\",\n   \"setpoints\"\n  ],\n  \"SAFE_SHUTDOWN\": []\n },\n \"constraints\": {\n  \"safety_limit_T\": 60.0,\n  \"setpoint_range\": [\n   30.0,\n   58.0\n  ],\n  \"max_derate_degC\": 15.0,\n  \"Kc_range\": [\n   0.5,\n   20.0\n  ],\n  \"tauI_range\": [\n   20.0,\n   600.0\n  ],\n  \"q_max_range\": [\n   0.0,\n   100.0\n  ],\n  \"sensor_offset_range\": [\n   -20.0,\n   20.0\n  ],\n  \"regulation_band_degC\": 1.5\n },\n \"dynamics\": \"Each zone is a lumped thermal mass (m*Cp ~ 2 J/K) heated by a resistive heater (gain alpha ~ 0.01 W/% for odd zones, 0.0075 W/% for even zones) and cooled by convection and radiation to ambient. Neighbouring zones exchange heat through a small shared area, so heating zone i also warms zones i-1 and i+1. Open-loop time constant ~ 3 min; sensors lag the heater by ~ 12 s. At 100 % output an odd zone settles near 71 degC and an even zone near 62 degC (nominal, isolated). Steady-state temperature rises roughly linearly with delivered power.\",\n \"interlock\": \"master heater relay (all heaters)\"\n}\n\nSELECTED MODE: SENSOR_CORRECTION\n\nPropose the recovery action."
+          }
+        ],
+        "output": "{\"mode\":\"SENSOR_CORRECTION\",\"setpoints\":{},\"gains\":{},\"q_max\":{},\"sensor_offset\":{\"3\":-12.26},\"shutdown\":false,\"rationale\":\"Residual -12.26 indicates sensor T4 reads ~12\u202f\u00b0C too high; applying -12.26\u202f\u00b0C offset corrects the bias within allowed range.\"}"
+      },
+      {
+        "tool": "action",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are the Action Agent of a supervisory fault-tolerant control system for a multi-zone electric thermal process. Given the plant snapshot, the fault report, the knowledge context and the selected mode,\npropose concrete recovery parameters. Only change what the mode requires. Zones are integers starting at 0.\nFollow the mode_fields mapping. Use empty objects for fields outside the selected mode.\nRespect every range in the constraints. Reply with a JSON object only, using this schema:\n{\"mode\": \"<MODE>\",\n \"setpoints\": {\"<zone>\": <degC>},\n \"gains\": {\"<zone>\": {\"Kc\": <%/degC>, \"tauI\": <s>}},\n \"q_max\": {\"<zone>\": <0-100 %>},\n \"sensor_offset\": {\"<zone>\": <degC added to the reading>},\n \"shutdown\": <true only for SAFE_SHUTDOWN>,\n \"rationale\": \"<short justification with the numbers you used>\"}"
+          },
+          {
+            "role": "user",
+            "content": "PLANT SNAPSHOT:\n{\n \"t_s\": 1682.0,\n \"n_zones\": 4,\n \"measured_T\": [\n  49.99,\n  44.95,\n  50.08,\n  34.25\n ],\n \"setpoints\": [\n  50.0,\n  45.0,\n  50.0,\n  45.0\n ],\n \"heater_output_pct\": [\n  53.8,\n  51.5,\n  55.4,\n  99.1\n ],\n \"q_max\": [\n  100.0,\n  100.0,\n  100.0,\n  100.0\n ],\n \"gains\": [\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  }\n ],\n \"sensor_offset\": [\n  0.0,\n  0.0,\n  0.0,\n  0.0\n ],\n \"residuals\": [\n  -0.01,\n  -0.05,\n  0.06,\n  -12.26\n ],\n \"trend\": {\n  \"t_s\": [\n   1383.0,\n   1413.0,\n   1443.0,\n   1473.0,\n   1503.0,\n   1533.0,\n   1563.0,\n   1593.0,\n   1623.0,\n   1653.0\n  ],\n  \"measured_T\": [\n   [\n    50.01,\n    45.02,\n    50.03,\n    44.97\n   ],\n   [\n    49.98,\n    44.93,\n    50.04,\n    45.03\n   ],\n   [\n    50.05,\n    45.09,\n    49.96,\n    45.0\n   ],\n   [\n    50.07,\n    45.06,\n    49.96,\n    44.97\n   ],\n   [\n    50.04,\n    45.0,\n    49.92,\n    45.08\n   ],\n   [\n    49.95,\n    45.03,\n    49.94,\n    45.01\n   ],\n   [\n    49.99,\n    44.99,\n    49.96,\n    45.07\n   ],\n   [\n    49.99,\n    45.06,\n    49.99,\n    44.9\n   ],\n   [\n    50.0,\n    44.96,\n    50.0,\n    44.92\n   ],\n   [\n    50.03,\n    44.95,\n    50.01,\n    44.97\n   ]\n  ],\n  \"heater_output_pct\": [\n   [\n    53.7,\n    51.5,\n    55.0,\n    53.8\n   ],\n   [\n    53.6,\n    51.8,\n    55.4,\n    53.7\n   ],\n   [\n    53.6,\n    52.1,\n    55.4,\n    53.9\n   ],\n   [\n    53.5,\n    51.2,\n    55.4,\n    54.0\n   ],\n   [\n    54.0,\n    51.4,\n    55.5,\n    53.7\n   ],\n   [\n    53.5,\n    51.3,\n    55.3,\n    53.9\n   ],\n   [\n    53.7,\n    51.5,\n    55.5,\n    54.0\n   ],\n   [\n    53.5,\n    51.7,\n    55.1,\n    53.7\n   ],\n   [\n    53.6,\n    51.3,\n    55.7,\n    54.1\n   ],\n   [\n    53.7,\n    51.3,\n    55.7,\n    53.8\n   ]\n  ]\n },\n \"ambient_T\": 23.0,\n \"safety_limit_T\": 60.0\n}\n\nFAULT REPORT:\n{\n \"detected\": true,\n \"t_detect_s\": 1682.0,\n \"symptoms\": [\n  \"model_residual_zone3\"\n ],\n \"fault_class\": \"sensor\",\n \"fault_kind\": \"sensor_bias\",\n \"zone\": 3,\n \"localisation_source\": \"oracle\"\n}\n\nKNOWLEDGE CONTEXT:\n{\n \"fault_kind\": \"sensor_bias\",\n \"fault_class\": \"sensor\",\n \"implicated_zones\": [\n  {\n   \"zone\": 2,\n   \"heater\": \"H3\",\n   \"sensor\": \"T3\",\n   \"controller\": \"PI-3\",\n   \"neighbours\": [\n    1,\n    3\n   ]\n  },\n  {\n   \"zone\": 3,\n   \"heater\": \"H4\",\n   \"sensor\": \"T4\",\n   \"controller\": \"PI-4\",\n   \"neighbours\": [\n    2\n   ]\n  }\n ],\n \"admissible_modes\": [\n  \"NORMAL\",\n  \"SENSOR_CORRECTION\",\n  \"DERATE\",\n  \"SAFE_SHUTDOWN\"\n ],\n \"mode_semantics\": {\n  \"NORMAL\": \"Keep current controller settings (monitor only); valid if the plant stays safe and regulated.\",\n  \"SENSOR_CORRECTION\": \"Add an offset (degC) to a biased sensor so the loop regulates the true temperature.\",\n  \"DERATE\": \"Lower setpoint(s) and/or heater output limit q_max of affected zones to a feasible level.\",\n  \"SAFE_SHUTDOWN\": \"Open the master heater relay (all heaters off). Use only if no operating mode is safe.\"\n },\n \"mode_fields\": {\n  \"NORMAL\": [],\n  \"SENSOR_CORRECTION\": [\n   \"sensor_offset\"\n  ],\n  \"DERATE\": [\n   \"q_max\",\n   \"setpoints\"\n  ],\n  \"SAFE_SHUTDOWN\": []\n },\n \"constraints\": {\n  \"safety_limit_T\": 60.0,\n  \"setpoint_range\": [\n   30.0,\n   58.0\n  ],\n  \"max_derate_degC\": 15.0,\n  \"Kc_range\": [\n   0.5,\n   20.0\n  ],\n  \"tauI_range\": [\n   20.0,\n   600.0\n  ],\n  \"q_max_range\": [\n   0.0,\n   100.0\n  ],\n  \"sensor_offset_range\": [\n   -20.0,\n   20.0\n  ],\n  \"regulation_band_degC\": 1.5\n },\n \"dynamics\": \"Each zone is a lumped thermal mass (m*Cp ~ 2 J/K) heated by a resistive heater (gain alpha ~ 0.01 W/% for odd zones, 0.0075 W/% for even zones) and cooled by convection and radiation to ambient. Neighbouring zones exchange heat through a small shared area, so heating zone i also warms zones i-1 and i+1. Open-loop time constant ~ 3 min; sensors lag the heater by ~ 12 s. At 100 % output an odd zone settles near 71 degC and an even zone near 62 degC (nominal, isolated). Steady-state temperature rises roughly linearly with delivered power.\",\n \"interlock\": \"master heater relay (all heaters)\"\n}\n\nSELECTED MODE: SENSOR_CORRECTION\n\nPropose the recovery action."
+          },
+          {
+            "role": "assistant",
+            "content": "{\"mode\":\"SENSOR_CORRECTION\",\"setpoints\":{},\"gains\":{},\"q_max\":{},\"sensor_offset\":{\"3\":-12.26},\"shutdown\":false,\"rationale\":\"Residual -12.26 indicates sensor T4 reads ~12\u202f\u00b0C too high; applying -12.26\u202f\u00b0C offset corrects the bias within allowed range.\"}"
+          },
+          {
+            "role": "user",
+            "content": "The validator rejected the proposal. Review the violations below.\nPrevious proposal: {\"mode\":\"SENSOR_CORRECTION\",\"setpoints\":{},\"gains\":{},\"q_max\":{},\"sensor_offset\":{\"3\":-12.26},\"shutdown\":false,\"rationale\":\"Residual -12.26 indicates sensor T4 reads ~12\u202f\u00b0C too high; applying -12.26\u202f\u00b0C offset corrects the bias within allowed range.\"}\nViolations:\n[\n {\n  \"check\": \"regulation\",\n  \"zone\": 3,\n  \"message\": \"twin predicts zone 3 misses setpoint 45.0 by 14.52 degC (mean heater output 100%) over the last 300s\",\n  \"value\": 14.522705245689098,\n  \"limit\": 1.5\n }\n]\nRevise the proposal to remove every violation. Reply with the JSON object only."
+          }
+        ],
+        "output": "{\"mode\":\"SENSOR_CORRECTION\",\"setpoints\":{},\"gains\":{},\"q_max\":{},\"sensor_offset\":{\"3\":-20.0},\"shutdown\":false,\"rationale\":\"Apply maximum allowed offset to counteract bias and bring zone 3 within regulation band.\"}"
+      },
+      {
+        "tool": "action",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are the Action Agent of a supervisory fault-tolerant control system for a multi-zone electric thermal process. Given the plant snapshot, the fault report, the knowledge context and the selected mode,\npropose concrete recovery parameters. Only change what the mode requires. Zones are integers starting at 0.\nFollow the mode_fields mapping. Use empty objects for fields outside the selected mode.\nRespect every range in the constraints. Reply with a JSON object only, using this schema:\n{\"mode\": \"<MODE>\",\n \"setpoints\": {\"<zone>\": <degC>},\n \"gains\": {\"<zone>\": {\"Kc\": <%/degC>, \"tauI\": <s>}},\n \"q_max\": {\"<zone>\": <0-100 %>},\n \"sensor_offset\": {\"<zone>\": <degC added to the reading>},\n \"shutdown\": <true only for SAFE_SHUTDOWN>,\n \"rationale\": \"<short justification with the numbers you used>\"}"
+          },
+          {
+            "role": "user",
+            "content": "PLANT SNAPSHOT:\n{\n \"t_s\": 1682.0,\n \"n_zones\": 4,\n \"measured_T\": [\n  49.99,\n  44.95,\n  50.08,\n  34.25\n ],\n \"setpoints\": [\n  50.0,\n  45.0,\n  50.0,\n  45.0\n ],\n \"heater_output_pct\": [\n  53.8,\n  51.5,\n  55.4,\n  99.1\n ],\n \"q_max\": [\n  100.0,\n  100.0,\n  100.0,\n  100.0\n ],\n \"gains\": [\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  }\n ],\n \"sensor_offset\": [\n  0.0,\n  0.0,\n  0.0,\n  0.0\n ],\n \"residuals\": [\n  -0.01,\n  -0.05,\n  0.06,\n  -12.26\n ],\n \"trend\": {\n  \"t_s\": [\n   1383.0,\n   1413.0,\n   1443.0,\n   1473.0,\n   1503.0,\n   1533.0,\n   1563.0,\n   1593.0,\n   1623.0,\n   1653.0\n  ],\n  \"measured_T\": [\n   [\n    50.01,\n    45.02,\n    50.03,\n    44.97\n   ],\n   [\n    49.98,\n    44.93,\n    50.04,\n    45.03\n   ],\n   [\n    50.05,\n    45.09,\n    49.96,\n    45.0\n   ],\n   [\n    50.07,\n    45.06,\n    49.96,\n    44.97\n   ],\n   [\n    50.04,\n    45.0,\n    49.92,\n    45.08\n   ],\n   [\n    49.95,\n    45.03,\n    49.94,\n    45.01\n   ],\n   [\n    49.99,\n    44.99,\n    49.96,\n    45.07\n   ],\n   [\n    49.99,\n    45.06,\n    49.99,\n    44.9\n   ],\n   [\n    50.0,\n    44.96,\n    50.0,\n    44.92\n   ],\n   [\n    50.03,\n    44.95,\n    50.01,\n    44.97\n   ]\n  ],\n  \"heater_output_pct\": [\n   [\n    53.7,\n    51.5,\n    55.0,\n    53.8\n   ],\n   [\n    53.6,\n    51.8,\n    55.4,\n    53.7\n   ],\n   [\n    53.6,\n    52.1,\n    55.4,\n    53.9\n   ],\n   [\n    53.5,\n    51.2,\n    55.4,\n    54.0\n   ],\n   [\n    54.0,\n    51.4,\n    55.5,\n    53.7\n   ],\n   [\n    53.5,\n    51.3,\n    55.3,\n    53.9\n   ],\n   [\n    53.7,\n    51.5,\n    55.5,\n    54.0\n   ],\n   [\n    53.5,\n    51.7,\n    55.1,\n    53.7\n   ],\n   [\n    53.6,\n    51.3,\n    55.7,\n    54.1\n   ],\n   [\n    53.7,\n    51.3,\n    55.7,\n    53.8\n   ]\n  ]\n },\n \"ambient_T\": 23.0,\n \"safety_limit_T\": 60.0\n}\n\nFAULT REPORT:\n{\n \"detected\": true,\n \"t_detect_s\": 1682.0,\n \"symptoms\": [\n  \"model_residual_zone3\"\n ],\n \"fault_class\": \"sensor\",\n \"fault_kind\": \"sensor_bias\",\n \"zone\": 3,\n \"localisation_source\": \"oracle\"\n}\n\nKNOWLEDGE CONTEXT:\n{\n \"fault_kind\": \"sensor_bias\",\n \"fault_class\": \"sensor\",\n \"implicated_zones\": [\n  {\n   \"zone\": 2,\n   \"heater\": \"H3\",\n   \"sensor\": \"T3\",\n   \"controller\": \"PI-3\",\n   \"neighbours\": [\n    1,\n    3\n   ]\n  },\n  {\n   \"zone\": 3,\n   \"heater\": \"H4\",\n   \"sensor\": \"T4\",\n   \"controller\": \"PI-4\",\n   \"neighbours\": [\n    2\n   ]\n  }\n ],\n \"admissible_modes\": [\n  \"NORMAL\",\n  \"SENSOR_CORRECTION\",\n  \"DERATE\",\n  \"SAFE_SHUTDOWN\"\n ],\n \"mode_semantics\": {\n  \"NORMAL\": \"Keep current controller settings (monitor only); valid if the plant stays safe and regulated.\",\n  \"SENSOR_CORRECTION\": \"Add an offset (degC) to a biased sensor so the loop regulates the true temperature.\",\n  \"DERATE\": \"Lower setpoint(s) and/or heater output limit q_max of affected zones to a feasible level.\",\n  \"SAFE_SHUTDOWN\": \"Open the master heater relay (all heaters off). Use only if no operating mode is safe.\"\n },\n \"mode_fields\": {\n  \"NORMAL\": [],\n  \"SENSOR_CORRECTION\": [\n   \"sensor_offset\"\n  ],\n  \"DERATE\": [\n   \"q_max\",\n   \"setpoints\"\n  ],\n  \"SAFE_SHUTDOWN\": []\n },\n \"constraints\": {\n  \"safety_limit_T\": 60.0,\n  \"setpoint_range\": [\n   30.0,\n   58.0\n  ],\n  \"max_derate_degC\": 15.0,\n  \"Kc_range\": [\n   0.5,\n   20.0\n  ],\n  \"tauI_range\": [\n   20.0,\n   600.0\n  ],\n  \"q_max_range\": [\n   0.0,\n   100.0\n  ],\n  \"sensor_offset_range\": [\n   -20.0,\n   20.0\n  ],\n  \"regulation_band_degC\": 1.5\n },\n \"dynamics\": \"Each zone is a lumped thermal mass (m*Cp ~ 2 J/K) heated by a resistive heater (gain alpha ~ 0.01 W/% for odd zones, 0.0075 W/% for even zones) and cooled by convection and radiation to ambient. Neighbouring zones exchange heat through a small shared area, so heating zone i also warms zones i-1 and i+1. Open-loop time constant ~ 3 min; sensors lag the heater by ~ 12 s. At 100 % output an odd zone settles near 71 degC and an even zone near 62 degC (nominal, isolated). Steady-state temperature rises roughly linearly with delivered power.\",\n \"interlock\": \"master heater relay (all heaters)\"\n}\n\nSELECTED MODE: SENSOR_CORRECTION\n\nPropose the recovery action."
+          },
+          {
+            "role": "assistant",
+            "content": "{\"mode\":\"SENSOR_CORRECTION\",\"setpoints\":{},\"gains\":{},\"q_max\":{},\"sensor_offset\":{\"3\":-12.26},\"shutdown\":false,\"rationale\":\"Residual -12.26 indicates sensor T4 reads ~12\u202f\u00b0C too high; applying -12.26\u202f\u00b0C offset corrects the bias within allowed range.\"}"
+          },
+          {
+            "role": "user",
+            "content": "The validator rejected the proposal. Review the violations below.\nPrevious proposal: {\"mode\":\"SENSOR_CORRECTION\",\"setpoints\":{},\"gains\":{},\"q_max\":{},\"sensor_offset\":{\"3\":-12.26},\"shutdown\":false,\"rationale\":\"Residual -12.26 indicates sensor T4 reads ~12\u202f\u00b0C too high; applying -12.26\u202f\u00b0C offset corrects the bias within allowed range.\"}\nViolations:\n[\n {\n  \"check\": \"regulation\",\n  \"zone\": 3,\n  \"message\": \"twin predicts zone 3 misses setpoint 45.0 by 14.52 degC (mean heater output 100%) over the last 300s\",\n  \"value\": 14.522705245689098,\n  \"limit\": 1.5\n }\n]\nRevise the proposal to remove every violation. Reply with the JSON object only."
+          },
+          {
+            "role": "assistant",
+            "content": "{\"mode\":\"SENSOR_CORRECTION\",\"setpoints\":{},\"gains\":{},\"q_max\":{},\"sensor_offset\":{\"3\":-20.0},\"shutdown\":false,\"rationale\":\"Apply maximum allowed offset to counteract bias and bring zone 3 within regulation band.\"}"
+          },
+          {
+            "role": "user",
+            "content": "The validator rejected the proposal. Review the violations below.\nPrevious proposal: {\"mode\":\"SENSOR_CORRECTION\",\"setpoints\":{},\"gains\":{},\"q_max\":{},\"sensor_offset\":{\"3\":-20.0},\"shutdown\":false,\"rationale\":\"Apply maximum allowed offset to counteract bias and bring zone 3 within regulation band.\"}\nViolations:\n[\n {\n  \"check\": \"regulation\",\n  \"zone\": 3,\n  \"message\": \"twin predicts zone 3 misses setpoint 45.0 by 14.52 degC (mean heater output 100%) over the last 300s\",\n  \"value\": 14.522705245689098,\n  \"limit\": 1.5\n }\n]\nRevise the proposal to remove every violation. Reply with the JSON object only."
+          }
+        ],
+        "output": "{\"mode\":\"SENSOR_CORRECTION\",\"setpoints\":{},\"gains\":{},\"q_max\":{},\"sensor_offset\":{\"3\":12.26},\"shutdown\":false,\"rationale\":\"Offset +12.26\u202f\u00b0C corrects the bias so predicted temp aligns with setpoint within band.\"}"
+      },
+      {
+        "tool": "plant_actuation",
+        "time_s": 1712.0,
+        "action": {
+          "mode": "SENSOR_CORRECTION",
+          "setpoints": {},
+          "gains": {},
+          "q_max": {},
+          "sensor_offset": {
+            "3": 12.26
+          },
+          "shutdown": false,
+          "rationale": "Offset +12.26\u202f\u00b0C corrects the bias so predicted temp aligns with setpoint within band."
+        }
+      }
+    ],
+    "notes": []
+  },
+  "checksum": "234a8ab067163d8729ec6b15acfdc601cb54cf1c2867097da543c726f7e19bba"
+}

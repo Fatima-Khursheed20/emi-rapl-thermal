@@ -1,0 +1,13 @@
+method,repeat,episodes,plant_success_post_actuation,plant_success_since_fault,safety_violations_post_actuation,safety_violations_since_fault
+de_retune,0,20,13,13,1,1
+de_retune,1,20,13,13,1,1
+de_retune,2,20,13,13,1,1
+no_recovery,0,20,3,3,2,2
+no_recovery,1,20,3,3,2,2
+no_recovery,2,20,3,3,2,2
+rule_table,0,20,13,13,1,1
+rule_table,1,20,13,13,1,1
+rule_table,2,20,13,13,1,1
+single_llm,0,20,3,3,2,2
+single_llm,1,20,3,3,2,2
+single_llm,2,20,4,4,2,2

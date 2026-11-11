@@ -1,0 +1,187 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z2-local_insulation_loss-mm30-s20-n1",
+    "n_zones": 2,
+    "setpoints": [
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "local_insulation_loss",
+      "zone": 0,
+      "magnitude": 3.439,
+      "onset_s": 1634.0
+    },
+    "mismatch": 0.3,
+    "noise_std": 0.15,
+    "seed": 20002,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "de_retune",
+  "repeat": 2,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 1,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 29.0,
+    "action_applied": true,
+    "actuation_s": 1693.0,
+    "validated_action": false,
+    "agent_success": true,
+    "plant_success": true,
+    "plant_success_since_fault": true,
+    "validated_but_failed": false,
+    "safety_violation_post": false,
+    "safety_violation_since_fault": false,
+    "max_T_post": 50.13,
+    "max_T_since_fault": 50.13,
+    "time_above_limit_s": 0.0,
+    "time_above_limit_post_s": 0.0,
+    "time_above_limit_before_actuation_s": 0.0,
+    "regulated": true,
+    "tracking_err_tail": [
+      0.022,
+      0.008
+    ],
+    "shutdown": false,
+    "shutdown_required": false,
+    "setpoint_retention": 0.915,
+    "iae_post": 2149.7,
+    "reprompts": 0,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 0,
+    "model_reply_failures": 0,
+    "provider_attempts": 0,
+    "missing_usage_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "llm_latency_s": 0.0,
+    "api_latency_s": 0.0,
+    "decision_wall_s": 30.979,
+    "episode_wall_s": 31.589
+  },
+  "trace": {
+    "method": "de_retune[nominal]",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1663.0,
+      "symptoms": [
+        "model_residual_zone0"
+      ],
+      "fault_class": "process",
+      "fault_kind": "local_insulation_loss",
+      "zone": 0,
+      "localisation_source": "oracle"
+    },
+    "plans": [],
+    "actions": [
+      {
+        "mode": "DERATE",
+        "setpoints": {
+          "0": 41.58,
+          "1": 44.95
+        },
+        "gains": {
+          "0": {
+            "Kc": 7.037,
+            "tauI": 53.3
+          },
+          "1": {
+            "Kc": 6.899,
+            "tauI": 90.5
+          }
+        },
+        "q_max": {},
+        "sensor_offset": {},
+        "shutdown": false,
+        "rationale": "DE optimum"
+      }
+    ],
+    "validations": [],
+    "llm_calls": [],
+    "reprompts": 0,
+    "used_fallback": false,
+    "validated_action": false,
+    "selected_action": {
+      "mode": "DERATE",
+      "setpoints": {
+        "0": 41.58,
+        "1": 44.95
+      },
+      "gains": {
+        "0": {
+          "Kc": 7.037,
+          "tauI": 53.3
+        },
+        "1": {
+          "Kc": 6.899,
+          "tauI": 90.5
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "applied_action": {
+      "mode": "DERATE",
+      "setpoints": {
+        "0": 41.58,
+        "1": 44.95
+      },
+      "gains": {
+        "0": {
+          "Kc": 7.037,
+          "tauI": 53.3
+        },
+        "1": {
+          "Kc": 6.899,
+          "tauI": 90.5
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "decision_wall_s": 30.979,
+    "tool_events": [
+      {
+        "tool": "plant_actuation",
+        "time_s": 1693.0,
+        "action": {
+          "mode": "DERATE",
+          "setpoints": {
+            "0": 41.58,
+            "1": 44.95
+          },
+          "gains": {
+            "0": {
+              "Kc": 7.037,
+              "tauI": 53.3
+            },
+            "1": {
+              "Kc": 6.899,
+              "tauI": 90.5
+            }
+          },
+          "q_max": {},
+          "sensor_offset": {},
+          "shutdown": false,
+          "rationale": "DE optimum"
+        }
+      }
+    ],
+    "notes": [
+      "DE evals=324 cost=1.276"
+    ]
+  },
+  "checksum": "9038d1ad8e6f2f67b390c2e32a8ffef6936e1b924c0bb548a5a008c444cb5956"
+}
