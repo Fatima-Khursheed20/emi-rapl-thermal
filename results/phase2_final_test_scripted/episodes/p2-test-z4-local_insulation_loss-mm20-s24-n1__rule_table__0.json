@@ -1,0 +1,149 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z4-local_insulation_loss-mm20-s24-n1",
+    "n_zones": 4,
+    "setpoints": [
+      50.0,
+      45.0,
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "local_insulation_loss",
+      "zone": 3,
+      "magnitude": 3.902,
+      "onset_s": 1652.0
+    },
+    "mismatch": 0.2,
+    "noise_std": 0.15,
+    "seed": 24004,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "rule_table",
+  "repeat": 0,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 1,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 32.0,
+    "action_applied": true,
+    "actuation_s": 1714.0,
+    "validated_action": false,
+    "agent_success": true,
+    "plant_success": true,
+    "plant_success_since_fault": true,
+    "validated_but_failed": false,
+    "safety_violation_post": false,
+    "safety_violation_since_fault": false,
+    "max_T_post": 50.06,
+    "max_T_since_fault": 50.06,
+    "time_above_limit_s": 0.0,
+    "time_above_limit_post_s": 0.0,
+    "time_above_limit_before_actuation_s": 0.0,
+    "regulated": true,
+    "tracking_err_tail": [
+      0.017,
+      0.009,
+      0.012,
+      0.006
+    ],
+    "shutdown": false,
+    "shutdown_required": false,
+    "setpoint_retention": 0.927,
+    "iae_post": 618.6,
+    "reprompts": 0,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 0,
+    "model_reply_failures": 0,
+    "provider_attempts": 0,
+    "missing_usage_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "llm_latency_s": 0.0,
+    "api_latency_s": 0.0,
+    "decision_wall_s": 0.0,
+    "episode_wall_s": 1.17
+  },
+  "trace": {
+    "method": "rule_table",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1684.0,
+      "symptoms": [
+        "model_residual_zone3"
+      ],
+      "fault_class": "process",
+      "fault_kind": "local_insulation_loss",
+      "zone": 3,
+      "localisation_source": "oracle"
+    },
+    "plans": [],
+    "actions": [
+      {
+        "mode": "DERATE",
+        "setpoints": {
+          "3": 31.8
+        },
+        "gains": {},
+        "q_max": {},
+        "sensor_offset": {},
+        "shutdown": false,
+        "rationale": "rule table"
+      }
+    ],
+    "validations": [],
+    "llm_calls": [],
+    "reprompts": 0,
+    "used_fallback": false,
+    "validated_action": false,
+    "selected_action": {
+      "mode": "DERATE",
+      "setpoints": {
+        "3": 31.8
+      },
+      "gains": {},
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": false,
+      "rationale": "rule table"
+    },
+    "applied_action": {
+      "mode": "DERATE",
+      "setpoints": {
+        "3": 31.8
+      },
+      "gains": {},
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": false,
+      "rationale": "rule table"
+    },
+    "decision_wall_s": 0.0,
+    "tool_events": [
+      {
+        "tool": "plant_actuation",
+        "time_s": 1714.0,
+        "action": {
+          "mode": "DERATE",
+          "setpoints": {
+            "3": 31.8
+          },
+          "gains": {},
+          "q_max": {},
+          "sensor_offset": {},
+          "shutdown": false,
+          "rationale": "rule table"
+        }
+      }
+    ],
+    "notes": []
+  },
+  "checksum": "057b5c5bc369882c4a4a2d25dfa22d6db391d439eabfb28a18080368a1cb614e"
+}

@@ -1,0 +1,142 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z4-actuator_stuck_high-mm10-s23-n0",
+    "n_zones": 4,
+    "setpoints": [
+      50.0,
+      45.0,
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "actuator_stuck_high",
+      "zone": 0,
+      "magnitude": 99.113,
+      "onset_s": 1612.0
+    },
+    "mismatch": 0.1,
+    "noise_std": 0.05,
+    "seed": 23004,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "de_retune",
+  "repeat": 0,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 1,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 35.0,
+    "action_applied": true,
+    "actuation_s": 1677.0,
+    "validated_action": false,
+    "agent_success": true,
+    "plant_success": true,
+    "plant_success_since_fault": true,
+    "validated_but_failed": false,
+    "safety_violation_post": false,
+    "safety_violation_since_fault": false,
+    "max_T_post": 59.67,
+    "max_T_since_fault": 60.06,
+    "time_above_limit_s": 1.0,
+    "time_above_limit_post_s": 0.0,
+    "time_above_limit_before_actuation_s": 1.0,
+    "regulated": false,
+    "tracking_err_tail": [
+      22.0,
+      27.0,
+      22.0
+    ],
+    "shutdown": true,
+    "shutdown_required": true,
+    "setpoint_retention": 0.0,
+    "iae_post": 171399.6,
+    "reprompts": 0,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 0,
+    "model_reply_failures": 0,
+    "provider_attempts": 0,
+    "missing_usage_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "llm_latency_s": 0.0,
+    "api_latency_s": 0.0,
+    "decision_wall_s": 1.219,
+    "episode_wall_s": 2.094
+  },
+  "trace": {
+    "method": "de_retune[nominal]",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1647.0,
+      "symptoms": [
+        "model_residual_zone0"
+      ],
+      "fault_class": "actuator",
+      "fault_kind": "actuator_stuck_high",
+      "zone": 0,
+      "localisation_source": "oracle"
+    },
+    "plans": [],
+    "actions": [
+      {
+        "mode": "SAFE_SHUTDOWN",
+        "setpoints": {},
+        "gains": {},
+        "q_max": {},
+        "sensor_offset": {},
+        "shutdown": true,
+        "rationale": "DE found no safe operating point"
+      }
+    ],
+    "validations": [],
+    "llm_calls": [],
+    "reprompts": 0,
+    "used_fallback": false,
+    "validated_action": false,
+    "selected_action": {
+      "mode": "SAFE_SHUTDOWN",
+      "setpoints": {},
+      "gains": {},
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": true,
+      "rationale": "DE found no safe operating point"
+    },
+    "applied_action": {
+      "mode": "SAFE_SHUTDOWN",
+      "setpoints": {},
+      "gains": {},
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": true,
+      "rationale": "DE found no safe operating point"
+    },
+    "decision_wall_s": 1.219,
+    "tool_events": [
+      {
+        "tool": "plant_actuation",
+        "time_s": 1677.0,
+        "action": {
+          "mode": "SAFE_SHUTDOWN",
+          "setpoints": {},
+          "gains": {},
+          "q_max": {},
+          "sensor_offset": {},
+          "shutdown": true,
+          "rationale": "DE found no safe operating point"
+        }
+      }
+    ],
+    "notes": [
+      "DE evals=144 cost=114.248"
+    ]
+  },
+  "checksum": "b180bfa3c00b6997bc6f923937bbf67b258cbc09b61383070cf0fde8384cea0e"
+}

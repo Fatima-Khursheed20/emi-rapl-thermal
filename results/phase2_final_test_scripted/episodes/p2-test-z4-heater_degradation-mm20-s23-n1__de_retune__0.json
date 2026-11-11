@@ -1,0 +1,171 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z4-heater_degradation-mm20-s23-n1",
+    "n_zones": 4,
+    "setpoints": [
+      50.0,
+      45.0,
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "heater_degradation",
+      "zone": 2,
+      "magnitude": 0.305,
+      "onset_s": 1537.0
+    },
+    "mismatch": 0.2,
+    "noise_std": 0.15,
+    "seed": 23004,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "de_retune",
+  "repeat": 0,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 1,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 39.0,
+    "action_applied": true,
+    "actuation_s": 1606.0,
+    "validated_action": false,
+    "agent_success": true,
+    "plant_success": false,
+    "plant_success_since_fault": false,
+    "validated_but_failed": false,
+    "safety_violation_post": false,
+    "safety_violation_since_fault": false,
+    "max_T_post": 50.04,
+    "max_T_since_fault": 50.04,
+    "time_above_limit_s": 0.0,
+    "time_above_limit_post_s": 0.0,
+    "time_above_limit_before_actuation_s": 0.0,
+    "regulated": false,
+    "tracking_err_tail": [
+      0.011,
+      0.01,
+      5.984,
+      0.012
+    ],
+    "shutdown": false,
+    "shutdown_required": false,
+    "setpoint_retention": 0.971,
+    "iae_post": 15690.0,
+    "reprompts": 0,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 0,
+    "model_reply_failures": 0,
+    "provider_attempts": 0,
+    "missing_usage_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "llm_latency_s": 0.0,
+    "api_latency_s": 0.0,
+    "decision_wall_s": 2.834,
+    "episode_wall_s": 3.502
+  },
+  "trace": {
+    "method": "de_retune[nominal]",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1576.0,
+      "symptoms": [
+        "model_residual_zone2"
+      ],
+      "fault_class": "actuator",
+      "fault_kind": "heater_degradation",
+      "zone": 2,
+      "localisation_source": "oracle"
+    },
+    "plans": [],
+    "actions": [
+      {
+        "mode": "DERATE",
+        "setpoints": {
+          "2": 44.23
+        },
+        "gains": {
+          "2": {
+            "Kc": 7.087,
+            "tauI": 115.5
+          }
+        },
+        "q_max": {},
+        "sensor_offset": {},
+        "shutdown": false,
+        "rationale": "DE optimum"
+      }
+    ],
+    "validations": [],
+    "llm_calls": [],
+    "reprompts": 0,
+    "used_fallback": false,
+    "validated_action": false,
+    "selected_action": {
+      "mode": "DERATE",
+      "setpoints": {
+        "2": 44.23
+      },
+      "gains": {
+        "2": {
+          "Kc": 7.087,
+          "tauI": 115.5
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "applied_action": {
+      "mode": "DERATE",
+      "setpoints": {
+        "2": 44.23
+      },
+      "gains": {
+        "2": {
+          "Kc": 7.087,
+          "tauI": 115.5
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {},
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "decision_wall_s": 2.834,
+    "tool_events": [
+      {
+        "tool": "plant_actuation",
+        "time_s": 1606.0,
+        "action": {
+          "mode": "DERATE",
+          "setpoints": {
+            "2": 44.23
+          },
+          "gains": {
+            "2": {
+              "Kc": 7.087,
+              "tauI": 115.5
+            }
+          },
+          "q_max": {},
+          "sensor_offset": {},
+          "shutdown": false,
+          "rationale": "DE optimum"
+        }
+      }
+    ],
+    "notes": [
+      "DE evals=162 cost=0.869"
+    ]
+  },
+  "checksum": "c63cd04933b6d9759df8084af666f7df0da6209ad0d3216dea93c31da1b4c9a4"
+}

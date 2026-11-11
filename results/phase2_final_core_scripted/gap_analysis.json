@@ -1,0 +1,178 @@
+{
+  "scope": {
+    "schema_version": 3,
+    "experiment": "all",
+    "methods": [
+      "base_agent_matched",
+      "base_agent_no_oracle",
+      "base_agent_nominal",
+      "de_retune",
+      "no_recovery",
+      "phase2_agent",
+      "phase2_agent_no_g1",
+      "phase2_agent_no_g2",
+      "phase2_agent_no_g3",
+      "rule_table",
+      "single_llm"
+    ],
+    "split": "llm",
+    "suite_sha256": "8328d6ee405b56ebcc01c89f6b4dfe56645a84f33f08c3c9487e16c4c4a1c307",
+    "scenario_ids": [
+      "p2-test-z2-heater_degradation-mm00-s20-n0",
+      "p2-test-z2-heater_degradation-mm30-s20-n1",
+      "p2-test-z2-heat_loss_increase-mm00-s20-n0",
+      "p2-test-z2-heat_loss_increase-mm30-s20-n1",
+      "p2-test-z2-sensor_bias-mm00-s20-n0",
+      "p2-test-z2-sensor_bias-mm30-s20-n1",
+      "p2-test-z2-local_insulation_loss-mm00-s20-n0",
+      "p2-test-z2-local_insulation_loss-mm30-s20-n1",
+      "p2-test-z2-actuator_stuck_high-mm00-s20-n0",
+      "p2-test-z2-actuator_stuck_high-mm30-s20-n1",
+      "p2-test-z4-heater_degradation-mm00-s20-n0",
+      "p2-test-z4-heater_degradation-mm30-s20-n1",
+      "p2-test-z4-heat_loss_increase-mm00-s20-n0",
+      "p2-test-z4-heat_loss_increase-mm30-s20-n1",
+      "p2-test-z4-sensor_bias-mm00-s20-n0",
+      "p2-test-z4-sensor_bias-mm30-s20-n1",
+      "p2-test-z4-local_insulation_loss-mm00-s20-n0",
+      "p2-test-z4-local_insulation_loss-mm30-s20-n1",
+      "p2-test-z4-actuator_stuck_high-mm00-s20-n0",
+      "p2-test-z4-actuator_stuck_high-mm30-s20-n1"
+    ],
+    "code_sha256": "50be86dd8c17593fd135ff8aebe5e10ae0bdc8af4059c77bdfc4a650a876db9d",
+    "provider": "scripted",
+    "model": "scripted:rules",
+    "temperature": null,
+    "repeats": 1,
+    "provider_seed": null,
+    "input_price": null,
+    "output_price": null,
+    "plant_delay_s": 30,
+    "reprompt_budget": 5,
+    "llm_request": null,
+    "runtime": {
+      "python": "3.12.14",
+      "os": "Linux",
+      "arch": "x86_64",
+      "workers": 3,
+      "numba": true,
+      "dependencies": {
+        "numpy": "2.3.5",
+        "scipy": "1.17.0",
+        "pandas": "2.2.3",
+        "pydantic": "2.13.4",
+        "numba": "0.65.1"
+      },
+      "blas_threads": {
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": null,
+        "MKL_NUM_THREADS": null
+      }
+    }
+  },
+  "analysis_code_sha256": "50048eb536f2624629b5ff3630cd08399921247d1e46de5d552080485c69d2c9",
+  "safety": {
+    "full_plant_success_post_actuation": 0.7,
+    "full_plant_success_since_fault": 0.7,
+    "full_post_actuation_violations": 1,
+    "full_since_fault_violations": 1
+  },
+  "G1": {
+    "full_validated_but_failed_at_30pct": 0.2,
+    "nominal_validated_but_failed_at_30pct": 0.3,
+    "full_vs_no_g1_at_30pct": {
+      "pairs": 10,
+      "scenario_blocks": 2,
+      "wins": 0,
+      "losses": 1,
+      "delta": -0.1,
+      "ci95": null,
+      "mcnemar_p_independent_pairs": null,
+      "wilcoxon_latency_p": null
+    },
+    "full_vs_baseline_at_30pct": {
+      "pairs": 10,
+      "scenario_blocks": 2,
+      "wins": 0,
+      "losses": 1,
+      "delta": -0.1,
+      "ci95": null,
+      "mcnemar_p_independent_pairs": null,
+      "wilcoxon_latency_p": null
+    },
+    "full_mean_decision_seconds": 0.5264,
+    "baseline_mean_decision_seconds": 0.046599999999999996,
+    "decision_time_ratio": 11.296137339055795,
+    "full_gain_scale_rmse_mean": 0.11449689928955534,
+    "full_loss_scale_rmse_mean": 0.7074641485618594,
+    "full_bias_rmse_mean": 0.9426809325635336
+  },
+  "G2": {
+    "full_reprompt_recovery": 0.0,
+    "baseline_reprompt_recovery": 0.0,
+    "full_reprompt_episodes": 3,
+    "baseline_reprompt_episodes": 2,
+    "full_episodes_with_repair": 0,
+    "full_repair_attempts": 0,
+    "full_repairs_validated": 0,
+    "full_mean_reprompts": 0.75,
+    "baseline_mean_reprompts": 0.5,
+    "relative_reprompt_reduction": -0.5,
+    "paired_ablation": {
+      "pairs": 20,
+      "scenario_blocks": 2,
+      "wins": 0,
+      "losses": 0,
+      "delta": 0.0,
+      "ci95": null,
+      "mcnemar_p_independent_pairs": null,
+      "wilcoxon_latency_p": null
+    }
+  },
+  "G3": {
+    "localisation_all_episodes": 0.7,
+    "localisation_after_valid_detection": 0.7,
+    "full_episodes": 20,
+    "full_valid_detection_episodes": 20,
+    "full_vs_oracle_matched": {
+      "pairs": 20,
+      "scenario_blocks": 2,
+      "wins": 0,
+      "losses": 1,
+      "delta": -0.05,
+      "ci95": null,
+      "mcnemar_p_independent_pairs": null,
+      "wilcoxon_latency_p": null
+    },
+    "full_vs_oracle_nominal": {
+      "pairs": 20,
+      "scenario_blocks": 2,
+      "wins": 0,
+      "losses": 1,
+      "delta": -0.05,
+      "ci95": null,
+      "mcnemar_p_independent_pairs": null,
+      "wilcoxon_latency_p": null
+    },
+    "full_vs_unlocalised_baseline": {
+      "pairs": 20,
+      "scenario_blocks": 2,
+      "wins": 12,
+      "losses": 1,
+      "delta": 0.55,
+      "ci95": null,
+      "mcnemar_p_independent_pairs": null,
+      "wilcoxon_latency_p": null
+    },
+    "paired_symptoms_only_ablation": {
+      "pairs": 20,
+      "scenario_blocks": 2,
+      "wins": 12,
+      "losses": 1,
+      "delta": 0.55,
+      "ci95": null,
+      "mcnemar_p_independent_pairs": null,
+      "wilcoxon_latency_p": null
+    }
+  }
+}

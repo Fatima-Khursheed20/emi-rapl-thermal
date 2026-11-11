@@ -1,0 +1,179 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z4-sensor_bias-mm10-s22-n1",
+    "n_zones": 4,
+    "setpoints": [
+      50.0,
+      45.0,
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "sensor_bias",
+      "zone": 1,
+      "magnitude": -11.772,
+      "onset_s": 1692.0
+    },
+    "mismatch": 0.1,
+    "noise_std": 0.15,
+    "seed": 22004,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "de_retune",
+  "repeat": 0,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 1,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 20.0,
+    "action_applied": true,
+    "actuation_s": 1742.0,
+    "validated_action": false,
+    "agent_success": true,
+    "plant_success": false,
+    "plant_success_since_fault": false,
+    "validated_but_failed": false,
+    "safety_violation_post": false,
+    "safety_violation_since_fault": false,
+    "max_T_post": 50.98,
+    "max_T_since_fault": 51.18,
+    "time_above_limit_s": 0.0,
+    "time_above_limit_post_s": 0.0,
+    "time_above_limit_before_actuation_s": 0.0,
+    "regulated": false,
+    "tracking_err_tail": [
+      0.013,
+      2.054,
+      0.011,
+      0.009
+    ],
+    "shutdown": false,
+    "shutdown_required": false,
+    "setpoint_retention": 1.0,
+    "iae_post": 4337.4,
+    "reprompts": 0,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 0,
+    "model_reply_failures": 0,
+    "provider_attempts": 0,
+    "missing_usage_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "llm_latency_s": 0.0,
+    "api_latency_s": 0.0,
+    "decision_wall_s": 2.883,
+    "episode_wall_s": 4.164
+  },
+  "trace": {
+    "method": "de_retune[nominal]",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1712.0,
+      "symptoms": [
+        "model_residual_zone1"
+      ],
+      "fault_class": "sensor",
+      "fault_kind": "sensor_bias",
+      "zone": 1,
+      "localisation_source": "oracle"
+    },
+    "plans": [],
+    "actions": [
+      {
+        "mode": "SENSOR_CORRECTION",
+        "setpoints": {
+          "1": 44.97
+        },
+        "gains": {
+          "1": {
+            "Kc": 2.186,
+            "tauI": 157.6
+          }
+        },
+        "q_max": {},
+        "sensor_offset": {
+          "1": 9.7
+        },
+        "shutdown": false,
+        "rationale": "DE optimum"
+      }
+    ],
+    "validations": [],
+    "llm_calls": [],
+    "reprompts": 0,
+    "used_fallback": false,
+    "validated_action": false,
+    "selected_action": {
+      "mode": "SENSOR_CORRECTION",
+      "setpoints": {
+        "1": 44.97
+      },
+      "gains": {
+        "1": {
+          "Kc": 2.186,
+          "tauI": 157.6
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {
+        "1": 9.7
+      },
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "applied_action": {
+      "mode": "SENSOR_CORRECTION",
+      "setpoints": {
+        "1": 44.97
+      },
+      "gains": {
+        "1": {
+          "Kc": 2.186,
+          "tauI": 157.6
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {
+        "1": 9.7
+      },
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "decision_wall_s": 2.883,
+    "tool_events": [
+      {
+        "tool": "plant_actuation",
+        "time_s": 1742.0,
+        "action": {
+          "mode": "SENSOR_CORRECTION",
+          "setpoints": {
+            "1": 44.97
+          },
+          "gains": {
+            "1": {
+              "Kc": 2.186,
+              "tauI": 157.6
+            }
+          },
+          "q_max": {},
+          "sensor_offset": {
+            "1": 9.7
+          },
+          "shutdown": false,
+          "rationale": "DE optimum"
+        }
+      }
+    ],
+    "notes": [
+      "DE evals=216 cost=0.035"
+    ]
+  },
+  "checksum": "bcdebe2a566180450a1c8d5b74b9644ce42b3285fed9c7c6d5b0d14ecf6e82a0"
+}

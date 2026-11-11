@@ -1,0 +1,12 @@
+method,repeat,episodes,plant_success_post_actuation,plant_success_since_fault,safety_violations_post_actuation,safety_violations_since_fault
+base_agent_matched,0,400,343,340,3,6
+base_agent_no_oracle,0,400,68,68,50,50
+base_agent_nominal,0,400,331,328,5,8
+de_retune,0,400,256,253,5,8
+no_recovery,0,400,68,68,50,50
+phase2_agent,0,400,264,261,8,11
+phase2_agent_no_g1,0,400,277,274,8,11
+phase2_agent_no_g2,0,400,262,259,8,11
+phase2_agent_no_g3,0,400,82,82,50,50
+rule_table,0,400,285,282,3,6
+single_llm,0,400,285,282,3,6

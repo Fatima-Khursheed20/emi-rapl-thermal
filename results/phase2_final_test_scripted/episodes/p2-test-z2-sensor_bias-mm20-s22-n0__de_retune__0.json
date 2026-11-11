@@ -1,0 +1,175 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z2-sensor_bias-mm20-s22-n0",
+    "n_zones": 2,
+    "setpoints": [
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "sensor_bias",
+      "zone": 0,
+      "magnitude": -10.558,
+      "onset_s": 1743.0
+    },
+    "mismatch": 0.2,
+    "noise_std": 0.05,
+    "seed": 22002,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "de_retune",
+  "repeat": 0,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 1,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 20.0,
+    "action_applied": true,
+    "actuation_s": 1793.0,
+    "validated_action": false,
+    "agent_success": true,
+    "plant_success": true,
+    "plant_success_since_fault": true,
+    "validated_but_failed": false,
+    "safety_violation_post": false,
+    "safety_violation_since_fault": false,
+    "max_T_post": 53.94,
+    "max_T_since_fault": 53.99,
+    "time_above_limit_s": 0.0,
+    "time_above_limit_post_s": 0.0,
+    "time_above_limit_before_actuation_s": 0.0,
+    "regulated": true,
+    "tracking_err_tail": [
+      0.536,
+      0.004
+    ],
+    "shutdown": false,
+    "shutdown_required": false,
+    "setpoint_retention": 0.996,
+    "iae_post": 1669.8,
+    "reprompts": 0,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 0,
+    "model_reply_failures": 0,
+    "provider_attempts": 0,
+    "missing_usage_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "llm_latency_s": 0.0,
+    "api_latency_s": 0.0,
+    "decision_wall_s": 1.279,
+    "episode_wall_s": 1.824
+  },
+  "trace": {
+    "method": "de_retune[nominal]",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1763.0,
+      "symptoms": [
+        "model_residual_zone0"
+      ],
+      "fault_class": "sensor",
+      "fault_kind": "sensor_bias",
+      "zone": 0,
+      "localisation_source": "oracle"
+    },
+    "plans": [],
+    "actions": [
+      {
+        "mode": "SENSOR_CORRECTION",
+        "setpoints": {
+          "0": 49.64
+        },
+        "gains": {
+          "0": {
+            "Kc": 5.715,
+            "tauI": 140.3
+          }
+        },
+        "q_max": {},
+        "sensor_offset": {
+          "0": 10.02
+        },
+        "shutdown": false,
+        "rationale": "DE optimum"
+      }
+    ],
+    "validations": [],
+    "llm_calls": [],
+    "reprompts": 0,
+    "used_fallback": false,
+    "validated_action": false,
+    "selected_action": {
+      "mode": "SENSOR_CORRECTION",
+      "setpoints": {
+        "0": 49.64
+      },
+      "gains": {
+        "0": {
+          "Kc": 5.715,
+          "tauI": 140.3
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {
+        "0": 10.02
+      },
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "applied_action": {
+      "mode": "SENSOR_CORRECTION",
+      "setpoints": {
+        "0": 49.64
+      },
+      "gains": {
+        "0": {
+          "Kc": 5.715,
+          "tauI": 140.3
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {
+        "0": 10.02
+      },
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "decision_wall_s": 1.279,
+    "tool_events": [
+      {
+        "tool": "plant_actuation",
+        "time_s": 1793.0,
+        "action": {
+          "mode": "SENSOR_CORRECTION",
+          "setpoints": {
+            "0": 49.64
+          },
+          "gains": {
+            "0": {
+              "Kc": 5.715,
+              "tauI": 140.3
+            }
+          },
+          "q_max": {},
+          "sensor_offset": {
+            "0": 10.02
+          },
+          "shutdown": false,
+          "rationale": "DE optimum"
+        }
+      }
+    ],
+    "notes": [
+      "DE evals=216 cost=0.062"
+    ]
+  },
+  "checksum": "e46d5ee2f0d1f24780fbeda9ee9c9ef7374f7ee099710c5937039b9ffc2effa3"
+}

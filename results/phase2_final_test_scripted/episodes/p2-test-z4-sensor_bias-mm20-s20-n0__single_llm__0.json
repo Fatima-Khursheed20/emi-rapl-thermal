@@ -1,0 +1,179 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z4-sensor_bias-mm20-s20-n0",
+    "n_zones": 4,
+    "setpoints": [
+      50.0,
+      45.0,
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "sensor_bias",
+      "zone": 3,
+      "magnitude": -12.271,
+      "onset_s": 1662.0
+    },
+    "mismatch": 0.2,
+    "noise_std": 0.05,
+    "seed": 20004,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "single_llm",
+  "repeat": 0,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 2,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 20.0,
+    "action_applied": true,
+    "actuation_s": 1712.0,
+    "validated_action": false,
+    "agent_success": true,
+    "plant_success": false,
+    "plant_success_since_fault": false,
+    "validated_but_failed": false,
+    "safety_violation_post": false,
+    "safety_violation_since_fault": false,
+    "max_T_post": 52.09,
+    "max_T_since_fault": 52.19,
+    "time_above_limit_s": 0.0,
+    "time_above_limit_post_s": 0.0,
+    "time_above_limit_before_actuation_s": 0.0,
+    "regulated": false,
+    "tracking_err_tail": [
+      0.005,
+      0.005,
+      0.004,
+      2.268
+    ],
+    "shutdown": false,
+    "shutdown_required": false,
+    "setpoint_retention": 1.0,
+    "iae_post": 5864.7,
+    "reprompts": 0,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 1,
+    "model_reply_failures": 0,
+    "provider_attempts": 0,
+    "missing_usage_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "llm_latency_s": 0.0,
+    "api_latency_s": 0.0,
+    "decision_wall_s": 0.001,
+    "episode_wall_s": 0.678
+  },
+  "trace": {
+    "method": "single_llm",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1682.0,
+      "symptoms": [
+        "model_residual_zone3"
+      ],
+      "fault_class": "sensor",
+      "fault_kind": "sensor_bias",
+      "zone": 3,
+      "localisation_source": "oracle"
+    },
+    "plans": [],
+    "actions": [
+      {
+        "mode": "SENSOR_CORRECTION",
+        "setpoints": {},
+        "gains": {},
+        "q_max": {},
+        "sensor_offset": {
+          "3": 10.0
+        },
+        "shutdown": false,
+        "rationale": "rule table"
+      }
+    ],
+    "validations": [],
+    "llm_calls": [
+      {
+        "agent": "single",
+        "model": "scripted:rules",
+        "latency_s": 0.0002,
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "ok": true,
+        "error": null,
+        "api_attempts": 0,
+        "api_latency_s": 0.0,
+        "usage_reported": false,
+        "returned_model": null,
+        "system_fingerprint": null,
+        "finish_reason": null
+      }
+    ],
+    "reprompts": 0,
+    "used_fallback": false,
+    "validated_action": false,
+    "selected_action": {
+      "mode": "SENSOR_CORRECTION",
+      "setpoints": {},
+      "gains": {},
+      "q_max": {},
+      "sensor_offset": {
+        "3": 10.0
+      },
+      "shutdown": false,
+      "rationale": "rule table"
+    },
+    "applied_action": {
+      "mode": "SENSOR_CORRECTION",
+      "setpoints": {},
+      "gains": {},
+      "q_max": {},
+      "sensor_offset": {
+        "3": 10.0
+      },
+      "shutdown": false,
+      "rationale": "rule table"
+    },
+    "decision_wall_s": 0.001,
+    "tool_events": [
+      {
+        "tool": "single",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You supervise a multi-zone electric thermal process. A fault has been detected. In ONE reply,\nchoose a recovery mode and its parameters. Reply with a JSON object only, using this schema:\n{\"mode\": \"<MODE>\", \"setpoints\": {\"<zone>\": <degC>}, \"gains\": {\"<zone>\": {\"Kc\": <num>, \"tauI\": <num>}},\n \"q_max\": {\"<zone>\": <0-100>}, \"sensor_offset\": {\"<zone>\": <degC>}, \"shutdown\": <bool>, \"rationale\": \"<short>\"}"
+          },
+          {
+            "role": "user",
+            "content": "PLANT SNAPSHOT:\n{\n \"t_s\": 1682.0,\n \"n_zones\": 4,\n \"measured_T\": [\n  50.03,\n  44.89,\n  50.03,\n  34.67\n ],\n \"setpoints\": [\n  50.0,\n  45.0,\n  50.0,\n  45.0\n ],\n \"heater_output_pct\": [\n  50.2,\n  47.8,\n  61.2,\n  98.2\n ],\n \"q_max\": [\n  100.0,\n  100.0,\n  100.0,\n  100.0\n ],\n \"gains\": [\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  },\n  {\n   \"Kc\": 4.0,\n   \"tauI\": 120.0,\n   \"tauD\": 0.0\n  }\n ],\n \"sensor_offset\": [\n  0.0,\n  0.0,\n  0.0,\n  0.0\n ],\n \"residuals\": [\n  0.03,\n  -0.11,\n  0.02,\n  -11.92\n ],\n \"trend\": {\n  \"t_s\": [\n   1383.0,\n   1413.0,\n   1443.0,\n   1473.0,\n   1503.0,\n   1533.0,\n   1563.0,\n   1593.0,\n   1623.0,\n   1653.0\n  ],\n  \"measured_T\": [\n   [\n    49.96,\n    45.07,\n    49.98,\n    45.03\n   ],\n   [\n    49.99,\n    44.95,\n    50.0,\n    45.04\n   ],\n   [\n    50.04,\n    44.98,\n    50.04,\n    45.03\n   ],\n   [\n    50.05,\n    45.02,\n    50.0,\n    45.02\n   ],\n   [\n    49.97,\n    44.99,\n    50.03,\n    45.03\n   ],\n   [\n    50.11,\n    44.96,\n    50.0,\n    44.98\n   ],\n   [\n    49.99,\n    45.03,\n    49.95,\n    45.12\n   ],\n   [\n    50.1,\n    44.97,\n    50.04,\n    44.98\n   ],\n   [\n    49.97,\n    45.03,\n    49.96,\n    44.98\n   ],\n   [\n    50.02,\n    44.99,\n    50.08,\n    44.95\n   ]\n  ],\n  \"heater_output_pct\": [\n   [\n    49.7,\n    48.0,\n    60.6,\n    50.9\n   ],\n   [\n    50.3,\n    47.9,\n    61.4,\n    51.0\n   ],\n   [\n    50.4,\n    47.9,\n    60.7,\n    51.2\n   ],\n   [\n    50.5,\n    47.7,\n    61.4,\n    51.5\n   ],\n   [\n    50.5,\n    48.2,\n    61.2,\n    51.4\n   ],\n   [\n    50.4,\n    48.1,\n    60.7,\n    51.1\n   ],\n   [\n    49.8,\n    47.8,\n    60.8,\n    51.2\n   ],\n   [\n    50.0,\n    48.0,\n    61.1,\n    51.2\n   ],\n   [\n    50.2,\n    48.1,\n    61.1,\n    51.3\n   ],\n   [\n    50.2,\n    47.8,\n    61.3,\n    51.3\n   ]\n  ]\n },\n \"ambient_T\": 23.0,\n \"safety_limit_T\": 60.0\n}\n\nFAULT REPORT:\n{\n \"detected\": true,\n \"t_detect_s\": 1682.0,\n \"symptoms\": [\n  \"model_residual_zone3\"\n ],\n \"fault_class\": \"sensor\",\n \"fault_kind\": \"sensor_bias\",\n \"zone\": 3,\n \"localisation_source\": \"oracle\"\n}\n\nKNOWLEDGE CONTEXT:\n{\n \"fault_kind\": \"sensor_bias\",\n \"fault_class\": \"sensor\",\n \"implicated_zones\": [\n  {\n   \"zone\": 2,\n   \"heater\": \"H3\",\n   \"sensor\": \"T3\",\n   \"controller\": \"PI-3\",\n   \"neighbours\": [\n    1,\n    3\n   ]\n  },\n  {\n   \"zone\": 3,\n   \"heater\": \"H4\",\n   \"sensor\": \"T4\",\n   \"controller\": \"PI-4\",\n   \"neighbours\": [\n    2\n   ]\n  }\n ],\n \"admissible_modes\": [\n  \"NORMAL\",\n  \"SENSOR_CORRECTION\",\n  \"DERATE\",\n  \"SAFE_SHUTDOWN\"\n ],\n \"mode_semantics\": {\n  \"NORMAL\": \"Keep current controller settings (monitor only); valid if the plant stays safe and regulated.\",\n  \"SENSOR_CORRECTION\": \"Add an offset (degC) to a biased sensor so the loop regulates the true temperature.\",\n  \"DERATE\": \"Lower setpoint(s) and/or heater output limit q_max of affected zones to a feasible level.\",\n  \"SAFE_SHUTDOWN\": \"Open the master heater relay (all heaters off). Use only if no operating mode is safe.\"\n },\n \"mode_fields\": {\n  \"NORMAL\": [],\n  \"SENSOR_CORRECTION\": [\n   \"sensor_offset\"\n  ],\n  \"DERATE\": [\n   \"q_max\",\n   \"setpoints\"\n  ],\n  \"SAFE_SHUTDOWN\": []\n },\n \"constraints\": {\n  \"safety_limit_T\": 60.0,\n  \"setpoint_range\": [\n   30.0,\n   58.0\n  ],\n  \"max_derate_degC\": 15.0,\n  \"Kc_range\": [\n   0.5,\n   20.0\n  ],\n  \"tauI_range\": [\n   20.0,\n   600.0\n  ],\n  \"q_max_range\": [\n   0.0,\n   100.0\n  ],\n  \"sensor_offset_range\": [\n   -20.0,\n   20.0\n  ],\n  \"regulation_band_degC\": 1.5\n },\n \"dynamics\": \"Each zone is a lumped thermal mass (m*Cp ~ 2 J/K) heated by a resistive heater (gain alpha ~ 0.01 W/% for odd zones, 0.0075 W/% for even zones) and cooled by convection and radiation to ambient. Neighbouring zones exchange heat through a small shared area, so heating zone i also warms zones i-1 and i+1. Open-loop time constant ~ 3 min; sensors lag the heater by ~ 12 s. At 100 % output an odd zone settles near 71 degC and an even zone near 62 degC (nominal, isolated). Steady-state temperature rises roughly linearly with delivered power.\",\n \"interlock\": \"master heater relay (all heaters)\"\n}"
+          }
+        ],
+        "output": "{\"mode\": \"SENSOR_CORRECTION\", \"setpoints\": {}, \"gains\": {}, \"q_max\": {}, \"sensor_offset\": {\"3\": 10.0}, \"shutdown\": false, \"rationale\": \"rule table\"}"
+      },
+      {
+        "tool": "plant_actuation",
+        "time_s": 1712.0,
+        "action": {
+          "mode": "SENSOR_CORRECTION",
+          "setpoints": {},
+          "gains": {},
+          "q_max": {},
+          "sensor_offset": {
+            "3": 10.0
+          },
+          "shutdown": false,
+          "rationale": "rule table"
+        }
+      }
+    ],
+    "notes": []
+  },
+  "checksum": "d9b91c9883709292823f175728d52d6987f5c8b489ba003aeaa43c920ffef1ed"
+}

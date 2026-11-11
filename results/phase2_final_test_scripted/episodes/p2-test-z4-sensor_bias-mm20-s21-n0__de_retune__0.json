@@ -1,0 +1,179 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z4-sensor_bias-mm20-s21-n0",
+    "n_zones": 4,
+    "setpoints": [
+      50.0,
+      45.0,
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "sensor_bias",
+      "zone": 0,
+      "magnitude": -11.639,
+      "onset_s": 1694.0
+    },
+    "mismatch": 0.2,
+    "noise_std": 0.05,
+    "seed": 21004,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "de_retune",
+  "repeat": 0,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 1,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 20.0,
+    "action_applied": true,
+    "actuation_s": 1744.0,
+    "validated_action": false,
+    "agent_success": true,
+    "plant_success": false,
+    "plant_success_since_fault": false,
+    "validated_but_failed": false,
+    "safety_violation_post": false,
+    "safety_violation_since_fault": false,
+    "max_T_post": 55.95,
+    "max_T_since_fault": 56.09,
+    "time_above_limit_s": 0.0,
+    "time_above_limit_post_s": 0.0,
+    "time_above_limit_before_actuation_s": 0.0,
+    "regulated": false,
+    "tracking_err_tail": [
+      1.601,
+      0.004,
+      0.007,
+      0.003
+    ],
+    "shutdown": false,
+    "shutdown_required": false,
+    "setpoint_retention": 1.0,
+    "iae_post": 3697.1,
+    "reprompts": 0,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 0,
+    "model_reply_failures": 0,
+    "provider_attempts": 0,
+    "missing_usage_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "llm_latency_s": 0.0,
+    "api_latency_s": 0.0,
+    "decision_wall_s": 1.37,
+    "episode_wall_s": 2.021
+  },
+  "trace": {
+    "method": "de_retune[nominal]",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1714.0,
+      "symptoms": [
+        "model_residual_zone0"
+      ],
+      "fault_class": "sensor",
+      "fault_kind": "sensor_bias",
+      "zone": 0,
+      "localisation_source": "oracle"
+    },
+    "plans": [],
+    "actions": [
+      {
+        "mode": "SENSOR_CORRECTION",
+        "setpoints": {
+          "0": 49.96
+        },
+        "gains": {
+          "0": {
+            "Kc": 5.057,
+            "tauI": 180.4
+          }
+        },
+        "q_max": {},
+        "sensor_offset": {
+          "0": 10.04
+        },
+        "shutdown": false,
+        "rationale": "DE optimum"
+      }
+    ],
+    "validations": [],
+    "llm_calls": [],
+    "reprompts": 0,
+    "used_fallback": false,
+    "validated_action": false,
+    "selected_action": {
+      "mode": "SENSOR_CORRECTION",
+      "setpoints": {
+        "0": 49.96
+      },
+      "gains": {
+        "0": {
+          "Kc": 5.057,
+          "tauI": 180.4
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {
+        "0": 10.04
+      },
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "applied_action": {
+      "mode": "SENSOR_CORRECTION",
+      "setpoints": {
+        "0": 49.96
+      },
+      "gains": {
+        "0": {
+          "Kc": 5.057,
+          "tauI": 180.4
+        }
+      },
+      "q_max": {},
+      "sensor_offset": {
+        "0": 10.04
+      },
+      "shutdown": false,
+      "rationale": "DE optimum"
+    },
+    "decision_wall_s": 1.37,
+    "tool_events": [
+      {
+        "tool": "plant_actuation",
+        "time_s": 1744.0,
+        "action": {
+          "mode": "SENSOR_CORRECTION",
+          "setpoints": {
+            "0": 49.96
+          },
+          "gains": {
+            "0": {
+              "Kc": 5.057,
+              "tauI": 180.4
+            }
+          },
+          "q_max": {},
+          "sensor_offset": {
+            "0": 10.04
+          },
+          "shutdown": false,
+          "rationale": "DE optimum"
+        }
+      }
+    ],
+    "notes": [
+      "DE evals=216 cost=0.021"
+    ]
+  },
+  "checksum": "ba7d7286cda52c0fa27b8f0346eaeef7d264e60876cb3322cf32c8f587683b81"
+}

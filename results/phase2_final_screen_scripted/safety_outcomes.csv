@@ -1,0 +1,8 @@
+method,repeat,episodes,plant_success_post_actuation,plant_success_since_fault,safety_violations_post_actuation,safety_violations_since_fault
+base_agent_matched,0,20,18,18,0,0
+base_agent_no_oracle,0,20,2,2,4,4
+base_agent_nominal,0,20,18,18,0,0
+phase2_agent,0,20,12,12,0,0
+phase2_agent_no_g1,0,20,13,13,0,0
+phase2_agent_no_g2,0,20,12,12,0,0
+phase2_agent_no_g3,0,20,4,4,4,4

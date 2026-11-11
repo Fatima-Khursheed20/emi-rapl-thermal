@@ -1,0 +1,103 @@
+{
+  "scope": {
+    "schema_version": 3,
+    "experiment": "E3",
+    "methods": [
+      "phase2_agent"
+    ],
+    "split": "stress",
+    "suite_sha256": "5da9ad7267390cd065f7de17b6ee616d514b3a5313bf36b07818e65dc36328cd",
+    "scenario_ids": [
+      "p2-stress-z2-heater_degradation-mm30-s40-unseen",
+      "p2-stress-z2-heater_degradation-mm30-s40-compound",
+      "p2-stress-z2-heat_loss_increase-mm30-s40-unseen",
+      "p2-stress-z2-heat_loss_increase-mm30-s40-compound",
+      "p2-stress-z2-sensor_bias-mm30-s40-unseen",
+      "p2-stress-z2-local_insulation_loss-mm30-s40-unseen",
+      "p2-stress-z2-local_insulation_loss-mm30-s40-compound",
+      "p2-stress-z2-actuator_stuck_high-mm30-s40-unseen",
+      "p2-stress-z2-actuator_stuck_high-mm30-s40-compound",
+      "p2-stress-z4-heater_degradation-mm30-s40-unseen",
+      "p2-stress-z4-heater_degradation-mm30-s40-compound",
+      "p2-stress-z4-heat_loss_increase-mm30-s40-unseen",
+      "p2-stress-z4-heat_loss_increase-mm30-s40-compound",
+      "p2-stress-z4-sensor_bias-mm30-s40-unseen",
+      "p2-stress-z4-local_insulation_loss-mm30-s40-unseen",
+      "p2-stress-z4-local_insulation_loss-mm30-s40-compound",
+      "p2-stress-z4-actuator_stuck_high-mm30-s40-unseen",
+      "p2-stress-z4-actuator_stuck_high-mm30-s40-compound"
+    ],
+    "code_sha256": "50be86dd8c17593fd135ff8aebe5e10ae0bdc8af4059c77bdfc4a650a876db9d",
+    "provider": "scripted",
+    "model": "scripted:rules",
+    "temperature": null,
+    "repeats": 1,
+    "provider_seed": null,
+    "input_price": null,
+    "output_price": null,
+    "plant_delay_s": 30,
+    "reprompt_budget": 5,
+    "llm_request": null,
+    "runtime": {
+      "python": "3.12.14",
+      "os": "Linux",
+      "arch": "x86_64",
+      "workers": 2,
+      "numba": true,
+      "dependencies": {
+        "numpy": "2.3.5",
+        "scipy": "1.17.0",
+        "pandas": "2.2.3",
+        "pydantic": "2.13.4",
+        "numba": "0.65.1"
+      },
+      "blas_threads": {
+        "OPENBLAS_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": null,
+        "MKL_NUM_THREADS": null
+      }
+    }
+  },
+  "analysis_code_sha256": "50048eb536f2624629b5ff3630cd08399921247d1e46de5d552080485c69d2c9",
+  "safety": {
+    "full_plant_success_post_actuation": 0.4444444444444444,
+    "full_plant_success_since_fault": 0.4444444444444444,
+    "full_post_actuation_violations": 0,
+    "full_since_fault_violations": 0
+  },
+  "G1": {
+    "full_validated_but_failed_at_30pct": 0.5,
+    "nominal_validated_but_failed_at_30pct": null,
+    "full_vs_no_g1_at_30pct": {},
+    "full_vs_baseline_at_30pct": {},
+    "full_mean_decision_seconds": 0.4612222222222222,
+    "baseline_mean_decision_seconds": null,
+    "decision_time_ratio": null,
+    "full_gain_scale_rmse_mean": 0.23625019565089214,
+    "full_loss_scale_rmse_mean": 1.4393806141734808,
+    "full_bias_rmse_mean": 2.2360466514277437
+  },
+  "G2": {
+    "full_reprompt_recovery": 0.0,
+    "baseline_reprompt_recovery": null,
+    "full_reprompt_episodes": 1,
+    "baseline_reprompt_episodes": 0,
+    "full_episodes_with_repair": 4,
+    "full_repair_attempts": 9,
+    "full_repairs_validated": 3,
+    "full_mean_reprompts": 0.2777777777777778,
+    "baseline_mean_reprompts": null,
+    "relative_reprompt_reduction": null,
+    "paired_ablation": {}
+  },
+  "G3": {
+    "localisation_all_episodes": 0.2777777777777778,
+    "localisation_after_valid_detection": 0.2777777777777778,
+    "full_episodes": 18,
+    "full_valid_detection_episodes": 18,
+    "full_vs_oracle_matched": {},
+    "full_vs_oracle_nominal": {},
+    "full_vs_unlocalised_baseline": {},
+    "paired_symptoms_only_ablation": {}
+  }
+}

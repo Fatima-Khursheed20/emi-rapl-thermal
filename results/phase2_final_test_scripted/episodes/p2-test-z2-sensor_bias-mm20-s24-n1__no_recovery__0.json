@@ -1,0 +1,99 @@
+{
+  "scenario": {
+    "scenario_id": "p2-test-z2-sensor_bias-mm20-s24-n1",
+    "n_zones": 2,
+    "setpoints": [
+      50.0,
+      45.0
+    ],
+    "fault": {
+      "kind": "sensor_bias",
+      "zone": 0,
+      "magnitude": -13.635,
+      "onset_s": 1585.0
+    },
+    "mismatch": 0.2,
+    "noise_std": 0.15,
+    "seed": 24002,
+    "t_end_s": 4200.0,
+    "secondary_faults": []
+  },
+  "method": "no_recovery",
+  "repeat": 0,
+  "metrics": {
+    "detected": true,
+    "false_alarm": false,
+    "localisation_correct": true,
+    "tool_events": 0,
+    "gain_scale_rmse": null,
+    "loss_scale_rmse": null,
+    "bias_rmse": null,
+    "detect_delay_s": 20.0,
+    "action_applied": false,
+    "actuation_s": null,
+    "validated_action": false,
+    "agent_success": false,
+    "plant_success": false,
+    "plant_success_since_fault": false,
+    "validated_but_failed": false,
+    "safety_violation_post": true,
+    "safety_violation_since_fault": true,
+    "max_T_post": 63.68,
+    "max_T_since_fault": 63.68,
+    "time_above_limit_s": 2561.0,
+    "time_above_limit_post_s": 2561.0,
+    "time_above_limit_before_actuation_s": 0.0,
+    "regulated": false,
+    "tracking_err_tail": [
+      13.633,
+      0.009
+    ],
+    "shutdown": false,
+    "shutdown_required": false,
+    "setpoint_retention": 1.0,
+    "iae_post": 35109.2,
+    "reprompts": 0,
+    "repair_attempts": 0,
+    "repairs_validated": 0,
+    "used_fallback": false,
+    "llm_calls": 0,
+    "model_reply_failures": 0,
+    "provider_attempts": 0,
+    "missing_usage_calls": 0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "llm_latency_s": 0.0,
+    "api_latency_s": 0.0,
+    "decision_wall_s": 0.0,
+    "episode_wall_s": 1.392
+  },
+  "trace": {
+    "method": "no_recovery",
+    "fault_report": {
+      "detected": true,
+      "t_detect_s": 1605.0,
+      "symptoms": [
+        "model_residual_zone0"
+      ],
+      "fault_class": "sensor",
+      "fault_kind": "sensor_bias",
+      "zone": 0,
+      "localisation_source": "oracle"
+    },
+    "plans": [],
+    "actions": [],
+    "validations": [],
+    "llm_calls": [],
+    "reprompts": 0,
+    "used_fallback": false,
+    "validated_action": false,
+    "selected_action": null,
+    "applied_action": null,
+    "decision_wall_s": 0.0,
+    "tool_events": [],
+    "notes": [
+      "no action"
+    ]
+  },
+  "checksum": "0e7637a8517928e40a99d3654a7377b6f16337091817a28656d59895c9e165b6"
+}
