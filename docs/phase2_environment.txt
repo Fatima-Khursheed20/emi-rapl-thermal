@@ -1,0 +1,24 @@
+Offline verification environment
+Python 3.12
+numpy 2.3.5
+scipy 1.17.0
+pandas 2.2.3
+pydantic 2.13.4
+openai 3.48.0
+python-dotenv 1.2.2
+pytest 9.2.0
+
+OPENBLAS_NUM_THREADS=1 during testing and offline screening.
+
+Final evaluator verification
+Linux CPython 3.12.14
+numpy 2.3.5
+scipy 1.17.0
+pandas 2.2.3
+pydantic 2.13.4
+openai 3.48.0
+python-dotenv 1.2.2
+pytest 9.2.0
+numba 0.65.1 (optional acceleration)
+OPENBLAS_NUM_THREADS=1
+The run manifests record the specific worker count and versions.
