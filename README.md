@@ -232,21 +232,31 @@ earlier Phase 2 runs are historical. Use live results for claims about the two
 LLMs. The verification used simulated HTTP responses to exercise the live CLI
 and error handling.
 
-### Gap resolution on the scripted screen
+### Gap resolution on the live core
 
-The table uses the 20 scenarios in
-[`results/phase2_final_screen_scripted`](results/phase2_final_screen_scripted).
-G1's 30% mismatch subset contains 10 scenarios. G2's reprompt recovery was 0/2
-for the nominal baseline and 0/4 for the full supervisor.
+The table uses the 20-scenario LLM core with three repeats
+([`results/phase2_final_v3_20b`](results/phase2_final_v3_20b)). The hypotheses
+were prespecified for gpt-oss-20b. The base-paper column is our local
+reimplementation of the Vyas et al. workflow with oracle fault labels and a
+nominal twin, run on the same scenarios and scored with the same metrics.
+Published CSTR and mixer numbers describe a different environment.
 
-| Gap | Component | Metric | Local base-paper workflow | Full supervisor | Addressed on the screen |
+| Gap | Method / component | Metric (prespecified target) | Base paper result (local, nominal twin) | Our result (full agent, 20B) | Addressed? |
 |---|---|---|---|---|---|
-| G1 | Adaptive EKF and ensemble | Validated-but-failed / plant success at 30% mismatch | 10% / 90%, nominal twin | 50% / 40% | No |
-| G2 | Physics bounds and seeded repair | Recovery after reprompt / mean reprompts | 0% / 0.50 | 0% / 1.00 | Live hypothesis pending |
-| G3 | Replay and verified diagnosis | Correct kind and zone / plant success | 100% by oracle / 90%, with 10% plant success without oracle | 75% / 60% | Partial |
+| G1 | Adaptive EKF and calibrated twin ensemble | Validated-but-failed ≤5% and plant success ≥15 pp above base, at 30% mismatch | 2/30 (6.7%) / 22/30 | 5/30 (16.7%) / 19/30 (−10.0 pp) | Not |
+| G2 | Physics bounds and bounded DE repair | Recovery among reprompted episodes ≥80% / mean reprompts ≥40% lower | 9/50 (18.0%) / 3.85 | 25/50 (50.0%) / 2.78 (−27.7%) | Partially |
+| G3 | Measurement replay and verified diagnosis | Correct kind and zone ≥85% / plant success within 10 pp of oracle | Oracle labels / 47/60 | 43/60 (71.7%) / 41/60 (−10.0 pp) | Partially |
 
-The local comparison uses the same scenarios and metrics for all methods.
-Published CSTR and mixer numbers describe a different environment. See the
+gpt-oss-120b (descriptive, `results/phase2_final_v3_120b_e*`): G1 3/30 (10.0%)
+/ 17/30 against 4/30 (13.3%) / 19/30; G2 21/54 (38.9%) / 3.52 against 12/48
+(25.0%) / 3.38; G3 43/60 (71.7%) / 37/60 against 48/60.
+
+The 20B ablations on the same 60 episodes give 43/60 without G1, 37/60 without
+G2 and 9/60 without G3, against 41/60 for the full agent. On the 400-episode
+scripted test ([`results/phase2_final_test_scripted`](results/phase2_final_test_scripted)),
+the full agent's plant success minus the ablation's is −3.25 pp for G1 (95%
+block-bootstrap interval −5.75 to −0.75) and +45.50 pp for G3 (36.25 to 56.75).
+See the
 [evaluation protocol](docs/phase2_protocol.md), [development log](docs/devlog.md),
 and [historical screening findings](docs/phase2_findings.md).
 
